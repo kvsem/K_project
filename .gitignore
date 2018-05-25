@@ -1,0 +1,49 @@
+# -*- mode: gitignore; -*-
+*.csv
+*.tsv
+*.sql
+*.pdf
+*.http
+
+# python
+__pycache__/
+*$py.class
+
+# Virtualenv, pyenv, authenv
+.Python
+pyvenv.cfg
+.venv
+.python-version
+.env
+environment.yml
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+
+# vim swap
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-v][a-z]
+[._]sw[a-p]
+# session
+Session.vim
+
+# etc
+*.DS_Store
+*.pid
+*.log
+logs/*
+static_root/
+scripts/batch/temp/*
+!.keep
+!.gitignore
+/lib
+.sass-cache/
+bower_components/
+node_modules/
+.project
+reports
+.grunt/
