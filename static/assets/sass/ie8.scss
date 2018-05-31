@@ -4,71 +4,82 @@
 @import 'libs/skel';
 
 /*
-	Prologue by HTML5 UP
+	Future Imperfect by HTML5 UP
 	html5up.net | @ajlkn
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 */
 
-/* Section/Article */
+$palette-border: #dedede;
 
-	section, article {
-		> .last-child,
-		&.last-child {
-			margin-bottom: 0;
-		}
+/* Button */
+
+	input[type="submit"],
+	input[type="reset"],
+	input[type="button"],
+	button,
+	.button {
+		border: solid 1px $palette-border;
 	}
 
 /* Form */
 
-	form {
-		input[type="text"],
-		input[type="email"],
-		input[type="password"],
-		select,
-		textarea {
-			-ms-behavior: url('assets/js/ie/PIE.htc');
+	input[type="text"],
+	input[type="password"],
+	input[type="email"],
+	input[type="tel"],
+	select,
+	textarea {
+		border: solid 1px $palette-border;
+	}
+
+/* Post */
+
+	.post {
+		border: solid 1px $palette-border;
+
+		> header {
+			border-bottom: solid 1px $palette-border;
 		}
 	}
 
-/* Button */
+/* Mini Post */
 
-	input[type="button"],
-	input[type="submit"],
-	input[type="reset"],
-	button,
-	.button {
-		-ms-behavior: url('assets/js/ie/PIE.htc');
+	.mini-post {
+		border: solid 1px $palette-border;
 	}
 
 /* Header */
 
-	#nav {
-		ul {
-			li {
-				a {
-					color: #888;
+	#header {
+		border-bottom: solid 1px $palette-border;
 
-					&.active {
-						background: #1C2022;
-					}
+		.links {
+			border-left: solid 1px $palette-border;
+		}
+
+		.main {
+			ul {
+				li {
+					border-left: solid 1px $palette-border;
 				}
 			}
 		}
 	}
 
-	#headerToggle {
-		.toggle {
-			background-color: #888;
+/* Sidebar */
+
+	#sidebar {
+		> * {
+			border-top: solid 1px $palette-border;
 		}
 	}
 
-/* Main */
+/* Menu */
 
-	#main {
-		> section {
-			&.cover {
-				background-position: auto;
-				-ms-behavior: url('assets/js/ie/backgroundsize.min.htc');
-			}
+	#menu {
+		border-left: solid 1px $palette-border;
+
+		> * {
+			border-top: solid 1px $palette-border;
 		}
 	}
