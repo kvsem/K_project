@@ -19,11 +19,12 @@ from django.urls import path
 from django.views.generic.base import RedirectView
 from main.views import main_page
 from main.views import post_view
+from main.views import guide
 
 urlpatterns = [
     path('', main_page, name='main'),
     path('favicon.ico', RedirectView.as_view(url=staticfiles_storage.url('favicon.ico')), name="favicon"),
     path('admin/', admin.site.urls),
-
+    path('guide/', guide, name='guide'),
     path('view/', post_view, name='view'),
 ]
