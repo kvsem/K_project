@@ -9,7 +9,7 @@
             {% include 'base/menu.html' %}
             <!-- Main -->
                 <div id="main">
-                    {% for content in contents_list.post_data %}
+                    {% for content in contents_list.default_post_data %}
                     <!-- Post -->
                         <article class="post">
                             <header>
@@ -19,7 +19,7 @@
                                 </div>
                                 <div class="meta">
                                     <time class="published" datetime="2015-11-01">{{ content.write_date }}</time>
-                                    <a href="#" class="author"><span class="name">KWAN</span><img src={% static 'images/avatar.jpg' %} alt="" /></a>
+                                    <a href="/intro" class="author"><span class="name">KWAN</span><img src={% static 'images/avatar.jpg' %} alt="" /></a>
                                 </div>
                             </header>
                             <!-- <a href="/view/?id={{ content.id }}" class="image featured"><img src={% static 'images/pic01.jpg' %} alt="" /></a> -->
@@ -30,7 +30,7 @@
                                 </ul>
                                 <ul class="stats">
                                     <li><a href="#">General</a></li>
-                                    <li><a href="#" class="icon fa-heart">28</a></li>
+                                    <li><a href="#" class="icon fa-heart">{{ content.like }}</a></li>
                                     <li><a href="#" class="icon fa-comment">128</a></li>
                                 </ul>
                             </footer>
@@ -39,8 +39,8 @@
 
                     <!-- Pagination -->
                         <ul class="actions pagination">
-                            <li><a href="" class="disabled button big previous">Previous Page</a></li>
-                            <li><a href="#" class="button big next">Next Page</a></li>
+                            <li><a href="/?page={{pages.prev_page}}" class={% if pages.page == 0 %}"disabled button big previous"{% else %}"button big next"{% endif %}>Previous Page</a></li>
+                            <li><a href="/?page={{pages.next_page}}" class={% if pages.max_page == pages.page %}"disabled button big previous"{% else %}"button big next"{% endif %}>Next Page</a></li>
                         </ul>
 
                 </div>

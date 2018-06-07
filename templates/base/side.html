@@ -15,51 +15,23 @@
                         <section>
                             <div class="mini-posts">
                                 <!-- Mini Post -->
+                                {% for contents in contents_list.small_post_data %}
                                     <article class="mini-post">
                                         <header>
-                                            <h3><a href="/view/">Vitae sed condimentum</a></h3>
-                                            <time class="published" datetime="2015-10-20">October 20, 2015</time>
-                                            <a href="#" class="author"><img src={% static 'images/avatar.jpg' %} alt="" /></a>
+                                            <h3><a href="/view/">{{ contents.title }}</a></h3>
+                                            <time class="published" datetime="2015-10-20">{{ contents.write_date }}</time>
+                                            <a href="/intro" class="author"><img src={% static 'images/avatar.jpg' %} alt="" /></a>
                                         </header>
                                         <a href="/view/" class="image"><img src={% static 'images/pic04.jpg' %} alt="" /></a>
                                     </article>
-
-                                <!-- Mini Post -->
-                                    <article class="mini-post">
-                                        <header>
-                                            <h3><a href="#">Rutrum neque accumsan</a></h3>
-                                            <time class="published" datetime="2015-10-19">October 19, 2015</time>
-                                            <a href="#" class="author"><img src={% static 'images/avatar.jpg' %} alt="" /></a>
-                                        </header>
-                                        <a href="#" class="image"><img src={% static 'images/pic05.jpg' %} alt="" /></a>
-                                    </article>
-
-                                <!-- Mini Post -->
-                                    <article class="mini-post">
-                                        <header>
-                                            <h3><a href="#">Odio congue mattis</a></h3>
-                                            <time class="published" datetime="2015-10-18">October 18, 2015</time>
-                                            <a href="#" class="author"><img src={% static 'images/avatar.jpg' %} alt="" /></a>
-                                        </header>
-                                        <a href="#" class="image"><img src={% static 'images/pic06.jpg' %} alt="" /></a>
-                                    </article>
-
-                                <!-- Mini Post -->
-                                    <article class="mini-post">
-                                        <header>
-                                            <h3><a href="#">Enim nisl veroeros</a></h3>
-                                            <time class="published" datetime="2015-10-17">October 17, 2015</time>
-                                            <a href="#" class="author"><img src={% static 'images/avatar.jpg' %} alt="" /></a>
-                                        </header>
-                                        <a href="#" class="image"><img src={% static 'images/pic07.jpg' %} alt="" /></a>
-                                    </article>
+                                {% endfor %}
                             </div>
                         </section>
 
                     <!-- Posts List -->
                         <section>
                             <ul class="posts">
-                                {% for content in contents_list.post_data %}
+                                {% for content in contents_list.all_post_list %}
                                 <li>
                                     <article>
                                         <header>
@@ -75,10 +47,10 @@
 
                     <!-- About -->
                         <section class="blurb">
-                            <h2>About</h2>
-                            <p>Mauris neque quam, fermentum ut nisl vitae, convallis maximus nisl. Sed mattis nunc id lorem euismod amet placerat. Vivamus porttitor magna enim, ac accumsan tortor cursus at phasellus sed ultricies.</p>
+                            <h2>Career</h2>
+                            <p>2018.02.26 ~ <br>SERVER DEVELOPER in AIM Cooperation</p>
                             <ul class="actions">
-                                <li><a href="#" class="button">Learn More</a></li>
+                                <li><a href="/contact" class="button">CONTACT ME</a></li>
                             </ul>
                         </section>
 

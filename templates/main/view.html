@@ -18,15 +18,15 @@
                                 </div>
                                 <div class="meta">
                                     <time class="published" datetime="2015-11-01">{{ post.write_date }}</time>
-                                    <a href="#" class="author"><span class="name">KWAN</span><img src={% static 'images/avatar.jpg' %}/></a>
+                                    <a href="/intro" class="author"><span class="name">KWAN</span><img src={% static 'images/avatar.jpg' %}/></a>
                                 </div>
                             </header>
-                            <span class="image featured"><img src={% static 'images/pic01.jpg' %} /></span>
+                            <!--<span class="image featured"><img src={% static 'images/pic01.jpg' %} /></span>-->
                             <p>{{ post.context|safe|linebreaksbr }}</p>
                             <footer>
                                 <ul class="stats">
                                     <li><a href="#">General</a></li>
-                                    <li><a href="#" class="icon fa-heart">28</a></li>
+                                    <li><a href="#" class="icon fa-heart">{{ post.like }}</a></li>
                                     <li><a href="#" class="icon fa-comment">128</a></li>
                                 </ul>
                             </footer>

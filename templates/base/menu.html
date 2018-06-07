@@ -1,9 +1,10 @@
+{% load static %}
 <!-- Menu -->
     <section id="menu">
         <!-- Search -->
             <section>
-                <form class="search" method="get" action="#">
-                    <input type="text" name="query" placeholder="Search" />
+                <form class="search" method="get" action="#">{% csrf_token %}
+                    <input type="text" name="query" class="searchbar"/>
                 </form>
             </section>
 
@@ -11,33 +12,27 @@
             <section>
                 <ul class="links">
                     <li>
-                        <a href="#">
-                            <h3>Home</h3>
-                            <p>Read recently posts</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
+                        <a href="/">
                             <h3>Post</h3>
                             <p>You can see list of all posts</p>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="/intro">
                             <h3>Introduction</h3>
                             <p>Who am i</p>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
-                            <h3>contact</h3>
+                        <a href="/contact">
+                            <h3>Contact</h3>
                             <p>if you want to work with me</p>
                         </a>
                     </li>
                     <li>
-                        <a href="/guide">
-                            <h3>post guide</h3>
-                            <p>when i write post</p>
+                        <a href="/write">
+                            <h3>Write</h3>
+                            <p>write post</p>
                         </a>
                     </li>
                 </ul>
