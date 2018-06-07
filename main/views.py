@@ -19,5 +19,10 @@ def post_view(request):
     return render(request, 'main/view.html', dict(post=post))
 
 
+def write(request):
+    return render(request, 'main/write.html')
+
+
 def guide(request):
     return render(request, 'base/write_guide.html')
+

@@ -1,0 +1,87 @@
+{% load static %}
+<!-- Sidebar -->
+                <section id="sidebar">
+
+                    <!-- Intro -->
+                        <section id="intro">
+                            <a href="#" class="logo"><img src={% static 'images/logo.jpg' %} /></a>
+                            <header>
+                                <h2>KWANHEE HAN</h2>
+                                <p>The best server developer</p>
+                            </header>
+                        </section>
+
+                    <!-- Mini Posts -->
+                        <section>
+                            <div class="mini-posts">
+                                <!-- Mini Post -->
+                                    <article class="mini-post">
+                                        <header>
+                                            <h3><a href="/view/">Vitae sed condimentum</a></h3>
+                                            <time class="published" datetime="2015-10-20">October 20, 2015</time>
+                                            <a href="#" class="author"><img src={% static 'images/avatar.jpg' %} alt="" /></a>
+                                        </header>
+                                        <a href="/view/" class="image"><img src={% static 'images/pic04.jpg' %} alt="" /></a>
+                                    </article>
+
+                                <!-- Mini Post -->
+                                    <article class="mini-post">
+                                        <header>
+                                            <h3><a href="#">Rutrum neque accumsan</a></h3>
+                                            <time class="published" datetime="2015-10-19">October 19, 2015</time>
+                                            <a href="#" class="author"><img src={% static 'images/avatar.jpg' %} alt="" /></a>
+                                        </header>
+                                        <a href="#" class="image"><img src={% static 'images/pic05.jpg' %} alt="" /></a>
+                                    </article>
+
+                                <!-- Mini Post -->
+                                    <article class="mini-post">
+                                        <header>
+                                            <h3><a href="#">Odio congue mattis</a></h3>
+                                            <time class="published" datetime="2015-10-18">October 18, 2015</time>
+                                            <a href="#" class="author"><img src={% static 'images/avatar.jpg' %} alt="" /></a>
+                                        </header>
+                                        <a href="#" class="image"><img src={% static 'images/pic06.jpg' %} alt="" /></a>
+                                    </article>
+
+                                <!-- Mini Post -->
+                                    <article class="mini-post">
+                                        <header>
+                                            <h3><a href="#">Enim nisl veroeros</a></h3>
+                                            <time class="published" datetime="2015-10-17">October 17, 2015</time>
+                                            <a href="#" class="author"><img src={% static 'images/avatar.jpg' %} alt="" /></a>
+                                        </header>
+                                        <a href="#" class="image"><img src={% static 'images/pic07.jpg' %} alt="" /></a>
+                                    </article>
+                            </div>
+                        </section>
+
+                    <!-- Posts List -->
+                        <section>
+                            <ul class="posts">
+                                {% for content in contents_list.post_data %}
+                                <li>
+                                    <article>
+                                        <header>
+                                            <h3><a href="#">{{ content.title }}</a></h3>
+                                            <time class="published" datetime="2015-10-20">{{ content.write_date }}</time>
+                                        </header>
+                                        <a href="#" class="image"><img src={% static 'images/pic08.jpg' %} alt="" /></a>
+                                    </article>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </section>
+
+                    <!-- About -->
+                        <section class="blurb">
+                            <h2>About</h2>
+                            <p>Mauris neque quam, fermentum ut nisl vitae, convallis maximus nisl. Sed mattis nunc id lorem euismod amet placerat. Vivamus porttitor magna enim, ac accumsan tortor cursus at phasellus sed ultricies.</p>
+                            <ul class="actions">
+                                <li><a href="#" class="button">Learn More</a></li>
+                            </ul>
+                        </section>
+
+                    <!-- Footer -->
+                        {% include 'base/footer.html' %}
+                </section>

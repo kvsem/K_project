@@ -1,0 +1,26 @@
+{% load static %}
+{% include 'base/base.html' %}
+<body>
+    <!-- Wrapper -->
+        <div id="wrapper">
+            <!-- Header -->
+            {% include 'base/header.html' %}
+            <!-- Menu -->
+            {% include 'base/menu.html' %}
+            <!-- Main -->
+                <div id="main">
+                    <article class="post">
+                    <!-- Post -->
+                        <form class="write_form" method="post" action="/">
+                            <h2>WRITING POST</h2>
+                            <div class="row"><label class="write_label" for="title"><h3>TITLE</h3></label><input class="write_input" id="title" type="text"/></div>
+                            <div class="row"><label class="write_label" for="sub_title"><h3>SUB TITLE</h3></label><input id="sub_title" class="write_input"  type="text"/></div>
+                            <div class="row"><label class="write_label" for="context"><h3>CONTEXT</h3></label><textarea id="context" class="write_input" ></textarea></div>
+                            <input class="submit_button" type="submit" value="SUBMIT"/>
+                        </form>
+                    </article>
+                </div>
+        {% include 'base/side.html' %}
+        </div>
+    {% include 'base/write_guide.html' %}
+</body>

@@ -13,25 +13,19 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.urls import path
 from django.views.generic.base import RedirectView
-from main.views import main_page
-from main.views import post_view
-from main.views import guide
-
-from jet.views import
+from main.views import main_page, post_view, guide, write
 
 urlpatterns = [
     path('', main_page, name='main'),
     path('favicon.ico', RedirectView.as_view(url=staticfiles_storage.url('favicon.ico')), name="favicon"),
 
-    # url(r'^jet/', include('jet.urls', 'jet'), name='jet'),
-    # url(r'^jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard'), name='jet-dashboard'),
     path('admin/', admin.site.urls),
     path('guide/', guide, name='guide'),
     path('view/', post_view, name='view'),
+    path('write/', write, name='write.html'),
 ]
 
