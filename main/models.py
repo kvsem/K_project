@@ -51,7 +51,7 @@ class Post(UpdatedAtCreatedAt):
     post_type = models.CharField(max_length=1000, default=DEFAULT, choices=CHOICES_CATEGORY, verbose_name='포스트 타입')
     write_date = models.DateTimeField(null=True, blank=True, verbose_name='작성일')
     context = models.TextField(null=True, blank=True, verbose_name='내용')
-    like = models.IntegerField()
+    like = models.IntegerField(null=False, blank=False, default=0, verbose_name='좋아요')
 
     class Meta:
         db_table = 'post'
