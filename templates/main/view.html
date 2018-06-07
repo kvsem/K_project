@@ -1,5 +1,5 @@
-{% include 'base/base.html' %}
 {% load static %}
+{% include 'base/base.html' %}
 <body class="single">
     <!-- Wrapper -->
         <div id="wrapper">
@@ -18,7 +18,7 @@
                                 </div>
                                 <div class="meta">
                                     <time class="published" datetime="2015-11-01">{{ post.write_date }}</time>
-                                    <a href="/intro" class="author"><span class="name">KWAN</span><img src={% static 'images/avatar.jpg' %}/></a>
+                                    <a href="/intro" class="author"><span class="name">KWAN</span><img src={% static 'images/avatar.jpg' %} alt=""/></a>
                                 </div>
                             </header>
                             <!--<span class="image featured"><img src={% static 'images/pic01.jpg' %} /></span>-->
