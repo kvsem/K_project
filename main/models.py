@@ -38,18 +38,6 @@ class UpdatedAtCreatedAt(CreatedAt, UpdatedAt):
 
 
 class Post(UpdatedAtCreatedAt):
-    title = models.CharField(max_length=200, null=True, blank=True, verbose_name='제목', help_text='200자')
-    sub_title = models.CharField(max_length=200, null=True, blank=True, verbose_name='부제목', help_text='200자')
-    write_date = models.DateTimeField(null=True, blank=True, verbose_name='작성일')
-    context = models.TextField(null=True, blank=True, verbose_name='내용')
-
-    class Meta:
-        db_table = 'post'
-        verbose_name = '포스트'
-        verbose_name_plural = verbose_name
-
-
-class Category(UpdatedAtCreatedAt):
     DEFAULT = 'default'
     SMALL = 'small'
 
@@ -58,12 +46,16 @@ class Category(UpdatedAtCreatedAt):
         (SMALL, '간식'),
     )
 
-    post_type = models.CharField(max_length=1000, default=DEFAULT, choices=CHOICES_CATEGORY, verbose_name='포스트 타입')
+    title = models.CharField(max_length=200, null=True, blank=True, verbose_name='제목', help_text='200자')
     category = models.CharField(max_length=200, null=True, blank=True, verbose_name='카테고리', help_text='200자')
+    post_type = models.CharField(max_length=1000, default=DEFAULT, choices=CHOICES_CATEGORY, verbose_name='포스트 타입')
+    write_date = models.DateTimeField(null=True, blank=True, verbose_name='작성일')
+    context = models.TextField(null=True, blank=True, verbose_name='내용')
+    like = models.IntegerField()
 
     class Meta:
-        db_table = 'category'
-        verbose_name = '카테고리'
+        db_table = 'post'
+        verbose_name = '포스트'
         verbose_name_plural = verbose_name
 
 

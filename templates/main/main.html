@@ -15,14 +15,14 @@
                             <header>
                                 <div class="title">
                                     <h2><a href="/view/?id={{ content.id }}">{{ content.title }}</a></h2>
-                                    <p>{{ content.sub_title }}</p>
+                                    <p>{{ content.category }}</p>
                                 </div>
                                 <div class="meta">
                                     <time class="published" datetime="2015-11-01">{{ content.write_date }}</time>
                                     <a href="#" class="author"><span class="name">KWAN</span><img src={% static 'images/avatar.jpg' %} alt="" /></a>
                                 </div>
                             </header>
-                            <a href="/view/?id={{ content.id }}" class="image featured"><img src={% static 'images/pic01.jpg' %} alt="" /></a>
+                            <!-- <a href="/view/?id={{ content.id }}" class="image featured"><img src={% static 'images/pic01.jpg' %} alt="" /></a> -->
                             <p>{{ content.context|safe|linebreaksbr }}</p>
                             <footer>
                                 <ul class="actions">

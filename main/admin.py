@@ -12,7 +12,7 @@ class PostAdmin(admin.ModelAdmin):
 
     list_display = (
         'title',
-        'sub_title',
+        'category',
         'write_date',
         'context',
     )
@@ -36,7 +36,7 @@ class PostAdmin(admin.ModelAdmin):
     fieldsets = (
         ('포스트 정보', dict(fields=[
             'title',
-            'sub_title',
+            'category',
             'write_date',
             'context',
         ])),
