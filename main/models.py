@@ -1,7 +1,10 @@
 from django.db import models
+from django_summernote import models as summer_model
+from django_summernote import fields as summer_fields
 
 # Create your models here.
-
+class SummerNote(summer_model.Attachment):
+	summer_field = summer_fields.SummernoteTextField(default='')
 
 class CreatedAt(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, verbose_name='생성 일시')

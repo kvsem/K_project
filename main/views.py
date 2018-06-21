@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from main.models import Post
-
+from main.forms import PostForm
 
 def main_page(request):
     page = int(request.GET.get('page', 0))
@@ -40,8 +40,9 @@ def post_view(request):
 
 
 def write(request):
+    form = PostForm()
     contents_list = get_side_contents()
-    return render(request, 'main/write.html', dict(contents_list=contents_list))
+    return render(request, 'main/write.html', dict(form=form, contents_list=contents_list))
 
 
 def guide(request):

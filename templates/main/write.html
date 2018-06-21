@@ -10,12 +10,14 @@
                 <div id="main">
                     <article class="post">
                     <!-- Post -->
-                        <form class="write_form" method="post" action="/">{% csrf_token %}
+                        <form class="write_form" method="post" action="/">
+			    {% csrf_token %}
                             <h2>WRITING POST</h2>
                             <div class="row"><label class="write_label" for="title"><h3>TITLE</h3></label><input class="write_input" id="title" type="text"/></div>
                             <div class="row"><label class="write_label" for="category"><h3>SUB TITLE</h3></label><input id="category" class="write_input"  type="text"/></div>
                             <div class="row"><label class="write_label" for="context"><h3>CONTEXT</h3></label><textarea id="context" class="write_input" ></textarea></div>
-                            <input class="submit_button" type="submit" value="SUBMIT"/>
+                            {{ form|safe }}
+			    <input class="submit_button" type="submit" value="SUBMIT"/>
                         </form>
                     </article>
                 </div>
