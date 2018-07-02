@@ -1,8 +1,29 @@
 from django.shortcuts import render
 from main.models import Post
 from main.forms import PostForm
+from django.utils import timezone
+
 
 def main_page(request):
+    if request.POST.get('title'):
+        now = timezone.now()
+
+        title = request.POST.get('title')
+        category = request.POST.get('category')
+        post_type = request.POST.get('post_type')
+        context = request.POST.get('context')
+
+        thumbnail = context.split('static/')[-1].split('"')[0]
+
+        Post.objects.create(
+            title=title,
+            category=category,
+            post_type=post_type,
+            context=context,
+            write_date=now,
+            thumbnail=thumbnail,
+        )
+
     page = int(request.GET.get('page', 0))
     next_page = page+1
     prev_page = page-1 if page != 0 else 0

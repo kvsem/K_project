@@ -49,6 +49,7 @@ class Post(UpdatedAtCreatedAt):
         (SMALL, '간식'),
     )
 
+    thumbnail = models.CharField(null=True, blank=True, max_length=200, verbose_name='Thumenail')
     title = models.CharField(max_length=200, null=True, blank=True, verbose_name='제목', help_text='200자')
     category = models.CharField(max_length=200, null=True, blank=True, verbose_name='카테고리', help_text='200자')
     post_type = models.CharField(max_length=1000, default=DEFAULT, choices=CHOICES_CATEGORY, verbose_name='포스트 타입')
