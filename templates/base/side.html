@@ -22,7 +22,7 @@
                                             <time class="published" datetime="2015-10-20">{{ contents.write_date }}</time>
                                             <a href="/intro" class="author"><img src={% static 'images/avatar.jpg' %} alt="" /></a>
                                         </header>
-                                        <a href="/view/" class="image"><img src={% static 'images/pic04.jpg' %} alt="" /></a>
+                                        <a href="/view/" class="image"><img src="/static/{{ contents.thumbnail }}" alt="" /></a>
                                     </article>
                                 {% endfor %}
                             </div>
@@ -38,7 +38,7 @@
                                             <h3><a href="#">{{ content.title }}</a></h3>
                                             <time class="published" datetime="2015-10-20">{{ content.write_date }}</time>
                                         </header>
-                                        <a href="#" class="image"><img src={% static 'images/pic08.jpg' %} alt="" /></a>
+                                        <a href="#" class="image"><img src="/static/{{ content.thumbnail }}" alt="" /></a>
                                     </article>
                                 </li>
                                 {% endfor %}
