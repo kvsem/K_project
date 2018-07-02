@@ -4,7 +4,7 @@
 
                     <!-- Intro -->
                         <section id="intro">
-                            <a href="#" class="logo"><img src={% static 'images/logo.jpg' %} /></a>
+                            <a href="/" class="logo"><img src={% static 'images/avatar.jpg' %} /></a>
                             <header>
                                 <h2>KWANHEE HAN</h2>
                                 <p>The best server developer</p>
@@ -15,14 +15,18 @@
                         <section>
                             <div class="mini-posts">
                                 <!-- Mini Post -->
-                                {% for contents in contents_list.small_post_data %}
+                                {% for contents in contents_list.all_post_list %}
                                     <article class="mini-post">
                                         <header>
-                                            <h3><a href="/view/">{{ contents.title }}</a></h3>
+                                            <h3><a href="/view/?id={{contents.id}}">{{ contents.title }}</a></h3>
                                             <time class="published" datetime="2015-10-20">{{ contents.write_date }}</time>
                                             <a href="/intro" class="author"><img src={% static 'images/avatar.jpg' %} alt="" /></a>
                                         </header>
-                                        <a href="/view/" class="image"><img src="/static/{{ contents.thumbnail }}" alt="" /></a>
+                                        {% if contents.thumbnail != "" %}
+                                        <a href="/view/?id={{contents.id}}" class="image"><img src="/static/{{ contents.thumbnail }}" alt="" /></a>
+                                        {% else %}
+                                        <a href="/view/?id={{contents.id}}" class="image"><img src="/static/images/pic02.jpg" alt="" /></a>
+                                        {% endif %}
                                     </article>
                                 {% endfor %}
                             </div>
@@ -35,10 +39,14 @@
                                 <li>
                                     <article>
                                         <header>
-                                            <h3><a href="#">{{ content.title }}</a></h3>
+                                            <h3><a href="/view/?id={{content.id}}">{{ content.title }}</a></h3>
                                             <time class="published" datetime="2015-10-20">{{ content.write_date }}</time>
                                         </header>
-                                        <a href="#" class="image"><img src="/static/{{ content.thumbnail }}" alt="" /></a>
+                                        {% if content.thumbnail != "" %}
+                                        <a href="/view/?id={{content.id}}" class="image"><img src="/static/{{ content.thumbnail }}" alt="" /></a>
+                                        {% else %}
+                                        <a href="/view/?id={{content.id}}" class="image"><img src="/static/images/pic02.jpg" alt="" /></a>
+                                        {% endif %}
                                     </article>
                                 </li>
                                 {% endfor %}
