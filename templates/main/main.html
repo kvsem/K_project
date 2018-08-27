@@ -23,7 +23,9 @@
                                 </div>
                             </header>
                             <!-- <a href="/view/?id={{ content.id }}" class="image featured"><img src={% static 'images/pic01.jpg' %} alt="" /></a> -->
-                            <p>{{ content.context|safe|linebreaksbr }}</p>
+                            <div class="post_context">
+				<p>{{ content.context|safe|linebreaksbr }}</p>
+			    </div>
                             <footer>
                                 <ul class="actions">
                                     <li><a href="/view/?id={{ content.id }}" class="button big">Continue Reading</a></li>

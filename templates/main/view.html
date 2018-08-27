@@ -21,8 +21,10 @@
                                     <a href="/intro" class="author"><span class="name">KWAN</span><img src={% static 'images/avatar.jpg' %} alt=""/></a>
                                 </div>
                             </header>
-                            <!--<span class="image featured"><img src={% static 'images/pic01.jpg' %} /></span>-->
-                            <p>{{ post.context|safe|linebreaksbr }}</p>
+		            <div class="post_context">
+                            	<!--<span class="image featured"><img src={% static 'images/pic01.jpg' %} /></span>-->
+                            	<p>{{ post.context|safe|linebreaksbr }}</p>
+			    </div>
                             <footer>
                                 <ul class="stats">
                                     <li><a href="#">General</a></li>
