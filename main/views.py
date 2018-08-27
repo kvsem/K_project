@@ -13,7 +13,10 @@ def main_page(request):
         post_type = request.POST.get('post_type')
         context = request.POST.get('context')
 
-        thumbnail = context.split('static/')[-1].split('"')[0]
+        if 'img src' in context:
+            thumbnail = context.split('static/')[-1].split('"')[0]
+        else:
+            thumbnail = ""
 
         Post.objects.create(
             title=title,
@@ -78,6 +81,10 @@ def intro(request):
 def contact(request):
     contents_list = get_side_contents()
     return render(request, 'main/contact.html', dict(contents_list=contents_list))
+
+def deleague(request):
+    contents_list = get_side_contents()
+    return render(request, 'main/deleague.html', dict(contents_list=contents_list))
 
 
 def get_side_contents():

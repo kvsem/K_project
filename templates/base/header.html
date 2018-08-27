@@ -1,7 +1,14 @@
 {% load static %}
+{% load socialaccount %}
+
 <!-- Header -->
 <header id="header">
     <h1><a href="/">KWANHEE HAN</a></h1>
+    {% if user.is_authenticated %}
+    <span>{{ user }}님이 로그인중입니다.</span>
+    {% endif %}
+
+    <h2><a href="/accounts/logout">로그아웃</a></h2><br>
     <nav class="links">
         <ul>
             <li><a href="/">Post</a></li>

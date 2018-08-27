@@ -18,10 +18,11 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 from django.conf.urls import include
 from django.urls import path
 from django.views.generic.base import RedirectView
-from main.views import main_page, post_view, guide, write, intro, contact
+from main.views import main_page, post_view, guide, write, intro, contact, deleague
 
 urlpatterns = [
     path('', main_page, name='main'),
+    path('accounts/', include('allauth.urls')),
     path('summmernote/', include('django_summernote.urls')),
 
     path('favicon.ico', RedirectView.as_view(url=staticfiles_storage.url('favicon.ico')), name="favicon"),
@@ -32,5 +33,6 @@ urlpatterns = [
     path('contact/', contact, name='contact'),
     path('view/', post_view, name='view'),
     path('write/', write, name='write.html'),
+    path('deleague/', deleague, name='deleague.html'),
 ]
 

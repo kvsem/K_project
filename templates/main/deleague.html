@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<script>window.stashEnv = {
+	environment: 'production',
+	appHost: 'https://app.stashinvest.com',
+	signUpURL: 'https://get.stashinvest.com/website-webreg'+window.location.search,
+	cdn: 'https://cdn.stashinvest.com/',
+	stashApi: 'https://api.stashinvest.com/api/v1',
+	branchKey: 'key_live_khjO8udET5Lp36DkH5uC5jbkrFkjXRq9'
+}</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script>
+(function($,T,A,S,H){$[S]=$[S]||[];$[S].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+var f=T.getElementsByTagName(A)[0],auth=$.location.host.match(/^\w+-/)?'&gtm_auth=Th3olOQ13l_KJTBEcUGWjg&gtm_preview=env-3&gtm_cookies_win=x':'',j=T.createElement(A),dl=S!='dataLayer'?'&l='+S:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+H+dl+auth;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-TFGKH8');
+</script>
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+<symbol id="info-icon" viewBox="0 0 12 12">
+<path fill-rule="evenodd" d="M5.409 4.197V2.986H6.59v1.211H5.41zM6 10.817c.865 0 1.673-.22 2.423-.663.73-.423 1.308-1 1.73-1.73.443-.75.664-1.559.664-2.424s-.22-1.673-.663-2.423c-.423-.73-1-1.308-1.73-1.73A4.688 4.688 0 0 0 6 1.182c-.865 0-1.673.22-2.423.663-.73.423-1.308 1-1.73 1.73A4.688 4.688 0 0 0 1.182 6c0 .865.22 1.673.663 2.423.423.73 1 1.308 1.73 1.73.75.443 1.559.664 2.424.664zM6 0a5.9 5.9 0 0 1 3.043.822 5.687 5.687 0 0 1 2.135 2.135A5.9 5.9 0 0 1 12 6a5.9 5.9 0 0 1-.822 3.043 5.687 5.687 0 0 1-2.135 2.135A5.9 5.9 0 0 1 6 12a5.9 5.9 0 0 1-3.043-.822 5.794 5.794 0 0 1-2.135-2.15A5.875 5.875 0 0 1 0 6c0-1.087.274-2.096.822-3.029A5.905 5.905 0 0 1 2.972.822 5.875 5.875 0 0 1 6 0zm-.591 9.014V5.41H6.59v3.605H5.41z"/>
+</symbol>
+</svg>
+<style>
+#yrBox {
+  transition: transform 0.2s ease-in;
+}
+#invest .potential-budget {
+  padding: 0 7.1em 0;
+  background: #000254 !important;
+}
+#invest .potential-budget p {
+  color: #C1BBD3;
+  text-align: left;
+  opacity: 1;
+}
+#invest .potential-budget #range-slider {
+  padding: 65px 0 0 0;
+}
+#invest .potential-budget #range-slider #rangeContainer {
+  background: rgba(180, 180, 180, 0.23);
+  opacity: 1;
+}
+#invest .potential-budget #range-slider #rangeContainer #rangeHighlight {
+  opacity: 0.87;
+  background: #ffffff;
+}
+#invest .potential-budget .line-chart #hzLine {
+  stroke: rgba(255, 255, 255, 0.13) !important;
+  stroke-width: .25 !important;
+}
+#invest .potential-budget .line-chart #retireLine {
+  stroke: #fff !important;
+  stroke-width: .25 !important;
+}
+#invest .potential-budget .line-chart #cashDepositedLine {
+  stroke: rgba(255, 255, 255, 0.6) !important;
+  stroke-width: .25 !important;
+}
+#invest .potential-budget .line-chart .draggable #verticalIndicator {
+  stroke: rgba(255, 255, 255, 0.13) !important;
+  stroke-width: .3 !important;
+}
+#invest .potential-budget .line-chart .draggable #yrBox .numYears {
+  font-size: 2.3px !important;
+}
+#invest .potential-budget .line-chart .draggable #yrBox .boxYearsG:first-child {
+  stroke: none !important;
+  fill: rgba(255, 255, 255, 0.3) !important;
+}
+#invest .potential-budget .line-chart .draggable #yrBox .boxYearsG:nth-child(2) {
+  stroke: none !important;
+  fill: rgba(255, 255, 255, 0.3) !important;
+}
+@media only screen and (max-width: 768px) {
+  .boxAnimate,
+  .retirePolygon,
+  .cashPolygon {
+    display: none;
+  }
+  #invest .potential-budget {
+    position: initial;
+    padding: .9em 30px 0;
+  }
+  #invest .potential-budget p {
+    text-align: center;
+  }
+  #invest .potential-budget .mobile-boxes {
+    display: flex;
+    font-family: 'Walsheim';
+    color: #fff;
+    text-align: left;
+    margin-top: 3.5em;
+  }
+  #invest .potential-budget .mobile-boxes .m-retireBox {
+    border-radius: 1px;
+    background-image: linear-gradient(111deg, #ce0432, #44d1db);
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
+    width: 122px;
+    height: 55px;
+    padding: 5px 12px;
+    box-sizing: border-box;
+    margin-right: 15px;
+  }
+  #invest .potential-budget .mobile-boxes .m-retireBox .label {
+    font-size: 14px;
+  }
+  #invest .potential-budget .mobile-boxes .m-retireBox .retireAmt {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  #invest .potential-budget .mobile-boxes .m-cashBox {
+    border-radius: 1px;
+    background-color: #6936cf;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
+    width: 122px;
+    height: 55px;
+    padding: 5px 11px;
+    box-sizing: border-box;
+  }
+  #invest .potential-budget .mobile-boxes .m-cashBox .label {
+    font-size: 14px;
+  }
+  #invest .potential-budget .mobile-boxes .m-cashBox .cashDespositedAmt {
+    font-size: 20px;
+    font-weight: 600;
+  }
+  #invest .potential-budget #range-slider {
+    margin: 0 auto;
+    padding: 75px 0 0 0;
+  }
+  #invest .potential-budget #range-slider #dollar {
+    top: 30px;
+  }
+  #invest .potential-budget .mobile-boxes {
+    display: flex !important;
+  }
+  #invest .potential-budget .mobile-boxes .m-retireBox .label,
+  #invest .potential-budget .mobile-boxes .m-cashBox .label,
+  #invest .potential-budget .mobile-boxes .m-retireBox .retireAmt,
+  #invest .potential-budget .mobile-boxes .m-cashBox .retireAmt,
+  #invest .potential-budget .mobile-boxes .m-retireBox .cashDespositedAmt,
+  #invest .potential-budget .mobile-boxes .m-cashBox .cashDespositedAmt {
+    opacity: 1;
+    color: #fff;
+    text-align: left;
+  }
+  #invest .potential-budget svg.line-chart g#indicatorGroup g#mobileIndicator {
+    display: block !important;
+  }
+  #invest .potential-budget svg.line-chart g#indicatorGroup g#yrBox .numYears {
+    font-size: 3px !important;
+  }
+  #invest .potential-budget svg.line-chart g#indicatorGroup g#yrBox .boxYearsG {
+    display: none;
+  }
+}
+@media only screen and (max-width: 400px) {
+  #invest .potential-budget svg.line-chart #hzLine {
+    stroke-width: .8 !important;
+  }
+  #invest .potential-budget svg.line-chart #verticalIndicator {
+    stroke-width: .8 !important;
+  }
+  #invest .potential-budget svg.line-chart #retireLine {
+    stroke-width: 1 !important;
+  }
+  #invest .potential-budget svg.line-chart #cashDepositedLine {
+    stroke-width: .7 !important;
+  }
+  #invest .potential-budget svg.line-chart g#indicatorGroup g#yrBox .numYears {
+    font-size: 5px !important;
+  }
+  #invest .potential-budget svg.line-chart .retireCircle,
+  #invest .potential-budget svg.line-chart .cashCircle,
+  #invest .potential-budget svg.line-chart circle.mobile {
+    r: 1.48 !important;
+  }
+}
+</style>
+<script>
+$(document).ready(function(){
+	changeGraphStyles();
+
+	var headlines = $('.banner .content');
+	var index = $('.banner .content.active').index();
+
+	// put this global so it can be flagged on/off in Google Optimize
+	window.headlineInterval = window.setInterval(function(){
+		if (window.innerWidth < 768) {
+			window.clearInterval(headlineInterval);
+			return false;
+		}
+		headlines.removeClass('active');
+		$(headlines.get(++index % headlines.length)).addClass('active')
+	}, 5000);
+
+	$('.potential-budget').on('keypress keydown', function(e){
+		if(e.which === 13) {
+			$('.interest-rate').blur();
+			return false;
+		}
+		if(/^[A-Z|a-z]$/.test(e.key)) {
+			e.preventDefault();
+			return false
+		}
+	});
+
+
+	// brought over from retire graph
+	// 'retire' label refers to 'invest' label & amounts
+	function changeGraphStyles() {
+		mobileResponsive()
+
+		$('.numYears').attr('fill', '#fff');
+
+		$('.retireCircle').attr({
+			'fill': '#fff',
+			'r': '.5'
+		})
+		$('.retireBoxWrapper').attr({
+			'height': '6.3',
+			'width': '12.8',
+			'x': '-6.4',
+			'transform': 'translate(0,2.5)'
+		});
+		$('.cashDepositedBoxWrapper').attr({
+			'height': '6.3',
+			'width': '12.55',
+			'x': '-6.275'
+		})
+
+		$('.cashCircle').attr({
+			'fill': '#b1a7c9',
+			'r': '.5'
+		});
+		// interestRateUpdate();
+		retireAndCashLabel();
+		setBoxYears();
+	}
+	function retireAndCashLabel() {
+		$('.retireLabel')[0].innerHTML = "Invested";
+		$('.m-retireBox .label').text('Invest');
+		$('.retireLabel, .cashDepositedLabel').attr({ 'font-size': '1.4' });
+		$('.retireLabel').attr({
+			'x': '-2',
+			'y': '4.85'
+		})
+		$('.cashDepositedLabel').attr({ 'y': '22.3' })
+		$('.retireAmt').attr({
+			'x': '-.25',
+			'y': '7.5',
+			'font-size': '2.4'
+		})
+		$('.cashDespositedAmt').attr({
+			'x': '-1.25',
+			'y': '25',
+			'font-size': '2.4'
+		})
+	}
+	function setBoxYears() {
+		$('.boxYearsG').attr({
+			'width': '13.82',
+			'height': '5.05',
+			'x': '-6.91',
+			'y': '59',
+			'stroke': 'rgba(255,255,255,0.3)'
+		})
+		$('.boxYearsG')[0].setAttribute("points", "-5.65,61.5 -4.47,62.375 -4.47,60.625")
+		$('.boxYearsG')[1].setAttribute("points", "5.65,61.5 4.5,62.375 4.5,60.625")
+	}
+
+	function mobileResponsive() {
+		$('.mobilePolygonLeft, .mobilePolygonRight, .mobile').attr('fill', 'rgba(255, 255, 255, 0.3)');
+
+		if ($(window).width() <= 767){
+			$('.numYears').attr({
+				'transform': 'translate(-6,31.9969948823)'
+			});
+		} else {
+			$('.numYears').attr({
+				'transform': 'translate(0,62.155)'
+			});
+		}
+	}
+
+	$( window ).resize(function() {
+		mobileResponsive()
+	})
+
+	var interestRate;
+	function updateNegativeRate() {
+		interestRate = $('.interest-and-percentage').text();
+		if (parseInt(interestRate) <= 0) {
+			$('.cashDepositedBoxWrapper').attr({'y':'22.3'})
+			$('.cashDespositedAmt').attr({'y': '27.2'})
+			$('.cashDepositedLabel').attr({'y': '24.6'})
+			// $('.cashDespositedAmt').attr({'y', '7'})
+
+			$('.retireBoxWrapper').attr({
+				'transform': 'translate(0,0)'
+			});
+			$('.retireLabel').attr({'y': '2.35'})
+			$('.retireAmt').attr({'y': '5'})
+		}
+	}
+
+	function updateInterestRate() {
+		$('.interest-rate').on('focus', function(){
+			$('.interest-rate').on('blur', function(){
+				updateNegativeRate();
+			});
+		});
+	}
+	updateInterestRate();
+	// line graph for mobile
+	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+		$('.line-chart').on('touchmove', function(e) {
+			var svgWidth = $(this).outerWidth();
+			var viewBoxWidth = $(this).attr("viewBox").split(" ")[2];
+
+			var xpos = e.pageX - $(this).offset().left;
+
+			positionX = (xpos/svgWidth)*viewBoxWidth;
+
+			// shift pointer of box positions if indicator reaches left/right border
+			if (positionX > 90) {
+				$(".boxAnimate, #yrBox").css({ transform: "translate(-4.5px, 0)"})
+			}
+		})
+	}
+	// line graph for desktop
+	else {
+		var svgWidth, viewBoxWidth;
+		$('.line-chart').on("mousedown", function(e){
+			canDrag = true;
+
+			$(this).on('mousemove', function(e){
+				if (canDrag == true) {
+					svgWidth = $('.line-chart').outerWidth();
+					viewBoxWidth = $('.line-chart').attr("viewBox").split(" ")[2];
+					var xpos = e.pageX - $('.line-chart').offset().left;
+					positionX = (xpos/svgWidth)*viewBoxWidth;
+
+					if (positionX > 96) {
+						positionX = 96;
+						canDrag = false;
+					}
+					if (positionX < 6) {
+						positionX = 6;
+						canDrag = false;
+					}
+
+					// shift pointer of box positions if indicator reaches left/right border
+					if (positionX > 90) {
+						$(".boxAnimate, #yrBox").css({ transform: "translate(-4.5px, 0)"})
+					}
+				}
+			})
+		});
+		$('.line-chart').on("mouseup", function(e){
+			canDrag = false;
+		});
+	}
+})</script>
+<section id="investing">
+
+<style>
+
+#investing .container #card div {
+  width: 246px;
+  height: 437px;
+  position: absolute;
+  top: 70px;
+  left: 17px;
+  background: #FFF;
+  border: 1px solid #878787;
+  box-sizing: border-box;
+}
+#investing .container #card div img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  width: 100%;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  transition: all 0.3s;
+}
+#investing .container #slider span {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+#investing .container #slider .s01 span {
+  background-image: url('https://cdn.stashinvest.com/assets/images/investing-slider/invest-american-innovators-photo.jpg');
+}
+#investing .container #slider .s02 span {
+  background-image: url('https://cdn.stashinvest.com/assets/images/investing-slider/invest-blue-chips-photo.jpg');
+}
+#investing .container #slider .s03 span {
+  background-image: url('https://cdn.stashinvest.com/assets/images/investing-slider/invest-netflix-photo.jpg');
+}
+#investing .container #slider .s04 span {
+  background-image: url('https://cdn.stashinvest.com/assets/images/investing-slider/invest-clean-green-photo.jpg');
+}
+#investing .container #slider .s05 span {
+  background-image: url('https://cdn.stashinvest.com/assets/images/investing-slider/invest-defending-america-photo.jpg');
+}
+#investing .container #slider .s06 span {
+  background-image: url('https://cdn.stashinvest.com/assets/images/investing-slider/invest-facebook-photo.jpg');
+}
+#investing .container #slider .s07 span {
+  background-image: url('https://cdn.stashinvest.com/assets/images/investing-slider/invest-roll-buffett-photo.jpg');
+}
+#investing .container #slider .s08 span {
+  background-image: url('https://cdn.stashinvest.com/assets/images/investing-slider/invest-smallbiz-photo.jpg');
+}
+#investing .container #slider .s09 span {
+  background-image: url('https://cdn.stashinvest.com/assets/images/investing-slider/invest-microsoft-photo.jpg');
+}
+#investing .container #slider .s10 span {
+  background-image: url('https://cdn.stashinvest.com/assets/images/investing-slider/invest-wireless-photo.jpg');
+}
+#investing .container p.disclosure span {
+  display: block;
+}
+/* Investment Slider
+=============================================== */
+@media only screen and (max-width: 640px) {
+  #investing .bx-wrapper li {
+    width: 20% !important;
+  }
+  #investing .bx-wrapper li span {
+    margin: 0;
+  }
+}
+@media only screen and (max-width: 768px) {
+  #investing .container p.disclosure span {
+    display: inline;
+  }
+}
+#range-slider {
+  position: relative;
+  max-width: 350px;
+  padding: 60px 0 0 0;
+  /* Chrome and Safari */
+  /* FireFox */
+  /* IE 10 -- Are we using IE */
+}
+@media only screen and (max-width: 768px) {
+  #range-slider {
+    padding: 58px 0 0 0;
+  }
+}
+#range-slider #dollar {
+  position: absolute;
+  top: 20px;
+  display: block;
+  color: #44cee7;
+  font-size: 14px;
+  font-family: 'Walsheim', arial, sans-serif;
+  font-weight: 600;
+}
+@media only screen and (max-width: 768px) {
+  #range-slider #dollar {
+    font-size: 12px;
+  }
+}
+#range-slider #dollar strong {
+  font-size: 24px;
+}
+@-moz-document url-prefix() {
+  #range-slider #dollar strong {
+    font-weight: 400;
+  }
+}
+@media only screen and (max-width: 768px) {
+  #range-slider #dollar strong {
+    font-size: 22px;
+  }
+}
+#range-slider #rangeContainer {
+  padding: 0;
+  border-radius: 50px;
+  height: 15.5px;
+  background: #eeeeee;
+  box-shadow: inset 0 0 4px 0 rgba(0, 0, 0, 0.2);
+}
+@media only screen and (max-width: 768px) {
+  #range-slider #rangeContainer {
+    height: 13px;
+  }
+}
+#range-slider #rangeHighlight {
+  display: block;
+  height: 15.5px;
+  min-width: 25px;
+  max-width: 98%;
+  position: absolute;
+  background: #cfcfcf;
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+  box-shadow: inset -1px 1px 1px rgba(0, 0, 0, 0.3);
+}
+@media only screen and (max-width: 768px) {
+  #range-slider #rangeHighlight {
+    height: 13px;
+  }
+}
+#range-slider input[type=range] {
+  -webkit-appearance: none;
+  background: transparent;
+  border: 0;
+  box-sizing: border-box;
+  margin: 0;
+  position: relative;
+  width: 100%;
+}
+#range-slider input[type=range]::-moz-range-thumb {
+  -webkit-appearance: none;
+  background: transparent;
+  border: 0;
+  box-sizing: border-box;
+  margin: 0;
+  position: relative;
+  width: 100%;
+  z-index: 200;
+}
+#range-slider input[type=range]::-webkit-slider-runnable-track {
+  height: 15px;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+}
+#range-slider input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  border: none;
+  height: 28px;
+  width: 28px;
+  border-radius: 40px;
+  background: #44cee7;
+  margin-top: -8px;
+}
+@media only screen and (max-width: 768px) {
+  #range-slider input[type=range]::-webkit-slider-thumb {
+    height: 24.5px;
+    width: 24.5px;
+    margin-top: -6px;
+  }
+}
+#range-slider input[type=range]:focus {
+  outline: none;
+}
+#range-slider input[type=range]:focus::-webkit-slider-runnable-track {
+  background: transparent;
+  outline: none;
+}
+#range-slider input[type=range]::-moz-range-track {
+  height: 15px;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+}
+#range-slider input[type="range"]::-moz-range-progress {
+  height: 15px;
+  border-radius: 5px;
+}
+#range-slider input[type=range]::-moz-range-thumb {
+  border: none;
+  height: 28px;
+  width: 28px;
+  border-radius: 50%;
+  background: #44cee7;
+  box-shadow: 0 0 1px 1px #FFF;
+}
+@media only screen and (max-width: 768px) {
+  #range-slider input[type=range]::-moz-range-thumb {
+    height: 24.5px;
+    width: 24.5px;
+    margin-top: -6px;
+  }
+}
+#range-slider input[type=range]:-moz-focusring {
+  outline: none;
+  outline-offset: -1;
+}
+#range-slider input[type=range]::-ms-track {
+  width: 98%;
+  height: 15px;
+  background: transparent;
+  border-color: transparent;
+  border-width: 6px 0;
+  color: transparent;
+}
+#range-slider input[type=range]::-ms-fill-lower {
+  background: #777;
+  border-radius: 10px;
+}
+#range-slider input[type=range]::-ms-fill-upper {
+  background: #ddd;
+  border-radius: 10px;
+}
+#range-slider input[type=range]::-ms-thumb {
+  border: none;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  background: #29828E;
+}
+#range-slider input[type=range]:focus::-ms-fill-lower {
+  background: #29828E;
+}
+#range-slider input[type=range]:focus::-ms-fill-upper {
+  background: #FFF;
+}
+.boxAnimate,
+#yrBox {
+  transition: transform 0.2s ease-in;
+}
+#invest {
+  background-image: linear-gradient(to bottom, rgba(252, 253, 253, 0), #f8f9f9);
+}
+#invest .potential-budget {
+  background: #fff;
+  box-sizing: border-box;
+  position: relative;
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+}
+#invest .potential-budget h1 {
+  font-size: 32px;
+  font-family: 'Walsheim';
+  font-weight: 600;
+  color: #272727;
+}
+#invest .potential-budget p .word-wrap .tip.interest-rate {
+  border-bottom: 1px dotted #9685bc !important;
+  padding: 0 5px;
+}
+#invest .potential-budget .mobile-boxes {
+  display: none;
+}
+#invest .potential-budget svg.line-chart {
+  margin-left: 7%;
+}
+@media only screen and (max-width: 1024px) {
+  #invest .potential-budget svg.line-chart {
+    margin-left: 6%;
+  }
+}
+@media only screen and (max-width: 768px) {
+  #invest .potential-budget svg.line-chart {
+    margin-left: 4%;
+  }
+}
+@media only screen and (max-width: 400px) {
+  #invest .potential-budget svg.line-chart {
+    margin-left: 0;
+  }
+}
+#invest .potential-budget svg.line-chart g#indicatorGroup {
+  cursor: move;
+}
+#invest .potential-budget svg.line-chart g#indicatorGroup g#retireBox g.boxAnimate text .retireLabel,
+#invest .potential-budget svg.line-chart g#indicatorGroup g#cashDepositedBox g.boxAnimate text .retireLabel,
+#invest .potential-budget svg.line-chart g#indicatorGroup g#retireBox g.boxAnimate text .cashDepositedLabel,
+#invest .potential-budget svg.line-chart g#indicatorGroup g#cashDepositedBox g.boxAnimate text .cashDepositedLabel {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+}
+@-moz-document url-prefix() {
+  #invest .potential-budget svg.line-chart g#indicatorGroup g#retireBox g.boxAnimate text .retireLabel,
+  #invest .potential-budget svg.line-chart g#indicatorGroup g#cashDepositedBox g.boxAnimate text .retireLabel,
+  #invest .potential-budget svg.line-chart g#indicatorGroup g#retireBox g.boxAnimate text .cashDepositedLabel,
+  #invest .potential-budget svg.line-chart g#indicatorGroup g#cashDepositedBox g.boxAnimate text .cashDepositedLabel {
+    font-weight: 300;
+  }
+}
+#invest .potential-budget svg.line-chart g#indicatorGroup g#retireBox g.boxAnimate text .retireAmt,
+#invest .potential-budget svg.line-chart g#indicatorGroup g#cashDepositedBox g.boxAnimate text .retireAmt,
+#invest .potential-budget svg.line-chart g#indicatorGroup g#retireBox g.boxAnimate text .cashDespositedAmt,
+#invest .potential-budget svg.line-chart g#indicatorGroup g#cashDepositedBox g.boxAnimate text .cashDespositedAmt {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+}
+@-moz-document url-prefix() {
+  #invest .potential-budget svg.line-chart g#indicatorGroup g#retireBox g.boxAnimate text .retireAmt,
+  #invest .potential-budget svg.line-chart g#indicatorGroup g#cashDepositedBox g.boxAnimate text .retireAmt,
+  #invest .potential-budget svg.line-chart g#indicatorGroup g#retireBox g.boxAnimate text .cashDespositedAmt,
+  #invest .potential-budget svg.line-chart g#indicatorGroup g#cashDepositedBox g.boxAnimate text .cashDespositedAmt {
+    font-weight: 500;
+  }
+}
+#invest .potential-budget svg.line-chart g#indicatorGroup g#mobileIndicator {
+  display: none;
+}
+#invest .potential-budget svg.line-chart g#indicatorGroup .numYears {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+}
+@-moz-document url-prefix() {
+  #invest .potential-budget svg.line-chart g#indicatorGroup .numYears {
+    font-size: 3px;
+  }
+}
+@media only screen and (max-width: 500px) {
+  .boxAnimate,
+  .retirePolygon,
+  .cashPolygon {
+    display: none;
+  }
+  #invest .potential-budget {
+    position: initial;
+    margin: 0;
+    width: 100%;
+    text-align: center;
+    box-shadow: none;
+  }
+  #invest .potential-budget h1 {
+    font-size: 24px;
+  }
+  #invest .potential-budget .mobile-boxes {
+    display: flex;
+    font-family: 'Walsheim';
+    color: #fff;
+    text-align: left;
+    margin-top: 3.5em;
+  }
+  #invest .potential-budget .mobile-boxes .m-retireBox {
+    border-radius: 1px;
+    background-image: linear-gradient(111deg, #6936ce, #44d1db);
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
+    width: 122px;
+    height: 55px;
+    padding: 5px 12px;
+    box-sizing: border-box;
+    margin-right: 15px;
+  }
+  #invest .potential-budget .mobile-boxes .m-retireBox .label {
+    font-size: 14px;
+  }
+  #invest .potential-budget .mobile-boxes .m-retireBox .retireAmt {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  #invest .potential-budget .mobile-boxes .m-cashBox {
+    border-radius: 1px;
+    background-color: #6936cf;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
+    width: 122px;
+    height: 55px;
+    padding: 5px 11px;
+    box-sizing: border-box;
+  }
+  #invest .potential-budget .mobile-boxes .m-cashBox .label {
+    font-size: 14px;
+  }
+  #invest .potential-budget .mobile-boxes .m-cashBox .cashDespositedAmt {
+    font-size: 20px;
+    font-weight: 600;
+  }
+  #invest .potential-budget svg.line-chart g#indicatorGroup g#mobileIndicator {
+    display: block;
+  }
+  #invest .potential-budget svg.line-chart g#indicatorGroup g#yrBox .boxYearsG {
+    display: none;
+  }
+}
+@media only screen and (max-width: 560px) {
+  #invest .potential-budget {
+    padding: .9em 0 0;
+  }
+  #invest .potential-budget svg.line-chart g#indicatorGroup g#yrBox .numYears {
+    font-size: 5px !important;
+  }
+  #invest .potential-budget svg.line-chart #hzLine {
+    stroke-width: .8 !important;
+  }
+  #invest .potential-budget svg.line-chart #verticalIndicator {
+    stroke-width: .8 !important;
+  }
+  #invest .potential-budget svg.line-chart #retireLine {
+    stroke-width: 1 !important;
+  }
+  #invest .potential-budget svg.line-chart #cashDepositedLine {
+    stroke-width: .7 !important;
+  }
+  #invest .potential-budget svg.line-chart .retireCircle,
+  #invest .potential-budget svg.line-chart .cashCircle,
+  #invest .potential-budget svg.line-chart circle.mobile {
+    r: 1.48 !important;
+  }
+}
+</style>
+<script>
+$(function() {
+	function mobilePolygon() {
+		if ($(window).width() <= 400) {
+			$('.mobilePolygonLeft').attr({
+				points: "-6,57 -3,55 -3,59"
+			});
+			$('.mobilePolygonRight').attr({
+				points: "6,57 3,55 3,59"
+			})
+			$('.line-chart').attr({
+				viewBox: "0 -10 103 78"
+			})
+		}
+	}
+
+	mobilePolygon();
+
+	function getFV(weeklyAmt, rate, years) {
+		var periodicPayment = weeklyAmt*52;
+		var ratePerPeriod = rate/100;
+		var periods = years;
+
+		return calculateFV(periodicPayment, ratePerPeriod, periods);
+	}
+
+	// FV formula
+	function calculateFV(periodicPayment, ratePerPeriod, numberOfPeriods) {
+		if(ratePerPeriod === 0) return periodicPayment * numberOfPeriods;
+		var fv = periodicPayment * ((Math.pow((1+ratePerPeriod), numberOfPeriods) - 1) / ratePerPeriod);
+		return Math.round(fv * 100) / 100;
+	}
+
+	// Add Commas to Range Numbers
+	function numberWithCommas(x) {
+		return Math.round(x).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	}
+
+	var minWindowSize     = 500;
+	var verticalIndicator = $('#indicatorGroup');
+	var verticalLine      = $("#verticalIndicator");
+	var cashBox           = $("#cashDepositedBox");
+	var retireBox         = $("#retireBox");
+	var numYears          = $(".numYears");
+	var cashDepositedAmt  = $(".cashDespositedAmt");
+	var weeklyAmt         = $("#rangeSlider").val();
+	var positionX         = 60;
+	var retireAmt         = $(".retireAmt");
+	var interestRate      = $('.interest-rate').text();
+	var years = positionX/2;
+
+	function updateRetireAndCashValue() {
+		var years = positionX/2;
+		var cashDespositedAmtVal = numberWithCommas(getFV(weeklyAmt,0,years));
+
+		var retireAmtVal = getFV(weeklyAmt,interestRate,years)
+		var maxRetireVal = getFV(weeklyAmt,interestRate,50);
+		var cashAmtVal   = getFV(weeklyAmt,0,years)
+		var maxCashVal   = getFV(weeklyAmt,0,50);
+
+		var retireFraction  = 50*(retireAmtVal / Math.max(maxRetireVal, maxCashVal));
+		var retireYVal      = 50-(retireFraction);
+		var retirePositionY = retireYVal;
+
+		var cashFraction = 50*(cashAmtVal / Math.max(maxRetireVal, maxCashVal));
+		var cashYVal     = 50-(cashFraction);
+		var cashPositionY = cashYVal;
+
+		if (parseInt(interestRate) <= 0) {
+			retireBox.attr({ transform: "translate(0,3.5) translate(0," + retirePositionY + ")" });
+			cashBox.attr({ transform: "translate(0,-32) translate(0, " + cashPositionY + ")" });
+			$('.retirePolygon').attr({ points: "-1.11,0.2 0,-0.85 1.11,0.2" })
+			$('.retireCircle').attr({ cy: -3.5 })
+			$('.cashPolygon').attr({ points: "-1.11,28.5 0,29.55 1.11,28.5" })
+			$('.cashCircle').attr({ cy: 32 })
+			verticalLine.attr({
+				"x1": "0",
+				"y1": cashPositionY-8,
+				"x2": "0",
+				"y2": 50
+			})
+			// $('.numYears').attr({ transform: "translate(0, 63)" });
+		} else {
+			// height of vertical indicator doesnt exceed height of retireBox
+			verticalLine.attr({
+				"x1": "0",
+				"y1": retirePositionY-8,
+				"x2": "0",
+				"y2": 50
+			})
+			retireBox.attr({ transform: "translate(0,-12) translate(0," + retirePositionY + ")" });
+
+			cashBox.attr({ transform: "translate(0,-17) translate(0, " + cashPositionY + ")" });
+			$('.retirePolygon').attr({ points: "-1.11,8.5 0,9.6 1.11,8.5" })
+			$('.cashPolygon').attr({ points: "-1,20.05 0,19.05 1,20.05" })
+			$('.retireCircle').attr({ cy: 12 })
+			$('.cashCircle').attr({ cy: 17 })
+			// $('#yrBox').attr({ transform: "translate(0, 17) translate(0, " + cashPositionY + ")" });
+			// $('.numYears').attr({ transform: "translate(0, 17) translate(0, " + cashPositionY + ")" });
+		}
+
+
+		$(window).resize(function () {
+			mobileResponsive()
+		})
+		mobileResponsive();
+
+		function mobileResponsive() {
+			if ($(window).width() <= 767){
+				if (parseInt(interestRate) <= 0) {
+					verticalLine.attr({
+						"y1": cashPositionY-6
+					})
+					$('.numYears').attr({
+						transform: "translate(-6, -4) translate(0, " + cashPositionY + ")"
+					});
+					if (years < 5) {
+						$('.numYears').attr({
+							transform: "translate(6, -4) translate(0, " + cashPositionY + ")"
+						});
+					}
+				} else {
+					verticalLine.attr({
+						"y1": retirePositionY-6
+					})
+					$('.numYears').attr({
+						transform: "translate(-6, -4) translate(0, " + retirePositionY + ")"
+					});
+					if (years < 5) {
+						$('.numYears').attr({
+							transform: "translate(6, -4) translate(0, " + retirePositionY + ")"
+						});
+					}
+				}
+			} else {
+				var numYearsVal = cashPositionY+18.25;
+				var boxYearsGVal = cashPositionY-44;
+
+				if (parseInt(interestRate) <= 0) {
+					$('.numYears').attr({ transform: "translate(0, 65)" });
+					$('.boxYearsG').attr({ transform: "translate(0, 2.75)" });
+				} else {
+					if (numYearsVal < 55.5) {
+						numYearsVal = 55.5;
+					}
+					if (boxYearsGVal < -7.02) {
+						boxYearsGVal = -7.02;
+					}
+
+					$('.numYears').attr({
+						transform: "translate(0, " + numYearsVal + ")"
+					});
+					$('.boxYearsG').attr({
+						transform: "translate(0, " + boxYearsGVal + ")"
+					});
+				}
+			}
+
+
+			if ($(window).width() <= 400) {
+				$('.numYears').attr({
+					transform: "translate(-9, -3) translate(0, " + retirePositionY + ")"
+				});
+				mobilePolygon();
+
+				if (parseInt(interestRate) <= 0) {
+					$('.numYears').attr({
+						transform: "translate(-9, -3) translate(0, " + cashPositionY + ")"
+					});
+					if (years < 8) {
+						$('.numYears').attr({
+							transform: "translate(9, -3) translate(0, " + cashPositionY + ")"
+						});
+					}
+				} else {
+					$('.numYears').attr({
+						transform: "translate(-9, -3) translate(0, " + retirePositionY + ")"
+					});
+					if (years < 8) {
+						$('.numYears').attr({
+							transform: "translate(9, -3) translate(0, " + retirePositionY + ")"
+						});
+					}
+				}
+			}
+		}
+
+		// find Y value for retire line
+		var dLine = "";
+		for (var i=0; i<=100; i++) {
+			var a = getFV(weeklyAmt,interestRate,(i/2))
+			var b = 50*(a / Math.max(maxRetireVal, maxCashVal));
+			var c = 50-(b);
+			dLine += " L " + i + " " + c;
+		}
+		// find Y value for cash line
+		var x100 = getFV(weeklyAmt,0,50);
+		var y100 = 50*(x100/Math.max(maxRetireVal, maxCashVal));
+		var z100 = 50-(y100);
+
+		$("#retireLine").attr("d", "M0 50" + dLine);
+		$("#cashDepositedLine").attr({
+			"x1": "0",
+			"y1": "50",
+			"x2": "100",
+			"y2": z100
+		})
+
+		var retireAmtValFormatted = numberWithCommas(retireAmtVal);
+		cashDepositedAmt.html("$" + cashDespositedAmtVal);
+		retireAmt.html("$" + retireAmtValFormatted);
+		numYears.html((Math.floor(years)) + " yrs");
+	}
+
+
+	if ($(window).width() <= minWindowSize) {
+		mobileLoad()
+	}
+	function mobileLoad() {
+		verticalLine.attr({
+			"y1": 27.937685282216876
+		})
+		$('.numYears').attr({
+			transform: "translate(-9, -3) translate(0, 33.937685282216876)"
+		})
+	}
+
+
+	$('.interest-rate').on('focus', function(){
+		var oldRate = parseFloat($(this).text());
+		$('.interest-rate').on('blur', function(){
+			var newRate = parseFloat($(this).text());
+			if (Number.isNaN(newRate)) newRate = oldRate;
+			if(newRate > 8) newRate = 8;
+			if(newRate < -8) newRate = -8;
+
+			$('.interest-rate').text(Math.round(newRate*10)/10).off('blur');
+			interestRate = $('.interest-rate').text();
+			updateRetireAndCashValue();
+		});
+	});
+	$('.interest-and-percentage').click(function(){$('interest-rate').focus()})
+	$('.interest-rate').on('input', function(e){$(e.target).val($(this).val().replace(/\D/, ''))});
+
+
+	// line graph for mobile
+	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+		$('.line-chart').on('touchmove', function(e) {
+			var svgWidth = $(this).outerWidth();
+			var viewBoxWidth = $(this).attr("viewBox").split(" ")[2];
+
+			var xpos = e.originalEvent.touches[0].pageX - $(this).offset().left;
+
+
+			// console.log(xpos);
+
+
+			positionX = (xpos/svgWidth)*viewBoxWidth;
+			if ( positionX < 6) positionX = 6;
+			if ( positionX > 96) positionX = 96;
+
+			// shift pointer of box positions if indicator reaches left/right border
+			if (positionX > 90) {
+				$(".boxAnimate, #yrBox").css({ transform: "translate(-5.5px, 0)"})
+
+				if ($(window).width() <= minWindowSize) {
+					$("#yrBox").css({ transform: "translate(-0.25px, 0)"})
+				}
+			}
+			if (positionX <= 89) {
+				$(".boxAnimate, #yrBox").css({ transform: "translate(0, 0)"})
+			}
+			if (positionX <= 10) {
+				$(".boxAnimate, #yrBox").css({ transform: "translate(4.5px, 0)"})
+				if ($(window).width() <= minWindowSize) {
+					$("#yrBox").css({ transform: "translate(0.25px, -3px)"})
+				}
+			}
+
+			updateRetireAndCashValue();
+
+			verticalIndicator.attr({
+				transform: "translate(" + positionX + ", 0)"
+			});
+		})
+	}
+	// line graph for desktop
+	else {
+		var svgWidth, viewBoxWidth;
+		$('.line-chart').on("mousedown", function(e){
+			canDrag = true;
+
+			$(this).on('mousemove', function(e){
+				if (canDrag == true) {
+					svgWidth = $('.line-chart').outerWidth();
+					viewBoxWidth = $('.line-chart').attr("viewBox").split(" ")[2];
+					var xpos = e.pageX - $('.line-chart').offset().left;
+					positionX = (xpos/svgWidth)*viewBoxWidth;
+
+					if (positionX > 96) {
+						positionX = 96;
+						canDrag = false;
+					}
+					if (positionX < 6) {
+						positionX = 6;
+						canDrag = false;
+					}
+
+					verticalIndicator.attr({
+						transform: "translate(" + positionX + ", 0)"
+					});
+
+					// shift pointer of box positions if indicator reaches left/right border
+					if (positionX > 90) {
+						$(".boxAnimate, #yrBox").css({ transform: "translate(-5.5px, 0)"})
+
+						if ($(window).width() <= minWindowSize) {
+							$("#yrBox").css({ transform: "translate(-0.25px, 0)"})
+						}
+					}
+					if (positionX <= 89) {
+						$(".boxAnimate, #yrBox").css({ transform: "translate(0, 0)"})
+					}
+					if (positionX <= 10) {
+						$(".boxAnimate, #yrBox").css({ transform: "translate(4.5px, 0)"})
+						if ($(window).width() <= minWindowSize) {
+							$("#yrBox").css({ transform: "translate(0.25px, -3px)"})
+						}
+					}
+					updateRetireAndCashValue();
+				}
+			})
+		});
+		$('.line-chart').on("mouseup", function(e){
+			canDrag = false;
+		});
+	}
+
+
+
+	var rangeSlider, newPoint, newPlace, offset, rangeContainer;
+	$("#rangeSlider").on('input', function(e) {
+		weeklyAmt = $(this).val();
+		updateRetireAndCashValue();
+
+		rangeSlider = $(this);
+		width = rangeSlider.width();
+
+		newPoint = (rangeSlider.val() - rangeSlider.attr("min")) / (rangeSlider.attr("max") - rangeSlider.attr("min"));
+		offset = -6.5;
+
+		// Prevent bubble from going beyond left or right (unsupported browsers)
+		if (newPoint < 0) {
+			newPlace = 0;
+		} else if (newPoint > 1) {
+			newPlace = width;
+		} else {
+			newPlace = width * newPoint + offset; offset -= newPoint;
+		}
+
+		$('#rangeHighlight').width(newPlace+5.8);
+
+		rangeSlider
+			.next("output")
+	  .html('<strong>$'+rangeSlider.val()+'</strong>&nbsp;/&nbsp;week');
+
+	if(newPoint <= .08){
+	  $("output")
+		.css({
+		  left: 0,
+		  right: "unset",
+		  marginLeft: 0
+		})
+	  } else if(newPoint > .8){
+		$("output")
+		.css({
+		  right: 0,
+		  left: "unset",
+		  marginLeft: 0
+		})
+	  } else {
+		$("output")
+		.css({
+		  left: newPlace,
+		  right: "unset",
+		  marginLeft: offset + "%"
+		})
+	  }
+	})
+	.trigger('change');
+});
+</script><div id="invest"><div class="potential-budget"><span class="word-wrap percentage"><a class="tip interest-rate tip interest-and-percentage" contenteditable="true" href="javascript:void(0);" data-tip="Edit the percentage to see how growth rate would affect your returns.">8</a></span><span class="word-wrap"><a class="tip" href="javascript:void(0);" data-tip="This is the amount your investment can be projected to change over a period of time. It’s shown as a percentage increase or decrease."></a></span><form id="range-slider"><p id="rangeContainer"><span id="rangeHighlight"></span><input class="dollar_amount" type="range" min="5" max="100" step="5" value="10" id="rangeSlider"><output id="dollar"><strong>$10</strong> / week</output></p></form><div class="mobile-boxes"><div class="m-retireBox"><p class="label">Retire account</p><p class="retireAmt">$34,548</p></div><div class="m-cashBox"><p class="label">Cash deposited</p><p class="cashDespositedAmt">$15,600</p></div></div><svg class="line-chart" viewBox="0 -7 120 80" width="100%"><defs><linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:rgb(105,54,206);stop-opacity:1;"></stop><stop offset="100%" style="stop-color:rgb(68,209,219);stop-opacity:1;"></stop></linearGradient><filter id="retireShadow" height="130%"><feGaussianBlur in="SourceAlpha" stdDeviation=".5"></feGaussianBlur><feOffset dx=".3" dy=".3" result="offsetblur"></feOffset><feComponentTransfer><feFuncA type="linear" slope="0.15"></feFuncA></feComponentTransfer><feMerge><feMergeNode></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter></defs><line id="hzLine" x1="0" y1="50" x2="100" y2="50" style="stroke:rgb(234,232,240); stroke-width:.5;"></line><path id="retireLine" d="M0 50 L 0 50 L 1 49.88203760099121 L 2 49.761163230601674 L 3 49.63730340059467 L 4 49.51038462273344 L 5 49.380333408781254 L 6 49.24706708447179 L 7 49.110512161568295 L 8 48.97058137278966 L 9 48.82720122989913 L 10 48.680275279586 L 11 48.529725440598725 L 12 48.37545525962659 L 13 48.21737287637368 L 14 48.05539102355886 L 15 47.88940406184182 L 16 47.71932013092664 L 17 47.54503818448781 L 18 47.36645258318501 L 19 47.183453094663136 L 20 46.99593867259668 L 21 46.80378989860093 L 22 46.60689654032079 L 23 46.40514377238635 L 24 46.19840299038333 L 25 45.98656396195661 L 26 45.76948889666231 L 27 45.547053783100935 L 28 45.3191254238434 L 29 45.08557062146062 L 30 44.84624699249391 L 31 44.60101215348459 L 32 44.34971912795919 L 33 44.09222553245902 L 34 43.82837061146623 L 35 43.55799820247773 L 36 43.28095214299047 L 37 42.997062491456994 L 38 42.70616389934463 L 39 42.40807723907634 L 40 42.102632569104664 L 41 41.789646168837756 L 42 41.468929724668975 L 43 41.14029032997688 L 44 40.80353967115484 L 45 40.45847106253702 L 46 40.1048778184576 L 47 39.74255784626555 L 48 39.371286088235856 L 49 38.99084667267311 L 50 38.60101454185229 L 51 38.201555452018795 L 52 37.79222597338844 L 53 37.37279186220662 L 54 36.943000502659544 L 55 36.502599278933424 L 56 36.05131720315529 L 57 35.58888788046697 L 58 35.11504491601029 L 59 34.6294989498531 L 60 34.13196062206323 L 61 33.62213597969373 L 62 33.09972188376807 L 63 32.56440600928009 L 64 32.01587143820889 L 65 31.45378747348912 L 66 30.877828011070267 L 67 30.287643981827827 L 68 29.6828817236225 L 69 29.06318757431498 L 70 28.428189499706786 L 71 27.777510872584628 L 72 27.110761286690842 L 73 26.427550335767755 L 74 25.727464648483718 L 75 25.01009085350708 L 76 24.275001800461805 L 77 23.521756559927454 L 78 22.749914202483605 L 79 21.959006240621065 L 80 21.14857337286021 L 81 20.318124146617855 L 82 19.46716251629602 L 83 18.595192436296728 L 84 17.701685709918422 L 85 16.78611414045953 L 86 15.847931159159359 L 87 14.886581011227534 L 88 13.901494162829358 L 89 12.89207352204133 L 90 11.857731182969545 L 91 10.797842495601728 L 92 9.71177821691083 L 93 8.59889991784015 L 94 7.458532425214699 L 95 6.290005158874216 L 96 5.092624573584509 L 97 3.865669566022568 L 98 2.608419032865413 L 99 1.3201151266716806 L 100 0" stroke="black" fill="transparent" style="stroke:url(#grad1); stroke-width:.5; filter:url(#retireShadow);"></path><line id="cashDepositedLine" x1="0" y1="50" x2="100" y2="38.058" style="stroke:#6936cf; stroke-width:.4;" stroke-dasharray="3, 2"></line><g class="draggable retire-indicator" id="indicatorGroup" data-eventlabel="retire-graph" transform="translate(60,0)"><line id="verticalIndicator" x1="0" y1="30" x2="0" y2="50" style="stroke:rgb(234,232,240); stroke-width:.5;"></line><g id="retireBox" transform="translate(0,22.25)"><circle class="retireCircle" cx="0" cy="12" r=".75" fill="rgb(68,209,219)"></circle><polygon class="retirePolygon" points="-1.11,8.5 0,9.6 1.11,8.5" fill="url(#grad1)"></polygon><g class="boxAnimate"><rect class="retireBoxWrapper" x="-8.61" y="0" width="17.22" height="8.62" rx=".4" fill="url(#grad1)" style="filter:url(#retireShadow);"></rect><text font-family="Walsheim" font-size="1.8" text-anchor="middle" font-weight="400" fill="#FFFFFF"><tspan class="retireLabel" x="0" y="3.2">Retire account</tspan></text><text font-family="Walsheim" font-size="2.6" text-anchor="middle" font-weight="bold" fill="#FFFFFF"><tspan class="retireAmt" x="0" y="6">$34,548</tspan></text></g></g><g id="cashDepositedBox" transform="translate(0,25.834896698654156)"><circle class="cashCircle" cx="0" cy="17" r=".75" fill="#6936cf"></circle><polygon class="cashPolygon" points="-1.11,20.05 0,19 1.11,20.05" fill="#6936cf"></polygon><g class="boxAnimate"><rect class="cashDepositedBoxWrapper" x="-8.61" y="20" width="17.22" height="8.62" rx=".4" fill="#6936cf" style="filter:url(#retireShadow);"></rect><text font-family="Walsheim" font-size="1.8" text-anchor="middle" font-weight="400" fill="#FFFFFF"><tspan class="cashDepositedLabel" x="0" y="23.2">Cash Deposited</tspan></text><text class="cashDespositedAmtWrapper" font-family="Walsheim" font-size="2.6" font-weight="600" text-anchor="middle" fill="#FFFFFF"><tspan class="cashDespositedAmt" x="0" y="26">$15,600</tspan></text></g></g><g id="mobileIndicator"><polygon class="mobilePolygonLeft" points="-6,57 -3,55 -3,59" fill="#EAE8F0"></polygon><circle class="mobile" cx="0" cy="57" r=".75" fill="#EAE8F0"></circle><polygon class="mobilePolygonRight" points="6,57 3,55 3,59" fill="#EAE8F0"></polygon></g><g id="yrBox"><polygon class="boxYearsG" points="-7,61.5 -5.85,62.375 -5.85,60.625" fill="#EAE8F0"></polygon><polygon class="boxYearsG" points="7,61.5 5.85,62.375 5.85,60.625" fill="#EAE8F0"></polygon><text class="numYears" transform="translate(0, 62.155)" font-family="Walsheim" text-anchor="middle" fill="#000" style="font-size:3;"><tspan id="yrSpan">30 yrs</tspan></text><rect class="boxYearsG" x="-9" y="58.2" width="18" height="6.54" rx=".8" fill="none" stroke="#eae8f0" stroke-width=".3" transform="translate(0, 0)"></rect></g></g></svg></div></div><div class="disclaimer"></div></div></section>
+<style>
+.interest-rate {
+    display:none;
+}
+</style>
+</body>
+</html>
