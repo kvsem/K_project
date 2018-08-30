@@ -41,7 +41,11 @@
         <!-- Actions -->
             <section>
                 <ul class="actions vertical">
-                    <li><a href="/accounts/kakao/login/" class="button big fit">Log In</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="/accounts/logout/" class="button big fit">Log OUT</a></li>
+                    {% else %}
+                        <li><a href="/accounts/kakao/login/" class="button big fit">Log In</a></li>
+                    {% endif %}
                 </ul>
             </section>
 
