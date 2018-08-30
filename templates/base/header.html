@@ -33,12 +33,34 @@
         float:left;
     }
 
+    .user_info {
+        margin:0.8%;
+        float:right;
+        width: 50%;
+        text-align: right;
+    }
     .user_info a {
         border:none;
     }
 
-    #kakao-login-btn {
-        margin:10% 5% 10% 5%;
+    @media screen and (max-width:980px) {
+        #profile_image {
+            float: left;
+            margin: 0.25em 0.5em 0.25em 0.5em;
+            width: 2em;
+            height: 2em;
+        }
+
+        .user_info {
+        margin:1.5%;
+        }
+    }
+
+
+    @media screen and (max-width:1280px) {
+        #main {
+            width:100% !important;
+        }
     }
 
 </style>
@@ -62,7 +84,7 @@
         </ul>
     </nav>
     <div class="user_info">
-        <a id="kakao-login-btn"></a>
+        <img id="kakao-login-btn" src={% static 'images/kakao_login_btn_small.png' %} alt=''/>
         {% if user.is_authenticated %}
         <div id="profile_image"><img src="{{ user_info.profile_image }}" width="100%" height="100%"></div>
         <a class="nickname" href="/accounts/profile">{{ user_info.nickname }}</a>
@@ -88,15 +110,18 @@
     // 사용할 앱의 JavaScript 키를 설정해 주세요.
     Kakao.init('30326ec365e81ebde2764349a59349f7');
     // 카카오 로그인 버튼을 생성합니다.
-    Kakao.Auth.createLoginButton({
-      container: '#kakao-login-btn',
-      success: function(authObj) {
-          location.href='/accounts/kakao/login/';
-        {#alert(JSON.stringify(authObj));#}
-      },
-      fail: function(err) {
-         {#alert(JSON.stringify(err));#}
-      }
-    });
+    // Kakao.Auth.createLoginButton({
+    //  container: '#kakao-login-btn',
+    //  success: function(authObj) {
+    //      location.href='/accounts/kakao/login/';
+    //    {#alert(JSON.stringify(authObj));#}
+    //  },
+    //  fail: function(err) {
+    //     {#alert(JSON.stringify(err));#}
+    //  }
+    //});
   //]]>
+    jQuery("#kakao-login-btn").on('click', function () {
+        location.href='/accounts/kakao/login/';
+    })
 </script>
