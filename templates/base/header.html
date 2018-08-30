@@ -8,6 +8,40 @@
     <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
     </head>
 
+<style>
+    {% if user.is_authenticated %}
+        #kakao-login-btn {
+            display: none;
+        }
+    {% endif %}
+    #profile_image {
+        float:left;
+        margin : 0.25em 0.5em 0.25em 0.5em;
+        width:3em;
+        height:3em;
+    }
+    #profile_image img{
+        border-radius: 100%;
+        display: block;
+    }
+
+    .nickname {
+        float:left;
+        color:#196b64 !important;
+    }
+    .logout_btn {
+        float:left;
+    }
+
+    .user_info a {
+        border:none;
+    }
+
+    #kakao-login-btn {
+        margin:10% 5% 10% 5%;
+    }
+
+</style>
 <!-- Header -->
 <header id="header">
     <h1><a href="/">KWANHEE HAN</a></h1>
@@ -27,8 +61,14 @@
             <li><a href="/write">Write</a></li>
         </ul>
     </nav>
-    <a id="kakao-login-btn"></a>
-    <a href="http://developers.kakao.com/logout"></a>
+    <div class="user_info">
+        <a id="kakao-login-btn"></a>
+        {% if user.is_authenticated %}
+        <div id="profile_image"><img src="{{ user_info.profile_image }}" width="100%" height="100%"></div>
+        <a class="nickname" href="/accounts/profile">{{ user_info.nickname }}</a>
+        <a class="logout_btn" href="/accounts/logout" style="margin-left:10px; margin-right:10px;">로그아웃</a>
+        {% endif %}
+    </div>
     <nav class="main">
         <ul>
             <!--<li class="search">
@@ -51,10 +91,11 @@
     Kakao.Auth.createLoginButton({
       container: '#kakao-login-btn',
       success: function(authObj) {
-        alert(JSON.stringify(authObj));
+          location.href='/accounts/kakao/login/';
+        {#alert(JSON.stringify(authObj));#}
       },
       fail: function(err) {
-         alert(JSON.stringify(err));
+         {#alert(JSON.stringify(err));#}
       }
     });
   //]]>

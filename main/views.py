@@ -2,6 +2,7 @@ from django.shortcuts import render
 from main.models import Post
 from main.forms import PostForm
 from django.utils import timezone
+from allauth.socialaccount.models import SocialAccount
 
 
 def main_page(request):
@@ -46,13 +47,29 @@ def main_page(request):
 
     contents_list['default_post_data'] = default_post_list
 
+    nickname = 'ANONYMOUS'
+    profile_image = None
+
+    if request.user.is_authenticated is True:
+        social_account = SocialAccount.objects.get(user_id=request.user.id)
+        if social_account:
+            account_data = social_account.extra_data
+            account_property = account_data.get('properties')
+            nickname = account_property.get('nickname')
+            profile_image = account_property.get('profile_image')
+
+    user_info = dict(
+        nickname=nickname,
+        profile_image=profile_image,
+    )
+
     pages = dict(
         max_page=max_page,
         page=page,
         next_page=next_page,
         prev_page=prev_page,
     )
-    return render(request, 'main/main.html', dict(contents_list=contents_list, pages=pages))
+    return render(request, 'main/main.html', dict(contents_list=contents_list, pages=pages, user_info=user_info))
 
 
 def post_view(request):
