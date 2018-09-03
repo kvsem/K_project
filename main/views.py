@@ -1,28 +1,26 @@
 from allauth.socialaccount.models import SocialAccount
 from django.shortcuts import render
 from django.utils import timezone
-
+from django.shortcuts import redirect
 from main.forms import PostForm
-from main.models import Post
+from main.models import Post, Comment
+from django.http import JsonResponse
 
 
 def main_page(request):
+    # PAGEING
     page = int(request.GET.get('page', 0))
-    next_page = page+1
-    prev_page = page-1 if page != 0 else 0
-
-    start_at = page*3
-    end_at = (page+1)*3
+    next_page = page + 1
+    prev_page = page - 1 if page != 0 else 0
+    start_at = page * 3
+    end_at = (page + 1) * 3
     post_list = Post.objects.order_by('-write_date').values()[start_at:end_at]
+
     count = Post.objects.count()
     if count % 3 == 0:
-        max_page = count//3-1
+        max_page = count // 3 - 1
     else:
-        max_page = count//3
-
-    side_contents_list = get_side_contents()
-    contents_list = get_contents_list(post_list)
-    user_info = get_user_info(request)
+        max_page = count // 3
 
     pages = dict(
         max_page=max_page,
@@ -30,14 +28,33 @@ def main_page(request):
         next_page=next_page,
         prev_page=prev_page,
     )
-    return render(request, 'main/main.html', dict(contents_list=contents_list, side_contents_list=side_contents_list, pages=pages, user_info=user_info))
+
+    # CONTENTS
+    side_contents_list = get_side_contents()
+    contents_list = get_contents_list(post_list)
+    user_info = get_user_info(request)
+
+    return render(request, 'main/main.html',
+                  dict(contents_list=contents_list, side_contents_list=side_contents_list, pages=pages,
+                       user_info=user_info))
 
 
 def post_view(request):
     post_id = request.GET.get('id')
     user_info = get_user_info(request)
-
     post = Post.objects.filter(id=post_id).values().last()
+    social_profile = SocialAccount.objects.get(user_id=post.get('user_id'))
+    if social_profile:
+        user_id = social_profile.user_id
+        account_data = social_profile.extra_data
+        account_property = account_data.get('properties')
+        post['user_id'] = user_id
+        post['nickname'] = account_property.get('nickname')
+        post['profile_image'] = account_property.get('profile_image')
+
+    # 댓글
+    comment_list = list(Comment.objects.filter(post_id=post.get('id')).order_by('-created_at').values())
+    post['comment_list'] = get_comment_list(comment_list)
 
     return render(request, 'main/view.html', dict(post=post, user_info=user_info))
 
@@ -71,7 +88,20 @@ def write(request):
         created = True
 
     side_contents_list = get_side_contents()
-    return render(request, 'main/write.html', dict(form=form, side_contents_list=side_contents_list, user_info=user_info, created=created))
+    return render(request, 'main/write.html',
+                  dict(form=form, side_contents_list=side_contents_list, user_info=user_info, created=created))
+
+
+def modify(request):
+    user_info = get_user_info(request)
+    form = PostForm()
+    post_id = request.GET.get('id')
+
+    post_info = Post.objects.filter(id=post_id).values().last()
+
+    side_contents_list = get_side_contents()
+    return render(request, 'main/modify.html',
+                  dict(form=form, side_contents_list=side_contents_list, user_info=user_info, post_info=post_info))
 
 
 def guide(request):
@@ -92,7 +122,7 @@ def contact(request):
 
 def deleague(request):
     side_contents_list = get_side_contents()
-    return render(request, 'main/deleague.html', dict(side_contents_list=side_contents_list,))
+    return render(request, 'main/deleague.html', dict(side_contents_list=side_contents_list, ))
 
 
 def get_side_contents():
@@ -105,31 +135,88 @@ def get_contents_list(post_list):
     for post in post_list:
         social_profile = SocialAccount.objects.get(user_id=post.get('user_id'))
         if social_profile:
+            user_id = social_profile.user_id
             account_data = social_profile.extra_data
             account_property = account_data.get('properties')
+            post['user_id'] = user_id
             post['nickname'] = account_property.get('nickname')
             post['profile_image'] = account_property.get('profile_image')
+
+        # 댓글
+        comment_list = list(Comment.objects.filter(post_id=post.get('id')).order_by('-created_at').values())
+        post['comment_list'] = get_comment_list(comment_list)
 
         contents_list.append(post)
 
     return contents_list
 
 
+def get_comment_list(comment_list):
+    result_comment_list = list()
+    for comment in comment_list:
+        social_profile = SocialAccount.objects.get(user_id=comment.get('user_id'))
+        if social_profile:
+            account_data = social_profile.extra_data
+            account_property = account_data.get('properties')
+            comment['nickname'] = account_property.get('nickname')
+            comment['profile_image'] = account_property.get('profile_image')
+
+        result_comment_list.append(comment)
+
+    return result_comment_list
+
+
 def get_user_info(request):
+    user_id = None
     nickname = 'ANONYMOUS'
     profile_image = None
 
     if request.user.is_authenticated is True:
         social_account = SocialAccount.objects.get(user_id=request.user.id)
         if social_account:
+            user_id = social_account.user_id
             account_data = social_account.extra_data
             account_property = account_data.get('properties')
             nickname = account_property.get('nickname')
             profile_image = account_property.get('profile_image')
 
     user_info = dict(
+        user_id=user_id,
         nickname=nickname,
         profile_image=profile_image,
     )
 
     return user_info
+
+
+def write_comment(request):
+    user_info = get_user_info(request)
+    created = False
+
+    if request.POST.get('comment_text'):
+        post_id = request.POST.get('post_id')
+        context = request.POST.get('comment_text')
+        user_id = request.user.id
+
+        Comment.objects.create(
+            post_id=post_id,
+            comment=context,
+            user_id=user_id,
+        )
+
+        created = True
+
+    return redirect('/')
+
+
+def increase_like(request):
+    post_data = eval(request.body.decode("utf-8"))
+    post_id = post_data.get('post_id')
+
+    if post_id:
+        post_obj = Post.objects.get(id=post_id)
+        post_obj.like += 1
+        post_obj.save()
+
+    response = dict(result_info='성공')
+    return JsonResponse(response, json_dumps_params=dict(ensure_ascii=False, sort_keys=True), safe=False)

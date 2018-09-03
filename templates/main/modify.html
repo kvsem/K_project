@@ -1,0 +1,41 @@
+<style>
+    #id_context_iframe {
+        width:100% !important;
+    }
+
+    label {
+        margin:20px 0px 10px 0px !important;
+    }
+</style>
+
+{% include 'base/base.html' %}
+<body>
+    <!-- Wrapper -->
+        <div id="wrapper">
+            <!-- Header -->
+            {% include 'base/header.html' %}
+            <!-- Menu -->
+            {% include 'base/menu.html' %}
+            <!-- Main -->
+                <div id="main">
+                    <article class="post">
+                    <!-- Post -->
+                        <form class="write_form" method="post" action="/modify/">
+			                {% csrf_token %}
+                            <h2>WRITING POST</h2>
+                            {{ form|safe }}
+			                <input class="submit_button" type="submit" value="SUBMIT"/>
+                        </form>
+                    </article>
+                </div>
+        {% include 'base/side.html' %}
+        </div>
+    {% include 'base/write_guide.html' %}
+</body>
+
+<script>
+    console.log("{{ post_info }}");
+    jQuery("#id_title").val("{{ post_info.title }}");
+    jQuery("#id_category").val("{{ post_info.category }}");
+    jQuery("#id_context").val("{{ post_info.context }}");
+</script>

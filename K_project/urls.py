@@ -18,7 +18,7 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 from django.conf.urls import include
 from django.urls import path
 from django.views.generic.base import RedirectView
-from main.views import main_page, post_view, guide, write, intro, contact, deleague
+from main.views import main_page, post_view, guide, write, intro, contact, deleague, modify, write_comment, increase_like
 
 urlpatterns = [
     path('', main_page, name='main'),
@@ -33,6 +33,12 @@ urlpatterns = [
     path('contact/', contact, name='contact'),
     path('view/', post_view, name='view'),
     path('write/', write, name='write.html'),
+    path('modify/', modify, name='modify.html'),
+    path('write_comment/', write_comment, name='write_comment.html'),
+    path('increase_like/', increase_like, name='increase_like.html'),
+
+
+
     path('deleague/', deleague, name='deleague.html'),
 ]
 

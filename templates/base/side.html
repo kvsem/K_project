@@ -7,7 +7,7 @@
                             <a href="/" class="logo"><img src={% static 'images/avatar.jpg' %} /></a>
                             <header>
                                 <h2>KWANHEE HAN</h2>
-                                <p>The best server developer</p>
+                                <p>The server developer</p>
                             </header>
                         </section>
 
@@ -20,7 +20,7 @@
                                         <header>
                                             <h3><a href="/view/?id={{contents.id}}">{{ contents.title }}</a></h3>
                                             <time class="published" datetime="2015-10-20">{{ contents.write_date }}</time>
-                                            <a href="/intro" class="author"><img src={{ contents.profile_image }} alt="" /></a>
+                                            <a href="/intro" class="author"><img src={{ contents.profile_image }} alt="" width="40px" height="40px"/></a>
                                         </header>
                                         {% if contents.thumbnail != "" %}
                                         <a href="/view/?id={{contents.id}}" class="image"><img src="/static/{{ contents.thumbnail }}" alt="" /></a>

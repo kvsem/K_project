@@ -62,7 +62,7 @@ class Post(UpdatedAtCreatedAt):
     thumbnail = models.CharField(null=True, blank=True, max_length=200, verbose_name='Thumenail')
     title = models.CharField(max_length=200, null=True, blank=True, verbose_name='제목')
     category = models.CharField(max_length=200, null=True, blank=True, choices=CHOICES_CATEGORY, verbose_name='카테고리')
-    user_id = models.CharField(User, max_length=200, null=True, blank=True)
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.DO_NOTHING, db_constraint=False)
     write_date = models.DateTimeField(null=True, blank=True, verbose_name='작성일')
     context = models.TextField(null=True, blank=True, verbose_name='내용')
     like = models.IntegerField(null=False, blank=False, default=0, verbose_name='좋아요')
@@ -75,7 +75,7 @@ class Post(UpdatedAtCreatedAt):
 
 class Comment(UpdatedAtCreatedAt):
     post = models.ForeignKey(Post, null=True, blank=True, on_delete=models.DO_NOTHING, db_constraint=False)
-    user = models.CharField(max_length=200, null=True, blank=True, verbose_name='이름', help_text='200자')
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.DO_NOTHING, db_constraint=False)
     comment = models.TextField(null=True, blank=True, verbose_name='내용')
 
     class Meta:
