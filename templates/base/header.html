@@ -88,7 +88,9 @@
             <li><a href="/">Post</a></li>
             <li><a href="/intro">Introduction</a></li>
             <li><a href="/contact">Contact</a></li>
+            {% if user.is_authenticated %}
             <li><a href="/write">Write</a></li>
+            {% endif %}
         </ul>
     </nav>
     <div class="user_info">
@@ -96,7 +98,7 @@
         {% if user.is_authenticated %}
         <div id="profile_image"><img src="{{ user_info.profile_image }}" width="100%" height="100%"></div>
         <a class="nickname" href="/accounts/profile">{{ user_info.nickname }}</a>
-        <a class="logout_btn" href="/accounts/logout" style="margin-left:10px; margin-right:10px;">로그아웃</a>
+        <a class="logout_btn" href="/accounts/logout" style="margin-left:10px; margin-right:10px;">LOGOUT</a>
         {% endif %}
     </div>
     <nav class="main">

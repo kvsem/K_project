@@ -14,7 +14,7 @@
             {% include 'base/menu.html' %}
             <!-- Main -->
                 <div id="main">
-                    {% for content in contents_list.default_post_data %}
+                    {% for content in contents_list %}
                     <!-- Post -->
                         <article class="post">
                             <header>
@@ -25,7 +25,7 @@
                                 <div class="meta">
 
                                     <time class="published" datetime="2015-11-01">{{ content.write_date }}</time>
-                                    <a href="/intro" class="author"><span class="name">KWAN</span><img src={% static 'images/avatar.jpg' %} alt="" /></a>
+                                    <a href="/intro" class="author"><span class="name">{{ content.nickname }}</span><img src='{{ content.profile_image }}' alt="" /></a>
                                 </div>
                             </header>
                             <!-- <a href="/view/?id={{ content.id }}" class="image featured"><img src={% static 'images/pic01.jpg' %} alt="" /></a> -->
@@ -55,3 +55,12 @@
         {% include 'base/side.html' %}
         </div>
 </body>
+
+<script>
+    jQuery(".fa-heart").on('click', function () {
+        jQuery(this).css('color', 'red');
+        var origin_like = jQuery(this).text();
+        var incresed_like = (origin_like*1) + 1;
+        jQuery(this).text(incresed_like);
+    })
+</script>

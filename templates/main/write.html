@@ -20,7 +20,7 @@
                 <div id="main">
                     <article class="post">
                     <!-- Post -->
-                        <form class="write_form" method="post" action="/">
+                        <form class="write_form" method="post" action="/write/">
 			                {% csrf_token %}
                             <h2>WRITING POST</h2>
                             {{ form|safe }}
@@ -32,3 +32,9 @@
         </div>
     {% include 'base/write_guide.html' %}
 </body>
+
+<script>
+    if ("{{ created }}" === "True") {
+        location.href='/';
+    };
+</script>
