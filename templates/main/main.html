@@ -1,5 +1,12 @@
 {% load static %}
 {% include 'base/base.html' %}
+<style>
+    .post_context {
+        max-height:60%;
+        overflow: hidden;
+        -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+    }
+</style>
 <body>
     <!-- Wrapper -->
         <div id="wrapper">
@@ -20,7 +27,7 @@
                                 <div class="meta">
 
                                     <time class="published" datetime="2015-11-01">{{ content.write_date }}</time>
-                                    <a href="/intro" class="author"><span class="name">{{ content.nickname }}</span><img src='{{ content.profile_image }}' alt="" width="40px" height="40px"/></a>
+                                    <a href="/accounts/profile/?user_id={{ content.user_id }}" class="author"><span class="name">{{ content.nickname }}</span><img src='{{ content.profile_image }}' alt="" width="40px" height="40px"/></a>
                                 </div>
                             </header>
                             <!-- <a href="/view/?id={{ content.id }}" class="image featured"><img src={% static 'images/pic01.jpg' %} alt="" /></a> -->
@@ -54,13 +61,16 @@
                                     {% endfor %}
                                 </ul>
 
+                                {% if user.is_authenticated %}
                                 <form method="post" action="/write_comment/">
                                     {% csrf_token %}
                                     <div class="write_comment">
                                         <input type="hidden" name="post_id" value="{{ content.id }}">
+                                        COMMENT
                                         <input type="text" name="comment_text">
                                     </div>
                                 </form>
+                                {% endif %}
                             </div>
                         </article>
                     {% endfor %}
@@ -110,17 +120,13 @@
         jQuery(this).off('click');
     });
 
-    var display_comment = false;
     jQuery(".comment_info").hide();
-
     jQuery(".fa-comment").on('click', function () {
-        if (display_comment === false) {
-            jQuery(".comment_info").show();
-            display_comment = true;
+        if (jQuery(this).parent().parent().parent().parent().find(".comment_info").css("display") === "none") {
+            jQuery(this).parent().parent().parent().parent().find(".comment_info").show();
         }
         else {
-            jQuery(".comment_info").hide();
-            display_comment = false;
+            jQuery(this).parent().parent().parent().parent().find(".comment_info").hide();
         }
     });
 </script>

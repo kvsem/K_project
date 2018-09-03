@@ -5,7 +5,7 @@ from django.shortcuts import redirect
 from main.forms import PostForm
 from main.models import Post, Comment
 from django.http import JsonResponse
-
+from django.contrib.auth.models import User
 
 def main_page(request):
     # PAGEING
@@ -30,13 +30,52 @@ def main_page(request):
     )
 
     # CONTENTS
-    side_contents_list = get_side_contents()
+    side_popular_contents_list = get_side_popular_contents()
+    side_latest_contents_list = get_side_latest_contents()
     contents_list = get_contents_list(post_list)
     user_info = get_user_info(request)
 
     return render(request, 'main/main.html',
-                  dict(contents_list=contents_list, side_contents_list=side_contents_list, pages=pages,
+                  dict(contents_list=contents_list, side_popular_contents_list=side_popular_contents_list, side_latest_contents_list=side_latest_contents_list, pages=pages,
                        user_info=user_info))
+
+
+def profile(request):
+    user_info = get_user_info(request)
+
+    user_id = request.GET.get('user_id')
+    user = User.objects.get(id=user_id)
+    email = user.email
+    # phone = user.phone
+    name = user.last_name + user.first_name
+
+    account_data = None
+    platform = None
+    account_property = None
+    nickname = None
+    profile_image = None
+    social_account = SocialAccount.objects.get(user_id=user_id)
+    if social_account:
+        account_data = social_account.extra_data
+        platform = social_account.provider
+        account_property = account_data.get('properties')
+        nickname = account_property.get('nickname')
+        profile_image = account_property.get('profile_image')
+
+    side_popular_contents_list = get_side_popular_contents()
+    side_latest_contents_list = get_side_latest_contents()
+
+    profile_info = dict(
+        user_id=user,
+        profile_image=profile_image,
+        nickname=nickname,
+        email=email,
+        # phone=phone,
+        name=name,
+        platform=platform,
+    )
+    return render(request, 'main/profile.html',
+                  dict(side_popular_contents_list=side_popular_contents_list, side_latest_contents_list=side_latest_contents_list, user_info=user_info, profile_info=profile_info))
 
 
 def post_view(request):
@@ -53,7 +92,7 @@ def post_view(request):
         post['profile_image'] = account_property.get('profile_image')
 
     # 댓글
-    comment_list = list(Comment.objects.filter(post_id=post.get('id')).order_by('-created_at').values())
+    comment_list = list(Comment.objects.filter(post_id=post.get('id')).order_by('created_at').values())
     post['comment_list'] = get_comment_list(comment_list)
 
     return render(request, 'main/view.html', dict(post=post, user_info=user_info))
@@ -87,9 +126,10 @@ def write(request):
 
         created = True
 
-    side_contents_list = get_side_contents()
+    side_popular_contents_list = get_side_popular_contents()
+    side_latest_contents_list = get_side_latest_contents()
     return render(request, 'main/write.html',
-                  dict(form=form, side_contents_list=side_contents_list, user_info=user_info, created=created))
+                  dict(form=form, side_popular_contents_list=side_popular_contents_list, side_latest_contents_list=side_latest_contents_list, user_info=user_info, created=created))
 
 
 def modify(request):
@@ -99,9 +139,10 @@ def modify(request):
 
     post_info = Post.objects.filter(id=post_id).values().last()
 
-    side_contents_list = get_side_contents()
+    side_popular_contents_list = get_side_popular_contents()
+    side_latest_contents_list = get_side_latest_contents()
     return render(request, 'main/modify.html',
-                  dict(form=form, side_contents_list=side_contents_list, user_info=user_info, post_info=post_info))
+                  dict(form=form, side_popular_contents_list=side_popular_contents_list, side_latest_contents_list=side_latest_contents_list, user_info=user_info, post_info=post_info))
 
 
 def guide(request):
@@ -109,24 +150,31 @@ def guide(request):
 
 
 def intro(request):
-    side_contents_list = get_side_contents()
     user_info = get_user_info(request)
-    return render(request, 'main/intro.html', dict(side_contents_list=side_contents_list, user_info=user_info))
+    side_popular_contents_list = get_side_popular_contents()
+    side_latest_contents_list = get_side_latest_contents()
+    return render(request, 'main/intro.html', dict(side_popular_contents_list=side_popular_contents_list, side_latest_contents_list=side_latest_contents_list, user_info=user_info))
 
 
 def contact(request):
     user_info = get_user_info(request)
-    side_contents_list = get_side_contents()
-    return render(request, 'main/contact.html', dict(side_contents_list=side_contents_list, user_info=user_info))
+    side_popular_contents_list = get_side_popular_contents()
+    side_latest_contents_list = get_side_latest_contents()
+    return render(request, 'main/contact.html', dict(side_popular_contents_list=side_popular_contents_list, side_latest_contents_list=side_latest_contents_list, user_info=user_info))
 
 
 def deleague(request):
-    side_contents_list = get_side_contents()
-    return render(request, 'main/deleague.html', dict(side_contents_list=side_contents_list, ))
+    side_popular_contents_list = get_side_popular_contents()
+    side_latest_contents_list = get_side_latest_contents()
+    return render(request, 'main/deleague.html', dict(side_popular_contents_list=side_popular_contents_list, side_latest_contents_list=side_latest_contents_list, ))
 
 
-def get_side_contents():
-    post_list = Post.objects.order_by('-write_date').values()[:5]
+def get_side_popular_contents():
+    post_list = Post.objects.order_by('-like').values()[:3]
+    return get_contents_list(post_list)
+
+def get_side_latest_contents():
+    post_list = Post.objects.order_by('-like').values()[:3]
     return get_contents_list(post_list)
 
 
@@ -143,7 +191,7 @@ def get_contents_list(post_list):
             post['profile_image'] = account_property.get('profile_image')
 
         # 댓글
-        comment_list = list(Comment.objects.filter(post_id=post.get('id')).order_by('-created_at').values())
+        comment_list = list(Comment.objects.filter(post_id=post.get('id')).order_by('created_at').values())
         post['comment_list'] = get_comment_list(comment_list)
 
         contents_list.append(post)

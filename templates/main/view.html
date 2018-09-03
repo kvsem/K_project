@@ -18,7 +18,7 @@
                                 </div>
                                 <div class="meta">
                                     <time class="published" datetime="2015-11-01">{{ post.write_date }}</time>
-                                    <a href="/intro" class="author"><span class="name">KWAN</span><img src={% static 'images/avatar.jpg' %} alt=""/></a>
+                                    <a href="/accounts/profile/?user_id={{ post.user_id }}" class="author"><span class="name">{{ post.nickname }}</span><img src={{ post.profile_image }} alt="" width="40px" height="40px"/></a>
                                 </div>
                             </header>
                             <div class="post_context">
@@ -50,13 +50,16 @@
                                     {% endfor %}
                                 </ul>
 
+                                {% if user.is_authenticated %}
                                 <form method="post" action="/write_comment/">
                                     {% csrf_token %}
                                     <div class="write_comment">
                                         <input type="hidden" name="post_id" value="{{ post.id }}">
+                                        COMMENT
                                         <input type="text" name="comment_text">
                                     </div>
                                 </form>
+                                {% endif %}
                             </div>
                         </article>
                 </div>

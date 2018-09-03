@@ -6,21 +6,22 @@
                         <section id="intro">
                             <a href="/" class="logo"><img src={% static 'images/avatar.jpg' %} /></a>
                             <header>
-                                <h2>KWANHEE HAN</h2>
+                                <a href="/"><h2 class="page_title">KWANHEE HAN</h2></a>
                                 <p>The server developer</p>
                             </header>
                         </section>
 
                     <!-- Mini Posts -->
+                    <h3><div class="sub_title">POPULAR POSTS</div></h3>
                         <section>
                             <div class="mini-posts">
                                 <!-- Mini Post -->
-                                {% for contents in side_contents_list %}
+                                {% for contents in side_popular_contents_list %}
                                     <article class="mini-post">
                                         <header>
                                             <h3><a href="/view/?id={{contents.id}}">{{ contents.title }}</a></h3>
                                             <time class="published" datetime="2015-10-20">{{ contents.write_date }}</time>
-                                            <a href="/intro" class="author"><img src={{ contents.profile_image }} alt="" width="40px" height="40px"/></a>
+                                            <a href="/accounts/profile/?user_id={{ contents.user_id }}" class="author"><img src={{ contents.profile_image }} alt="" width="40px" height="40px"/></a>
                                         </header>
                                         {% if contents.thumbnail != "" %}
                                         <a href="/view/?id={{contents.id}}" class="image"><img src="/static/{{ contents.thumbnail }}" alt="" /></a>
@@ -33,9 +34,10 @@
                         </section>
 
                     <!-- Posts List -->
+                    <h3><div class="sub_title">LATEST POSTS</div></h3>
                         <section>
                             <ul class="posts">
-                                {% for content in side_contents_list %}
+                                {% for content in side_latest_contents_list %}
                                 <li>
                                     <article>
                                         <header>

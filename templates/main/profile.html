@@ -1,0 +1,74 @@
+<style>
+    .post h2 {
+        border-bottom:2px solid #E3ECF2;
+        margin-bottom:10%;
+    }
+    .post {
+        overflow:hidden;
+    }
+
+    .profile_image {
+        width:22%;
+        height:25%;
+        border-radius: 100%;
+        border:2px solid #f4f4f4;
+        background-image: url("{{ profile_info.profile_image }}");
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: cover;
+        margin:0px auto;
+    }
+
+    .profile_info {
+        width:50%;
+        margin:0px auto;
+        margin-top:10%;
+        margin-bottom:10%;
+    }
+
+</style>
+{% include 'base/base.html' %}
+<body>
+<!-- Wrapper -->
+<div id="wrapper">
+            <!-- Header -->
+            {% include 'base/header.html' %}
+            <!-- Menu -->
+            {% include 'base/menu.html' %}
+            <!-- Main -->
+                <div id="main">
+                    <article class="post">
+                        <h2>PROFILE</h2>
+                    <!-- Post -->
+                        <div class="profile_image"></div>
+                        <div class="profile_info">
+                            <div class="profile_nickname">
+                                <h3>NICKNAME</h3>
+                                <input class=profile_input" type="text" value="{{ profile_info.nickname }}" readonly>
+                            </div><br>
+                            <div class="profile_user_id">
+                                <h3>USER ID</h3>
+                                <input class=profile_input" type="text" value="{{ profile_info.user_id }}" readonly>
+                            </div><br>
+                            <div class="profile_email">
+                                <h3>EMAIL</h3>
+                                <input class=profile_input" type="text" value="{{ profile_info.email }}" readonly>
+                            </div><br>
+                            <div class="profile_phone">
+                                <h3>PHONE</h3>
+                                <input class=profile_input" type="text" value="{{ profile_info.phone }}" readonly>
+                            </div><br>
+                            <div class="profile_name">
+                                <h3>NAME</h3>
+                                <input class=profile_input" type="text" value="{{ profile_info.name }}" readonly>
+                            </div><br>
+                            <div class="profile_platform">
+                                <h3>PLATFORM</h3>
+                                <input class=profile_input" type="text" value="{{ profile_info.platform | upper }}" readonly>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+        {% include 'base/side.html' %}
+        </div>
+</body>

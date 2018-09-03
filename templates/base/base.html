@@ -8,7 +8,7 @@
     <link rel="stylesheet" href={% static "assets/css/main.css" %} />
 
     <!-- Scripts -->
-    <script>
+    <!-- FB <script>
       window.fbAsyncInit = function() {
         FB.init({
           appId      : '538473486584838',
@@ -36,7 +36,7 @@
             statusChangeCallback(response);
           });
         }
-    </script>
+    </script> -->
     <script src={% static "assets/js/jquery.min.js" %}></script>
     <script src={% static "assets/js/skel.min.js" %}></script>
     <script src={% static "assets/js/util.js" %}></script>
@@ -52,11 +52,18 @@
     #main {
         width:50%;
     }
-    .icon {
+    .sub_title {
+        color:#2ebaae;
+    }
+    .icon, .page_title {
         cursor: pointer;
     }
-    .icon:hover {
+    .icon:hover, .page_title:hover {
         color: #2ebaae;
+    }
+
+    .comments {
+        padding:0;
     }
     .comment {
         overflow:hidden;
