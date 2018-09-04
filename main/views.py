@@ -7,6 +7,7 @@ from main.models import Post, Comment
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 
+
 def main_page(request):
     # PAGEING
     page = int(request.GET.get('page', 0))
@@ -268,3 +269,8 @@ def increase_like(request):
 
     response = dict(result_info='성공')
     return JsonResponse(response, json_dumps_params=dict(ensure_ascii=False, sort_keys=True), safe=False)
+
+
+def gate(request):
+    response = dict()
+    return render(request, 'base/gate.html', dict(response=response))

@@ -18,10 +18,11 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 from django.conf.urls import include
 from django.urls import path
 from django.views.generic.base import RedirectView
-from main.views import main_page, post_view, guide, write, intro, contact, deleague, modify, write_comment, increase_like, profile
+from main.views import gate, main_page, post_view, guide, write, intro, contact, deleague, modify, write_comment, increase_like, profile
 
 urlpatterns = [
-    path('', main_page, name='main'),
+    path('', gate, name='main'),
+    path('post/', main_page, name='main'),
     path('accounts/', include('allauth.urls')),
     path('summmernote/', include('django_summernote.urls')),
 

@@ -1,0 +1,85 @@
+{% load static %}
+{% include 'base/base.html' %}
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.9"></script>
+<style>
+    body {
+        background-image: url("/static/images/mac_background_image.jpg");
+        background-repeat: round;
+    }
+    .text-editor-wrap {
+        box-shadow: #000000 0px 0px 20px 2px;
+        width:50%;
+        height:50%;
+        margin:0px auto;
+        margin-top:10%;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .title_bar {
+        height:10%;
+        padding: 5px 0;
+        font-family: "Lucida Grande", sans-serif;
+        font-size: 0.75em;
+        text-align: center;
+        text-shadow: rgba(255, 255, 255, 0.8) 0px 1px 0px;
+        background-color: #f8f8f8;
+        background-image: -webkit-linear-gradient(top, #e8e8e8, #bcbbbc);
+        box-shadow: inset rgba(255, 255, 255, 0.7) 0px 1px 1px;
+        border-bottom: #6a6a6a 1px solid;
+    }
+
+    .text-body {
+        width:100%;
+        height:90%;
+        background-color: rgba(0, 0, 0, 0.85);
+        padding: 10px;
+        color: #f0f0f0;
+        text-shadow: #000 0px 1px 0px;
+        font-family: "Lucida Grande", sans-serif;
+        font-size: 1.45em;
+        line-height: 1.40em;
+        font-weight: 500;
+        text-align: left;
+        overflow: hidden;
+    }
+
+    @media (max-width: 1024px) {
+        body {
+            background-image: url("/static/images/mac_background_image.jpg");
+            background-repeat: round;
+        }
+        .text-editor-wrap {
+            width:90%;
+        }
+        .title_bar {
+            height: 15%;
+        }
+        .text-body {
+            height: 85%;
+        }
+
+    }
+</style>
+<div class="text-editor-wrap">
+    <div class="title_bar">Terminal -- -bash -- 600x400</div>
+    <div class="text-body">$
+        <span id="typed"></span>
+    </div>
+</div>
+
+<script>
+var string = ["HELLO, I AM KWANHEE HAN,^200 THE SERVER DEVELOPER.", "THIS IS MY BLOG FOR EVERYONE.", "IN A FEW SECONDS, ^200 YOU WILL ENTER THE BLOG.", "WELCOME TO MY PLACE !"];
+var typed = new Typed("#typed", {
+    strings: string,
+    typeSpeed: 40,
+    backSpeed: 10,
+    backDelay: 300,
+    startDelay: 300,
+    loop: false,
+  });
+
+setTimeout(function () {
+    location.href="/post";
+}, 14000)
+</script>
