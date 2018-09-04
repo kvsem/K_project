@@ -9,7 +9,7 @@
 
     .profile_image {
         width:22%;
-        height:25%;
+        height:28%;
         border-radius: 100%;
         border:2px solid #f4f4f4;
         background-image: url("{{ profile_info.profile_image }}");
@@ -25,7 +25,14 @@
         margin-top:10%;
         margin-bottom:10%;
     }
-
+    @media screen and (max-width:980px) {
+        .profile_image {
+            height:15%;
+        }
+        .profile_info {
+            width:100%;
+        }
+    }
 </style>
 {% include 'base/base.html' %}
 <body>
