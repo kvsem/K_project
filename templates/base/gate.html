@@ -3,6 +3,7 @@
 <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.9"></script>
 <style>
     body {
+        padding:0;
         background-image: url("/static/images/mac_background_image.jpg");
         background-repeat: round;
     }
@@ -44,6 +45,16 @@
         overflow: hidden;
     }
 
+    .skip_btn {
+        margin-top:10px;
+        margin-right:10px;
+        font-size:25px;
+        color:white;
+        font-weight: bold;
+        text-align:right;
+        animation: float 2s ease-in-out infinite;
+    }
+
     @media (max-width: 1024px) {
         body {
             background-image: url("/static/images/mac_background_image.jpg");
@@ -60,7 +71,24 @@
         }
 
     }
+
+    @keyframes float {
+        0% {
+            {#box-shadow: 0 5px 15px 0px rgba(0,0,0,0.6);#}
+            transform: translatey(0px);
+        }
+        50% {
+            {#box-shadow: 0 25px 15px 0px rgba(0,0,0,0.2);#}
+            transform: translatey(10px);
+        }
+        100% {
+            {#box-shadow: 0 5px 15px 0px rgba(0,0,0,0.6);#}
+            transform: translatey(0px);
+        }
+    }
+
 </style>
+<a href="/post"><h1 class="skip_btn">SKIP ></h1></a>
 <div class="text-editor-wrap">
     <div class="title_bar">Terminal -- -bash -- 600x400</div>
     <div class="text-body">$
@@ -69,7 +97,7 @@
 </div>
 
 <script>
-var string = ["HELLO, I AM KWANHEE HAN,^200 THE SERVER DEVELOPER.", "THIS IS MY BLOG FOR EVERYONE.", "IN A FEW SECONDS, ^200 YOU WILL ENTER THE BLOG.", "WELCOME TO MY PLACE !"];
+var string = ["HELLO, I AM KWANHEE HAN,^200 THE SERVER DEVELOPER.", "WELCOME TO MY PLACE !"];
 var typed = new Typed("#typed", {
     strings: string,
     typeSpeed: 40,
@@ -81,5 +109,5 @@ var typed = new Typed("#typed", {
 
 setTimeout(function () {
     location.href="/post";
-}, 14000)
+}, 6000)
 </script>
