@@ -255,7 +255,7 @@ def write_comment(request):
 
         created = True
 
-    return redirect('/')
+    return redirect('/post')
 
 
 def increase_like(request):
