@@ -61,7 +61,7 @@ def profile(request):
         platform = social_account.provider
         account_property = account_data.get('properties')
         nickname = account_property.get('nickname')
-        profile_image = account_property.get('profile_image')
+        profile_image = account_property.get('profile_image').replace('http', 'https')
 
     side_popular_contents_list = get_side_popular_contents()
     side_latest_contents_list = get_side_latest_contents()
@@ -90,7 +90,7 @@ def post_view(request):
         account_property = account_data.get('properties')
         post['user_id'] = user_id
         post['nickname'] = account_property.get('nickname')
-        post['profile_image'] = account_property.get('profile_image')
+        post['profile_image'] = account_property.get('profile_image').replace('http', 'https')
 
     # 댓글
     comment_list = list(Comment.objects.filter(post_id=post.get('id')).order_by('created_at').values())
@@ -174,6 +174,7 @@ def get_side_popular_contents():
     post_list = Post.objects.order_by('-like').values()[:3]
     return get_contents_list(post_list)
 
+
 def get_side_latest_contents():
     post_list = Post.objects.order_by('-like').values()[:3]
     return get_contents_list(post_list)
@@ -189,7 +190,7 @@ def get_contents_list(post_list):
             account_property = account_data.get('properties')
             post['user_id'] = user_id
             post['nickname'] = account_property.get('nickname')
-            post['profile_image'] = account_property.get('profile_image')
+            post['profile_image'] = account_property.get('profile_image').replace('http', 'https')
 
         # 댓글
         comment_list = list(Comment.objects.filter(post_id=post.get('id')).order_by('created_at').values())
@@ -208,7 +209,7 @@ def get_comment_list(comment_list):
             account_data = social_profile.extra_data
             account_property = account_data.get('properties')
             comment['nickname'] = account_property.get('nickname')
-            comment['profile_image'] = account_property.get('profile_image')
+            comment['profile_image'] = account_property.get('profile_image').replace('http', 'https')
 
         result_comment_list.append(comment)
 
@@ -227,7 +228,7 @@ def get_user_info(request):
             account_data = social_account.extra_data
             account_property = account_data.get('properties')
             nickname = account_property.get('nickname')
-            profile_image = account_property.get('profile_image')
+            profile_image = account_property.get('profile_image').replace('http', 'https')
 
     user_info = dict(
         user_id=user_id,
