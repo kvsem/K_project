@@ -46,14 +46,24 @@ class UpdatedAtCreatedAt(CreatedAt, UpdatedAt):
 
 class Post(UpdatedAtCreatedAt):
     DEFAULT = 'DEFAULT'
+    SERVER = 'SERVER'
     PYTHON = 'PYTHON'
+    DJANGO = 'DJANGO'
+    JAVA = 'JAVA'
+    SPRING = 'SPRING'
+    FRONT = 'FRONT'
     DATABASE = 'DATABASE'
     WEB = 'WEB'
     ELASTICSEARCH = 'ELASTIC SEARCH'
 
     CHOICES_CATEGORY = (
         (DEFAULT, 'DEFAULT'),
+        (SERVER, 'SERVER'),
         (PYTHON, 'PYTHON'),
+        (DJANGO, 'DJANGO'),
+        (JAVA, 'JAVA'),
+        (SPRING, 'SPRING'),
+        (FRONT, 'FRONT'),
         (DATABASE, 'DATABASE'),
         (WEB, 'WEB'),
         (ELASTICSEARCH, 'ELASTIC SEARCH'),
