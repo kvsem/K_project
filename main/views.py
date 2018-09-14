@@ -135,6 +135,7 @@ def write(request):
 
 def modify(request):
     user_info = get_user_info(request)
+
     form = PostForm()
     post_id = request.GET.get('id')
 

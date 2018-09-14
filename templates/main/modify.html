@@ -37,5 +37,5 @@
     console.log("{{ post_info }}");
     jQuery("#id_title").val("{{ post_info.title }}");
     jQuery("#id_category").val("{{ post_info.category }}");
-    jQuery("#id_context").val("{{ post_info.context }}");
+    jQuery("#id_context").html("{{ post_info.context }}");
 </script>
