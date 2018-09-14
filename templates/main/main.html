@@ -77,8 +77,8 @@
 
                     <!-- Pagination -->
                         <ul class="actions pagination">
-                            <li><a href="/?page={{pages.prev_page}}" class={% if pages.page == 0 %}"disabled button big previous"{% else %}"button big next"{% endif %}>Previous Page</a></li>
-                            <li><a href="/?page={{pages.next_page}}" class={% if pages.max_page == pages.page %}"disabled button big previous"{% else %}"button big next"{% endif %}>Next Page</a></li>
+                            <li><a href="/post/?page={{pages.prev_page}}" class={% if pages.page == 0 %}"disabled button big previous"{% else %}"button big next"{% endif %}>Previous Page</a></li>
+                            <li><a href="/post/?page={{pages.next_page}}" class={% if pages.max_page == pages.page %}"disabled button big previous"{% else %}"button big next"{% endif %}>Next Page</a></li>
                         </ul>
 
                 </div>
