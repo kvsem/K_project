@@ -138,13 +138,36 @@ def modify(request):
 
     form = PostForm()
     post_id = request.GET.get('id')
+    modified = False
+
+    if request.POST.get('title'):
+        now = timezone.now()
+        title = request.POST.get('title')
+        post_id = request.POST.get('id')
+        category = request.POST.get('category')
+        context = request.POST.get('context')
+        user_id = request.user.id
+
+        if 'img src' in context:
+            thumbnail = context.split('static/')[-1].split('"')[0]
+        else:
+            thumbnail = ""
+
+        Post.objects.filter(id=post_id).update(
+            title=title,
+            category=category,
+            context=context,
+            write_date=now,
+            thumbnail=thumbnail,
+        )
+        modified = True
 
     post_info = Post.objects.filter(id=post_id).values().last()
 
     side_popular_contents_list = get_side_popular_contents()
     side_latest_contents_list = get_side_latest_contents()
     return render(request, 'main/modify.html',
-                  dict(form=form, side_popular_contents_list=side_popular_contents_list, side_latest_contents_list=side_latest_contents_list, user_info=user_info, post_info=post_info))
+                  dict(form=form, side_popular_contents_list=side_popular_contents_list, side_latest_contents_list=side_latest_contents_list, user_info=user_info, post_info=post_info, modified=modified))
 
 
 def guide(request):

@@ -21,6 +21,7 @@
                     <article class="post">
                     <!-- Post -->
                         <form class="write_form" method="post" action="/modify/">
+                            <input name='id' type="hidden" value="{{ post_info.id }}"/>
 			                {% csrf_token %}
                             <h2>WRITING POST</h2>
                             {{ form|safe }}
@@ -34,8 +35,30 @@
 </body>
 
 <script>
-    console.log("{{ post_info }}");
+    function set_select_data(_id, select_value) {
+        var select_id = "#" + _id;
+        jQuery(select_id).val(select_value);
+
+        var selected_text = jQuery(select_id).children("option:selected").text();
+        var input_activates = "select-options-" + jQuery(select_id).data("select-id");
+        var ul_id = "#" + input_activates;
+
+        jQuery("input[data-activates=" + input_activates + "]").val(selected_text);
+        jQuery(ul_id).children("li").removeClass("active").removeClass("selected");
+        jQuery(ul_id).children("li").each(function() {
+            var span_text = jQuery(this).find("span").text();
+            if(span_text === selected_text) {
+                jQuery(this).addClass("active").addClass("selected");
+            }
+        });
+    }
+
     jQuery("#id_title").val("{{ post_info.title }}");
-    jQuery("#id_category").val("{{ post_info.category }}");
+    jQuery("#id_category").value = 4;
     jQuery("#id_context").html("{{ post_info.context }}");
+
+
+    if ("{{ modified }}" === "True") {
+        location.href='/post/';
+    };
 </script>
