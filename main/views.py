@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.shortcuts import redirect
 from main.forms import PostForm
 from main.models import Post, Comment
+from utils.logger import logger
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 
@@ -35,6 +36,8 @@ def main_page(request):
     side_latest_contents_list = get_side_latest_contents()
     contents_list = get_contents_list(post_list)
     user_info = get_user_info(request)
+
+    logger.warning('[WARNING] 로그 테스트')
 
     return render(request, 'main/main.html',
                   dict(contents_list=contents_list, side_popular_contents_list=side_popular_contents_list, side_latest_contents_list=side_latest_contents_list, pages=pages,
