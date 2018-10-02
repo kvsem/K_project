@@ -1,12 +1,19 @@
+import json
 from allauth.socialaccount.models import SocialAccount
 from django.shortcuts import render
 from django.utils import timezone
 from django.shortcuts import redirect
 from main.forms import PostForm
-from main.models import Post, Comment
+from main.models import Post, Comment, Game
 from utils.logger import logger
 from django.http import JsonResponse
+from django.views.generic import View
 from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_exempt
+
+
+def get_request_body(body):
+    return json.loads(body.decode('utf-8'))
 
 
 def main_page(request):
@@ -191,6 +198,29 @@ def contact(request):
     return render(request, 'main/contact.html', dict(side_popular_contents_list=side_popular_contents_list, side_latest_contents_list=side_latest_contents_list, user_info=user_info))
 
 
+def game(request):
+    user_info = get_user_info(request)
+    side_popular_contents_list = get_side_popular_contents()
+    side_latest_contents_list = get_side_latest_contents()
+
+    game_rank_info_list = list(Game.objects.all().values())
+
+    refined_rank_info_list = list()
+    for game_rank_info in game_rank_info_list:
+        user_id = game_rank_info.get('user_id')
+        user_info = get_user_info_by_user_id(user_id)
+        rank_info = dict(
+            profile_image=user_info.get('profile_image'),
+            username=user_info.get('nickname'),
+            score=game_rank_info.get('score'),
+        )
+        refined_rank_info_list.append(rank_info)
+
+    sorted_rank_info_list = sorted(refined_rank_info_list, key=lambda k: k['score'], reverse=True)
+
+    return render(request, 'main/snake_game.html', dict(side_popular_contents_list=side_popular_contents_list, side_latest_contents_list=side_latest_contents_list, user_info=user_info, rank_info_list=sorted_rank_info_list))
+
+
 def deleague(request):
     side_popular_contents_list = get_side_popular_contents()
     side_latest_contents_list = get_side_latest_contents()
@@ -299,6 +329,49 @@ def increase_like(request):
     return JsonResponse(response, json_dumps_params=dict(ensure_ascii=False, sort_keys=True), safe=False)
 
 
+def get_user_info_by_user_id(user_id):
+    social_account = SocialAccount.objects.get(user_id=user_id)
+    user_info = dict()
+
+    if social_account:
+        user_id = social_account.user_id
+        account_data = social_account.extra_data
+        account_property = account_data.get('properties')
+        nickname = account_property.get('nickname')
+        profile_image = account_property.get('profile_image').replace('http', 'https')
+
+        user_info = dict(
+            nickname=nickname,
+            profile_image=profile_image,
+        )
+
+    return user_info
+
 def gate(request):
     response = dict()
     return render(request, 'base/gate.html', dict(response=response))
+
+
+class GameView(View):
+    # API 서버 구축
+    def get(self, request, *args, **kwargs):
+        pass
+
+    @csrf_exempt
+    def post(self, request, *args, **kwargs):
+        body = get_request_body(request.body)
+        user = request.user
+
+        if not user.id:
+            response = dict()
+            return JsonResponse(response, json_dumps_params=dict(ensure_ascii=False, sort_keys=True), safe=False)
+        keys = dict(
+            user_id=user.id,
+        )
+
+        Game.objects.update_or_create(**keys, defaults=dict(
+            user_id=user.id,
+            score=body.get('score')
+        ))
+        response = dict()
+        return JsonResponse(response, json_dumps_params=dict(ensure_ascii=False, sort_keys=True), safe=False)

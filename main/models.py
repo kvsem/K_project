@@ -92,3 +92,14 @@ class Comment(UpdatedAtCreatedAt):
         db_table = 'comment'
         verbose_name = '댓글'
         verbose_name_plural = verbose_name
+
+
+class Game(UpdatedAtCreatedAt):
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.DO_NOTHING, db_constraint=False)
+    score = models.IntegerField(null=False, blank=False, default=0, verbose_name='점수')
+
+    class Meta:
+        db_table = 'game'
+        verbose_name = '게임'
+        verbose_name_plural = verbose_name
+
