@@ -369,6 +369,7 @@ class GameView(View):
             user_id=user.id,
         )
 
+        # TODO 최대값 비교
         Game.objects.update_or_create(**keys, defaults=dict(
             user_id=user.id,
             score=body.get('score')
