@@ -361,6 +361,7 @@ class GameView(View):
     def post(self, request, *args, **kwargs):
         body = get_request_body(request.body)
         user = request.user
+        score = body.get('score')
 
         if not user.id:
             response = dict()
@@ -370,9 +371,11 @@ class GameView(View):
         )
 
         # TODO 최대값 비교
-        Game.objects.update_or_create(**keys, defaults=dict(
-            user_id=user.id,
-            score=body.get('score')
-        ))
+        if score > Game.objects.filter(user_id=user.id).values_list('score', flat=True).first():
+            Game.objects.update_or_create(**keys, defaults=dict(
+                user_id=user.id,
+                score=score
+            ))
+
         response = dict()
         return JsonResponse(response, json_dumps_params=dict(ensure_ascii=False, sort_keys=True), safe=False)
