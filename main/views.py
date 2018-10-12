@@ -347,6 +347,7 @@ def get_user_info_by_user_id(user_id):
 
     return user_info
 
+
 def gate(request):
     response = dict()
     return render(request, 'base/gate.html', dict(response=response))
