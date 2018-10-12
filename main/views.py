@@ -208,10 +208,10 @@ def game(request):
     refined_rank_info_list = list()
     for game_rank_info in game_rank_info_list:
         user_id = game_rank_info.get('user_id')
-        user_info = get_user_info_by_user_id(user_id)
+        game_user_info = get_user_info_by_user_id(user_id)
         rank_info = dict(
-            profile_image=user_info.get('profile_image'),
-            username=user_info.get('nickname'),
+            profile_image=game_user_info.get('profile_image'),
+            username=game_user_info.get('nickname'),
             score=game_rank_info.get('score'),
         )
         refined_rank_info_list.append(rank_info)
