@@ -138,6 +138,18 @@
                 initFood(); // 새로운 먹이 추가
                 //뱀 꼬리 늘리기
                 state = 'eat';
+                if (score >= 10) {
+                    start(60)
+                }
+                if (score >= 20) {
+                    start(50)
+                }
+                if (score >= 30) {
+                    start(40)
+                }
+                if (score >= 40) {
+                    start(30)
+                }
             }
         }
         return state;
@@ -235,12 +247,12 @@
 
     $(document).on('click', '#startBtn', function(){
         end(0);
-        start();
+        start(70);
     });
 
     $(document).on('keydown', 'body', function (event) {
         if(event.keyCode == 32) {
-            start();
+            start(70);
             return false;
         }
     });
@@ -310,8 +322,10 @@
         TB = 1; // 위아래 방향 초기화
     }
 
-    function start(){
-        gameInterval = setInterval(move, 70);
+    function start(Interval){
+        // 라운드
+        //gameInterval = setInterval(move, 70);
+        gameInterval = setInterval(move, Interval);
         jQuery('.press').hide();
     }
 
