@@ -74,7 +74,7 @@ def profile(request):
         if account_property.get('profile_image'):
             profile_image = account_property.get('profile_image').replace('http', 'https')
         else:
-            profile_image = None
+            profile_image = '/static/images/none_profile.png'
 
     side_popular_contents_list = get_side_popular_contents()
     side_latest_contents_list = get_side_latest_contents()
@@ -106,7 +106,7 @@ def post_view(request):
         if account_property.get('profile_image'):
             post['profile_image'] = account_property.get('profile_image').replace('http', 'https')
         else:
-            post['profile_image'] = None
+            post['profile_image'] = '/static/images/none_profile.png'
 
     # 댓글
     comment_list = list(Comment.objects.filter(post_id=post.get('id')).order_by('created_at').values())
@@ -256,7 +256,7 @@ def get_contents_list(post_list):
             if account_property.get('profile_image'):
                 post['profile_image'] = account_property.get('profile_image').replace('http', 'https')
             else:
-                post['profile_image'] = None
+                post['profile_image'] = '/static/images/none_profile.png'
 
         # 댓글
         comment_list = list(Comment.objects.filter(post_id=post.get('id')).order_by('created_at').values())
@@ -278,7 +278,7 @@ def get_comment_list(comment_list):
             if account_property.get('profile_image'):
                 comment['profile_image'] = account_property.get('profile_image').replace('http', 'https')
             else:
-                comment['profile_image'] = None
+                comment['profile_image'] = '/static/images/none_profile.png'
 
         result_comment_list.append(comment)
 
@@ -300,7 +300,7 @@ def get_user_info(request):
             if account_property.get('profile_image'):
                 profile_image = account_property.get('profile_image').replace('http', 'https')
             else:
-                profile_image = None
+                profile_image = '/static/images/none_profile.png'
 
     user_info = dict(
         user_id=user_id,
@@ -356,7 +356,7 @@ def get_user_info_by_user_id(user_id):
         if account_property.get('profile_image'):
             profile_image = account_property.get('profile_image').replace('http', 'https')
         else:
-            profile_image = None
+            profile_image = '/static/images/none_profile.png'
 
         user_info = dict(
             nickname=nickname,
