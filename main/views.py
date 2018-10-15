@@ -167,7 +167,7 @@ def modify(request):
             title=title,
             category=category,
             context=context,
-            write_date=now,
+            updated_at=now,
             thumbnail=thumbnail,
         )
         modified = True
@@ -233,7 +233,7 @@ def get_side_popular_contents():
 
 
 def get_side_latest_contents():
-    post_list = Post.objects.order_by('-like').values()[:3]
+    post_list = Post.objects.order_by('-write_date').values()[:3]
     return get_contents_list(post_list)
 
 
