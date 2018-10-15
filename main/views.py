@@ -390,7 +390,11 @@ class GameView(View):
         )
 
         # TODO 최대값 비교
-        if Game.objects.filter(user_id=user.id).values_list('score', flat=True).first() is None or score > Game.objects.filter(user_id=user.id).values_list('score', flat=True).first():
+        last_score = Game.objects.filter(user_id=user.id).values_list('score', flat=True).first()
+        if not last_score:
+            last_score = 0
+
+        if score > last_score:
             Game.objects.update_or_create(**keys, defaults=dict(
                 user_id=user.id,
                 score=score
