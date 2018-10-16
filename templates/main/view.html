@@ -1,5 +1,14 @@
 {% load static %}
 {% include 'base/base.html' %}
+<style>
+    .comment_text, .comment_options, .comment_modify, .comment_delete {
+        float:left;
+    }
+
+    .comment_options {
+        display: none;
+    }
+</style>
 <body class="single">
     <!-- Wrapper -->
         <div id="wrapper">
@@ -35,7 +44,7 @@
                             </footer>
 
                             <div class="comment_info">
-                                <ul class="comments">
+                                <ul class="comments" id="comments">
                                     {% for comment in post.comment_list %}
                                     <li class="comment">
                                         <div class="comment_profile">
@@ -46,6 +55,16 @@
                                         <div class="comment_text">
                                             {{ comment.comment }}
                                         </div>
+                                        {% if comment.user_id %}
+                                        <div class="comment_options">
+                                            <div class="comment_modify">
+                                                <img src={% static 'images/eraser.png' %}>
+                                            </div>
+                                            <div class="comment_delete">
+                                                <img src={% static 'images/trash-can.png' %}>
+                                            </div>
+                                        </div>
+                                        {% endif %}
                                     </li>
                                     {% endfor %}
                                 </ul>
@@ -101,4 +120,10 @@
         });
         jQuery(this).off('click');
     });
+
+    jQuery('#comments').children("li").each(function () {
+        jQuery(this).mouseover(function () {
+            jQuery(this).children(".comment_options").show();
+        })
+    })
 </script>
