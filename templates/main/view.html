@@ -1,12 +1,24 @@
 {% load static %}
 {% include 'base/base.html' %}
 <style>
-    .comment_text, .comment_options, .comment_modify, .comment_delete {
+    .comment_text, .comment_options {
         float:left;
     }
 
+    .comment_modify, .comment_delete {
+        float:left;
+        width:20px;
+        height:20px;
+        margin:3px 0px 0px 5px;
+        opacity: 0.5;
+    }
+
     .comment_options {
+        width:50px;
+        height:25px;
         display: none;
+        overflow: hidden;
+        margin-left:1%;
     }
 </style>
 <body class="single">
@@ -55,13 +67,13 @@
                                         <div class="comment_text">
                                             {{ comment.comment }}
                                         </div>
-                                        {% if comment.user_id %}
+                                        {% if comment.user_id == user_info.user_id %}
                                         <div class="comment_options">
                                             <div class="comment_modify">
-                                                <img src={% static 'images/eraser.png' %}>
+                                                <img src={% static 'images/eraser.png' %} width="100%" height="100%">
                                             </div>
                                             <div class="comment_delete">
-                                                <img src={% static 'images/trash-can.png' %}>
+                                                <img src={% static 'images/trash-can.png' %} width="100%" height="100%">
                                             </div>
                                         </div>
                                         {% endif %}
@@ -124,6 +136,8 @@
     jQuery('#comments').children("li").each(function () {
         jQuery(this).mouseover(function () {
             jQuery(this).children(".comment_options").show();
+        }).mouseout(function () {
+            jQuery(this).children(".comment_options").hide();
         })
     })
 </script>
