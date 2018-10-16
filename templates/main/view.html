@@ -28,7 +28,7 @@
 
                             <footer>
                                 <ul class="stats">
-                                    {% if content.user_id == user_info.user_id %}<li><a href="/modify/?id={{ post.id }}">MODIFY</a></li>{% endif %}
+                                    {% if post.user_id == user_info.user_id %}<li><a href="/modify/?id={{ post.id }}">MODIFY</a></li>{% endif %}
                                     <li><div class="icon fa-heart" data-post="{{ post.id }}">{{ post.like }}</div></li>
                                     <li><div class="icon fa-comment">{{ post.comment_list | length }}</div></li>
                                 </ul>
