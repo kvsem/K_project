@@ -44,8 +44,6 @@ def main_page(request):
     contents_list = get_contents_list(post_list)
     user_info = get_user_info(request)
 
-    logger.warning('[WARNING] 로그 테스트')
-
     return render(request, 'main/main.html',
                   dict(contents_list=contents_list, side_popular_contents_list=side_popular_contents_list, side_latest_contents_list=side_latest_contents_list, pages=pages,
                        user_info=user_info))
