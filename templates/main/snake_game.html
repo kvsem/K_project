@@ -1,5 +1,12 @@
 {% include 'base/base.html' %}
 <style type="text/css">
+    .rank {
+        font-weight: bold;
+    }
+    .profile_image {
+        margin-top:5%;
+        border-radius:30px;
+    }
     .top_info_box {
         overflow: hidden;
         width:50%;
@@ -19,9 +26,10 @@
     }
     #speed_up {
         color: #009688;
-        position: relative;
+        position: absolute;
         margin: 0px auto;
-        top: -335px;
+        top: 66%;
+        left: 43%;
         text-align: center;
         font-size: 35px;
     }
@@ -421,11 +429,11 @@
                                 <table class="rank_table_body">
                                     {% for game_info in rank_info_list %}
                                     <tr>
-                                        <td>
+                                        <td class="rank">
                                             {{ forloop.counter }}
                                         </td>
                                         <td>
-                                            <img src="{{ game_info.profile_image }}" width="30px">
+                                            <img src="{{ game_info.profile_image }}" width="30px" height="30px" class="profile_image">
                                         </td>
                                         <td>
                                             {{ game_info.username }}
@@ -455,9 +463,9 @@
                             </div>
                         </div>
                         <div class='center'>
+                            <div id="speed_up">SPEED UP!</div>
                             <table id='snakeTable'>
                             </table>
-                            <div id="speed_up">SPEED UP!</div>
                         </div>
 
 
