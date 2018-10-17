@@ -1,5 +1,6 @@
+import json
 from django.utils import timezone
-from main.views import get_user_info
+from main.views import get_user_info, get_request_body
 from .logger import logger
 
 
@@ -20,10 +21,16 @@ class CustomMiddleware:
         method = request.method
         user_info = get_user_info(request)
         path = request.path
-        if user_info.get('user_id'):
-            logger.info('[{0}] [REQUEST] [{1}] USER_ID:{2}[{3}] {4}'.format(sequence, method, user_info.get('user_id'), user_info.get('nickname'), path))
+        body = request.body
+        if body:
+            body = json.loads(body.decode('utf-8'))
         else:
-            logger.info('[{0}] [REQUEST] [{1}] [{2}] {3}'.format(sequence, method, user_info.get('nickname'), path))
+            body = ''
+
+        if user_info.get('user_id'):
+            logger.info('[{0}] [REQUEST] [{1}] USER_ID:{2}[{3}] {4} {5}'.format(sequence, method, user_info.get('user_id'), user_info.get('nickname'), path, body))
+        else:
+            logger.info('[{0}] [REQUEST] [{1}] [{2}] {3} {4}'.format(sequence, method, user_info.get('nickname'), path, body))
 
         response = self.get_response(request)
         response_now = timezone.now()
