@@ -22,18 +22,24 @@ class CustomMiddleware:
         method = request.method
         user_info = get_user_info(request)
         path = request.path
+        body = request.body
+
         if request.FILES:
             file = request.FILES.get('files')
-            file_log = '[FILE : {}]'.format(file)
+            file_log = '[files : {}]'.format(file)
 
         if method == 'POST':
             argument = request.POST.dict()
         else:
             argument = request.GET.dict()
-        argument_log = '[arg : {}]'.format(argument) if argument else ''
+
+        if argument:
+            argument_log = '[arg : {}]'.format(argument)
+        else:
+            argument_log = '[arg : {}]'.format(body.decode('utf-8'))
 
         if user_info.get('user_id'):
-            logger.info('[{0}] [REQUEST] [{1}] USER_ID:{2}[{3}] {4} {5} {6}'.format(sequence, method, user_info.get('user_id'), user_info.get('nickname'), path, argument_log, file_log))
+            logger.info('[{0}] [REQUEST] [{1}] USER_ID:{2} [{3}] {4} {5} {6}'.format(sequence, method, user_info.get('user_id'), user_info.get('nickname'), path, argument_log, file_log))
         else:
             logger.info('[{0}] [REQUEST] [{1}] [{2}] {3} {4} {5}'.format(sequence, method, user_info.get('nickname'), path, argument_log, file_log))
 
