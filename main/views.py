@@ -206,6 +206,10 @@ def game(request):
     user_info = get_user_info(request)
     side_popular_contents_list = get_side_popular_contents()
     side_latest_contents_list = get_side_latest_contents()
+    last_game = Game.objects.filter(user_id=user_info.get('user_id')).last()
+    last_game_score = 0
+    if last_game:
+        last_game_score = last_game.score
 
     game_rank_info_list = list(Game.objects.all().values())
 
@@ -222,7 +226,7 @@ def game(request):
 
     sorted_rank_info_list = sorted(refined_rank_info_list, key=lambda k: k['score'], reverse=True)
 
-    return render(request, 'main/snake_game.html', dict(side_popular_contents_list=side_popular_contents_list, side_latest_contents_list=side_latest_contents_list, user_info=user_info, rank_info_list=sorted_rank_info_list))
+    return render(request, 'main/snake_game.html', dict(side_popular_contents_list=side_popular_contents_list, side_latest_contents_list=side_latest_contents_list, user_info=user_info, rank_info_list=sorted_rank_info_list, last_game_score=last_game_score))
 
 
 def deleague(request):

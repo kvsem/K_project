@@ -17,25 +17,25 @@ class CustomMiddleware:
         if self.request_sequence >= 99999:
             self.request_sequence = 1
 
+        file_log = ''
         sequence = str(self.request_sequence).zfill(5)
         method = request.method
         user_info = get_user_info(request)
         path = request.path
-        body = request.body
+        if request.FILES:
+            file = request.FILES.get('files')
+            file_log = '[FILE : {}]'.format(file)
 
-        if body:
-            if not request.content_type == 'multipart/form-data':
-                try:
-                    body = json.loads(body.decode('utf-8'))
-                except:
-                    body = body.decode('utf-8')
+        if method == 'POST':
+            argument = request.POST.dict()
         else:
-            body = ''
+            argument = request.GET.dict()
+        argument_log = '[arg : {}]'.format(argument) if argument else ''
 
         if user_info.get('user_id'):
-            logger.info('[{0}] [REQUEST] [{1}] USER_ID:{2}[{3}] {4} {5}'.format(sequence, method, user_info.get('user_id'), user_info.get('nickname'), path, body))
+            logger.info('[{0}] [REQUEST] [{1}] USER_ID:{2}[{3}] {4} {5} {6}'.format(sequence, method, user_info.get('user_id'), user_info.get('nickname'), path, argument_log, file_log))
         else:
-            logger.info('[{0}] [REQUEST] [{1}] [{2}] {3} {4}'.format(sequence, method, user_info.get('nickname'), path, body))
+            logger.info('[{0}] [REQUEST] [{1}] [{2}] {3} {4} {5}'.format(sequence, method, user_info.get('nickname'), path, argument_log, file_log))
 
         response = self.get_response(request)
         response_now = timezone.now()

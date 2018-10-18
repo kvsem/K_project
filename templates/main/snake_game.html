@@ -400,7 +400,10 @@
         });
 
         request.done(function(result) {
-            location.reload();
+            var last_score = "{{ last_game_score }}" * 1;
+            if (last_score  < score) {
+                location.reload();
+            }
         }).fail(function(err) {
             console.error(err.statusText);
         });
