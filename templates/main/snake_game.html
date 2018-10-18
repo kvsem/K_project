@@ -131,7 +131,7 @@
     var LR = 0; // 좌우 방향
     var TB = 1; // 위아래 방향
 
-    var mapSize = 21; //map size
+    var mapSize = 17; //map size
 
     var gameInterval;
 
@@ -178,7 +178,7 @@
                 initFood(); // 새로운 먹이 추가
                 //뱀 꼬리 늘리기
                 state = 'eat';
-                if (score != 0 && score % 5 == 0) {
+                if (score != 0 && score % 10 == 0) {
                     round_up();
                 }
             }
@@ -194,7 +194,7 @@
         }, 1000);
 
         clearInterval(gameInterval);
-        start(80-((round-1)*7));
+        start(90-((round-1)*5));
     }
 
     // 먹이 초기화
@@ -289,13 +289,13 @@
 
     $(document).on('click', '#startBtn', function(){
         end(0);
-        start(80);
+        start(90);
     });
 
     $(document).on('keydown', 'body', function (event) {
         if(event.keyCode == 32) {
             if (game_status == false) {
-                start(80);
+                start(90);
             }
             return false;
         }
