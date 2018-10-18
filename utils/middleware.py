@@ -25,7 +25,10 @@ class CustomMiddleware:
 
         if body:
             if not request.content_type == 'multipart/form-data':
-                body = json.loads(body.decode('utf-8'))
+                try:
+                    body = json.loads(body.decode('utf-8'))
+                except:
+                    body = body.decode('utf-8')
         else:
             body = ''
 
