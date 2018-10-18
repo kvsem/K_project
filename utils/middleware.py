@@ -22,8 +22,10 @@ class CustomMiddleware:
         user_info = get_user_info(request)
         path = request.path
         body = request.body
+
         if body:
-            body = json.loads(body.decode('utf-8'))
+            if not request.content_type == 'multipart/form-data':
+                body = json.loads(body.decode('utf-8'))
         else:
             body = ''
 
