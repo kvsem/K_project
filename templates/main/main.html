@@ -65,9 +65,9 @@
                             </footer>
 
                             <div class="comment_info">
-                                <ul class="comments">
+                                <ul class="comments" id="comments">
                                     {% for comment in content.comment_list %}
-                                    <li class="comment">
+                                    <li class="comment" data-comment_id="{{ comment.id }}">
                                         <div class="comment_profile">
                                             <img class="comment_profile_image" src="{{ comment.profile_image }}" width="100%" height="100%"/>
                                             <div class="comment_profile_nickname">{{ comment.nickname }}</div>
@@ -77,14 +77,14 @@
                                             {{ comment.comment }}
                                         </div>
                                         {% if comment.user_id == user_info.user_id %}
-                                            <div class="comment_options">
-                                                <div class="comment_modify">
-                                                    <img src={% static 'images/eraser.png' %}>
-                                                </div>
-                                                <div class="comment_delete">
-                                                    <img src={% static 'images/trash-can.png' %}>
-                                                </div>
+                                        <div class="comment_options">
+                                            <div class="comment_modify">
+                                                <img src={% static 'images/eraser.png' %}>
                                             </div>
+                                            <div class="comment_delete">
+                                                <img src={% static 'images/trash-can.png' %}>
+                                            </div>
+                                        </div>
                                         {% endif %}
                                     </li>
                                     {% endfor %}
@@ -158,7 +158,7 @@
         }
     });
 
-        jQuery('#comments').children("li").each(function () {
+    jQuery('#comments').children("li").each(function () {
         jQuery(this).mouseover(function () {
             jQuery(this).children(".comment_options").show();
         }).mouseout(function () {
