@@ -6,6 +6,25 @@
         overflow: hidden;
         -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
     }
+    .comment_text, .comment_options {
+        float:left;
+    }
+
+    .comment_modify, .comment_delete {
+        float:left;
+        width:20px;
+        height:20px;
+        margin:3px 0px 0px 5px;
+        opacity: 0.5;
+    }
+
+    .comment_options {
+        width:50px;
+        height:25px;
+        display: none;
+        overflow: hidden;
+        margin-left:1%;
+    }
 </style>
 <body>
     <!-- Wrapper -->
@@ -60,10 +79,10 @@
                                         {% if comment.user_id == user_info.user_id %}
                                             <div class="comment_options">
                                                 <div class="comment_modify">
-                                                    <img src={% static 'images/eraser.png' %} width="100%" height="100%">
+                                                    <img src={% static 'images/eraser.png' %}>
                                                 </div>
                                                 <div class="comment_delete">
-                                                    <img src={% static 'images/trash-can.png' %} width="100%" height="100%">
+                                                    <img src={% static 'images/trash-can.png' %}>
                                                 </div>
                                             </div>
                                         {% endif %}
@@ -130,7 +149,6 @@
         jQuery(this).off('click');
     });
 
-    jQuery(".comment_info").hide();
     jQuery(".fa-comment").on('click', function () {
         if (jQuery(this).parent().parent().parent().parent().find(".comment_info").css("display") === "none") {
             jQuery(this).parent().parent().parent().parent().find(".comment_info").show();
@@ -139,4 +157,67 @@
             jQuery(this).parent().parent().parent().parent().find(".comment_info").hide();
         }
     });
+
+        jQuery('#comments').children("li").each(function () {
+        jQuery(this).mouseover(function () {
+            jQuery(this).children(".comment_options").show();
+        }).mouseout(function () {
+            jQuery(this).children(".comment_options").hide();
+        });
+    });
+
+    jQuery('.comment_delete').each(function () {
+        jQuery(this).on('click', function () {
+            jQuery(this).parent().parent().hide();
+            var comment_id = $(this).data("comment_id");
+            delete_comment(comment_id);
+        })
+    });
+
+    jQuery('.comment_modify').each(function () {
+        jQuery(this).on('click', function () {
+            var modify_text = jQuery(this).parent().parent().find('.comment_text').val();
+            var comment_id = $(this).data("comment_id");
+            modify_comment(comment_id, modify_text);
+        })
+    });
+
+    function delete_comment(comment_id) {
+        var post_data = {
+            comment_id : comment_id
+        };
+
+        var request = jQuery.ajax({
+            type: "POST",
+            url: "/delete_comment/",
+            data: JSON.stringify(post_data),
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        });
+
+        request.done(function(result) {
+        }).fail(function(err) {
+            console.error(err.statusText);
+        });
+    }
+
+    function modify_comment(comment_id, modify_text) {
+        var post_data = {
+            comment_id : comment_id,
+            modify_text : modify_text
+        };
+
+        var request = jQuery.ajax({
+            type: "POST",
+            url: "/modify_comment/",
+            data: JSON.stringify(post_data),
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        });
+
+        request.done(function(result) {
+        }).fail(function(err) {
+            console.error(err.statusText);
+        });
+    }
 </script>

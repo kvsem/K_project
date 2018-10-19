@@ -151,7 +151,7 @@
 
     jQuery('.comment_modify').each(function () {
         jQuery(this).on('click', function () {
-            jQuery(this).parent().parent().find('.comment_text').val;
+            var modify_text = jQuery(this).parent().parent().find('.comment_text').val();
             var comment_id = $(this).data("comment_id");
             modify_comment(comment_id, modify_text);
         })
