@@ -1,4 +1,5 @@
 import json
+import traceback
 from allauth.socialaccount.models import SocialAccount
 from django.shortcuts import render
 from django.utils import timezone
@@ -94,6 +95,11 @@ def post_view(request):
     post_id = request.GET.get('id')
     user_info = get_user_info(request)
     post = Post.objects.filter(id=post_id).values().last()
+    if post is None:
+        error_msg = '[post_id:{}] invalid access.'.format(post_id)
+        logger.error(error_msg)
+        redirect('/post')
+
     social_profile = SocialAccount.objects.get(user_id=post.get('user_id'))
     if social_profile:
         user_id = social_profile.user_id
@@ -334,16 +340,21 @@ def write_comment(request):
 
 
 def increase_like(request):
-    post_data = eval(request.body.decode("utf-8"))
-    post_id = post_data.get('post_id')
+    try:
+        post_data = eval(request.body.decode("utf-8"))
+        post_id = post_data.get('post_id')
 
-    if post_id:
-        post_obj = Post.objects.get(id=post_id)
-        post_obj.like += 1
-        post_obj.save()
+        if post_id:
+            post_obj = Post.objects.get(id=post_id)
+            post_obj.like += 1
+            post_obj.save()
 
-    response = dict(result_info='성공')
-    return JsonResponse(response, json_dumps_params=dict(ensure_ascii=False, sort_keys=True), safe=False)
+        response = dict(result_info='성공')
+        return JsonResponse(response, json_dumps_params=dict(ensure_ascii=False, sort_keys=True), safe=False)
+    except Exception as e:
+        logger.error(e.args)
+        logger.error(traceback.format_exc())
+        return redirect('/post')
 
 
 def get_user_info_by_user_id(user_id):
