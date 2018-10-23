@@ -389,7 +389,6 @@ class GameView(View):
     def get(self, request, *args, **kwargs):
         pass
 
-    @csrf_exempt
     def post(self, request, *args, **kwargs):
         body = get_request_body(request.body)
         user = request.user
