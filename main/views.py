@@ -21,10 +21,11 @@ def get_request_body(body):
 def main_page(request):
     # PAGEING
     page = int(request.GET.get('page', 0))
+    num_per_page = 2
     next_page = page + 1
     prev_page = page - 1 if page != 0 else 0
-    start_at = page * 3
-    end_at = (page + 1) * 3
+    start_at = page * num_per_page
+    end_at = (page + 1) * num_per_page
 
     category = ''
     all_post_list = list(Post.objects.order_by('-write_date').values())
@@ -36,10 +37,10 @@ def main_page(request):
     post_list = all_post_list[start_at:end_at]
     count = len(all_post_list)
 
-    if count % 3 == 0:
-        max_page = count // 3 - 1
+    if count % num_per_page == 0:
+        max_page = count // num_per_page - 1
     else:
-        max_page = count // 3
+        max_page = count // num_per_page
 
     pages = dict(
         max_page=max_page,
