@@ -4,6 +4,11 @@
     #category_post {
         padding-top:1em;
     }
+
+    #list_post {
+        padding-bottom:3em;
+    }
+
     .post_context {
         max-height:60%;
         overflow: hidden;
@@ -37,6 +42,18 @@
         font-family: "Raleway", Helvetica, sans-serif;
         margin:0% 2% 0% 2%;
         font-weight:bold;
+    }
+
+    .all_post_title {
+        float:left;
+    }
+
+    .all_post_info {
+        overflow: hidden;
+    }
+
+    .list_text {
+        font-weight: bold;
     }
 
     {% if category == '' %}
@@ -146,6 +163,26 @@
                             {% endif %}
                         </ul>
 
+                    <article class="post" id="list_post">
+                        <div class="all_post_list">
+                            <h2 class="list_text">
+                                {% if category == '' %}
+                                    모든 카테고리의 글 목록 ({{ count }})
+                                {% else %}
+                                    '{{ category | upper }}' 카테고리의 글 목록 ({{ count }})
+                                {% endif %}
+                            </h2>
+                            <ul class="alt">
+                            {% for all_post in all_post_list %}
+                                <li class="all_post_info">
+                                    <a href="/view/?id={{ all_post.id }}">
+                                        <div class="all_post_title" id="all_post_title_{{ all_post.id }}">{{ all_post.title }}</div>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                            </ul>
+                        </div>
+                    </article>
                 </div>
         {% include 'base/side.html' %}
         </div>

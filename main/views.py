@@ -27,13 +27,14 @@ def main_page(request):
     end_at = (page + 1) * 3
 
     category = ''
-    post_list = Post.objects.order_by('-write_date').values()[start_at:end_at]
-    count = Post.objects.count()
+    all_post_list = list(Post.objects.order_by('-write_date').values())
 
     if request.GET.get('category'):
         category = request.GET.get('category')
-        post_list = Post.objects.order_by('-write_date').filter(category=category).values()[start_at:end_at]
-        count = Post.objects.filter(category=category).count()
+        all_post_list = list(Post.objects.order_by('-write_date').filter(category=category).values())
+
+    post_list = all_post_list[start_at:end_at]
+    count = len(all_post_list)
 
     if count % 3 == 0:
         max_page = count // 3 - 1
@@ -56,9 +57,17 @@ def main_page(request):
     # CATEGORY
     category_list = list(Post.objects.distinct().values_list('category', flat=True))
 
-    return render(request, 'main/main.html',
-                  dict(contents_list=contents_list, side_popular_contents_list=side_popular_contents_list, side_latest_contents_list=side_latest_contents_list, pages=pages,
-                       user_info=user_info, category_list=category_list, category=category))
+    response = dict(all_post_list=all_post_list,
+                    contents_list=contents_list,
+                    side_popular_contents_list=side_popular_contents_list,
+                    side_latest_contents_list=side_latest_contents_list,
+                    pages=pages,
+                    user_info=user_info,
+                    category_list=category_list,
+                    count=count,
+                    category=category)
+
+    return render(request, 'main/main.html', response)
 
 
 def profile(request):
