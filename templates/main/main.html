@@ -38,6 +38,16 @@
         margin:0% 2% 0% 2%;
         font-weight:bold;
     }
+
+    {% if category == '' %}
+        #category_all {
+            color: #2ebaae;
+        }
+    {% else %}
+        #category_{{ category }} {
+            color: #2ebaae;
+        }
+    {% endif %}
 </style>
 <body>
     <!-- Wrapper -->
@@ -48,15 +58,16 @@
             {% include 'base/menu.html' %}
             <!-- Main -->
                 <div id="main">
+                    <article class="post" id="category_post">
+                        <div class="category_list">
+                                <a href="/post"><div class="category_each" id="category_all">ALL</div></a>
+                            {% for category in category_list %}
+                                <a href="/post/?category={{ category }}"><div class="category_each" id="category_{{ category }}">{{ category | upper }}</div></a>
+                            {% endfor %}
+                        </div>
+                    </article>
                     {% for content in contents_list %}
                     <!-- Post -->
-                        <article class="post" id="category_post">
-                            <div class="category_list">
-                                {% for category in category_list %}
-                                    <a href="/post/?category={{ category }}"><div class="category_each" id="category_{{ category }}">{{ category | upper }}</div></a>
-                                {% endfor %}
-                            </div>
-                        </article>
                         <article class="post">
                             <header>
                                 <div class="title">
