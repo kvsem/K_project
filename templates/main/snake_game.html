@@ -33,6 +33,15 @@
         text-align: center;
         font-size: 35px;
     }
+    #pause {
+        color: #009688;
+        position: absolute;
+        margin: 0px auto;
+        top: 66%;
+        left: 45%;
+        text-align: center;
+        font-size: 35px;
+    }
     #round, #score {
         font-size:16px;
         font-weight: bold;
@@ -124,6 +133,7 @@
 
     ////뱀게임///
 
+    var speed = 90;
     var score = 0;
     var round = 1;
     var game_status = false;
@@ -134,6 +144,7 @@
     var mapSize = 17; //map size
 
     var gameInterval;
+    var is_pause = false;
 
 
     // init map
@@ -194,7 +205,8 @@
         }, 1000);
 
         clearInterval(gameInterval);
-        start(90-((round-1)*5));
+        speed = speed-((round-1)*5);
+        start(speed);
     }
 
     // 먹이 초기화
@@ -289,14 +301,21 @@
 
     $(document).on('click', '#startBtn', function(){
         end(0);
-        start(90);
+        start(speed);
     });
 
     $(document).on('keydown', 'body', function (event) {
         if(event.keyCode == 32) {
-            if (game_status == false) {
-                start(90);
+            if (game_status == false && is_pause == false) {
+                start(speed);
             }
+            else if (game_status == true && is_pause == false) {
+                pause();
+            }
+            else if (game_status == true && is_pause == true) {
+                restart();
+            }
+
             return false;
         }
     });
@@ -359,6 +378,7 @@
 
     function initAll() {
         score = 0; // 점수 초기화
+        speed = 90;
         round = 1; // 라운드 초기화
         initMap(); // 맵 초기화
         initFood(); // 먹이 초기화
@@ -366,6 +386,7 @@
         LR = 0; // 좌우 방향 초기화
         TB = 1; // 위아래 방향 초기화
         jQuery('#speed_up').hide();
+        jQuery('#pause').hide();
     }
 
     function start(Interval){
@@ -382,6 +403,18 @@
         send_result_to_server(score);
         clearInterval(gameInterval);
         jQuery('.press').show();
+    }
+
+    function pause() {
+        is_pause = true;
+        clearInterval(gameInterval);
+        jQuery('#pause').fadeIn();
+    }
+
+    function restart() {
+        gameInterval = setInterval(move, speed);
+        jQuery('#pause').fadeOut();
+        is_pause = false;
     }
 
     function send_result_to_server(score) {
@@ -468,6 +501,7 @@
                         </div>
                         <div class='center'>
                             <div id="speed_up">SPEED UP!</div>
+                            <div id="pause">PAUSE</div>
                             <table id='snakeTable'>
                             </table>
                         </div>

@@ -1,16 +1,17 @@
 import json
 import traceback
+
 from allauth.socialaccount.models import SocialAccount
+from django.contrib.auth.models import User
+from django.http import JsonResponse
+from django.shortcuts import redirect
 from django.shortcuts import render
 from django.utils import timezone
-from django.shortcuts import redirect
+from django.views.generic import View
+
 from main.forms import PostForm
 from main.models import Post, Comment, Game
 from utils.logger import logger
-from django.http import JsonResponse
-from django.views.generic import View
-from django.contrib.auth.models import User
-from django.views.decorators.csrf import csrf_exempt
 
 
 def get_request_body(body):
@@ -24,9 +25,16 @@ def main_page(request):
     prev_page = page - 1 if page != 0 else 0
     start_at = page * 3
     end_at = (page + 1) * 3
-    post_list = Post.objects.order_by('-write_date').values()[start_at:end_at]
 
+    category = ''
+    post_list = Post.objects.order_by('-write_date').values()[start_at:end_at]
     count = Post.objects.count()
+
+    if request.GET.get('category'):
+        category = request.GET.get('category')
+        post_list = Post.objects.order_by('-write_date').filter(category=category).values()[start_at:end_at]
+        count = Post.objects.filter(category=category).count()
+
     if count % 3 == 0:
         max_page = count // 3 - 1
     else:
@@ -45,9 +53,12 @@ def main_page(request):
     contents_list = get_contents_list(post_list)
     user_info = get_user_info(request)
 
+    # CATEGORY
+    category_list = list(Post.objects.distinct().values_list('category', flat=True))
+
     return render(request, 'main/main.html',
                   dict(contents_list=contents_list, side_popular_contents_list=side_popular_contents_list, side_latest_contents_list=side_latest_contents_list, pages=pages,
-                       user_info=user_info))
+                       user_info=user_info, category_list=category_list, category=category))
 
 
 def profile(request):

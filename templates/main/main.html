@@ -1,6 +1,9 @@
 {% load static %}
 {% include 'base/base.html' %}
 <style>
+    #category_post {
+        padding-top:1em;
+    }
     .post_context {
         max-height:60%;
         overflow: hidden;
@@ -25,6 +28,16 @@
         overflow: hidden;
         margin-left:1%;
     }
+
+    .category_list {
+        overflow: hidden;
+    }
+    .category_each {
+        float:left;
+        font-family: "Raleway", Helvetica, sans-serif;
+        margin:0% 2% 0% 2%;
+        font-weight:bold;
+    }
 </style>
 <body>
     <!-- Wrapper -->
@@ -37,6 +50,13 @@
                 <div id="main">
                     {% for content in contents_list %}
                     <!-- Post -->
+                        <article class="post" id="category_post">
+                            <div class="category_list">
+                                {% for category in category_list %}
+                                    <a href="/post/?category={{ category }}"><div class="category_each" id="category_{{ category }}">{{ category | upper }}</div></a>
+                                {% endfor %}
+                            </div>
+                        </article>
                         <article class="post">
                             <header>
                                 <div class="title">
@@ -106,8 +126,13 @@
 
                     <!-- Pagination -->
                         <ul class="actions pagination">
-                            <li><a href="/post/?page={{pages.prev_page}}" class={% if pages.page == 0 %}"disabled button big previous"{% else %}"button big next"{% endif %}>Previous Page</a></li>
-                            <li><a href="/post/?page={{pages.next_page}}" class={% if pages.max_page == pages.page %}"disabled button big previous"{% else %}"button big next"{% endif %}>Next Page</a></li>
+                            {% if category == '' %}
+                                <li><a href="/post/?page={{pages.prev_page}}" class={% if pages.page == 0 %}"disabled button big previous"{% else %}"button big next"{% endif %}>Previous Page</a></li>
+                                <li><a href="/post/?page={{pages.next_page}}" class={% if pages.max_page == pages.page %}"disabled button big previous"{% else %}"button big next"{% endif %}>Next Page</a></li>
+                            {% else %}
+                                <li><a href="/post/?page={{pages.prev_page}}&category={{ category }}" class={% if pages.page == 0 %}"disabled button big previous"{% else %}"button big next"{% endif %}>Previous Page</a></li>
+                                <li><a href="/post/?page={{pages.next_page}}&category={{ category }}" class={% if pages.max_page == pages.page %}"disabled button big previous"{% else %}"button big next"{% endif %}>Next Page</a></li>
+                            {% endif %}
                         </ul>
 
                 </div>
