@@ -118,8 +118,8 @@ def post_view(request):
     post = Post.objects.filter(id=post_id).values().last()
     if post is None:
         error_msg = '[post_id:{}] invalid access.'.format(post_id)
-        logger.error(error_msg)
-        redirect('/post')
+        logger.warning(error_msg)
+        return redirect('/post')
 
     social_profile = SocialAccount.objects.get(user_id=post.get('user_id'))
     if social_profile:
