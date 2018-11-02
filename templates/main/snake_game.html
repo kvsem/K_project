@@ -239,10 +239,20 @@
         head[0] = snake[0][0];
         head[1] = snake[0][1];
 
+        try {
+            var neck_x = snake[1][1];
+            var neck_y = snake[1][0];
+        }
+        catch (e) {
+            var neck_x = snake[0][1];
+            var neck_y = snake[0][0];
+        }
+
+
         // 벽을 만난건지 체크
-        var tmp = head[0]+1*TB;
-        if(tmp >= 0 && tmp < mapSize) {
-            head[0] = tmp;
+        var tmp_y = head[0]+1*TB;
+        if(tmp_y >= 0 && tmp_y < mapSize) {
+            head[0] = tmp_y;
         }else {
             alert('점수 : '+score);
             end(score);
@@ -250,9 +260,9 @@
             return;
         }
 
-        tmp = head[1]+1*LR;
-        if(tmp >= 0 && tmp < mapSize) {
-            head[1] = tmp;
+        var tmp_x = head[1]+1*LR;
+        if(tmp_x >= 0 && tmp_x < mapSize) {
+            head[1] = tmp_x;
         }else {
             alert('점수 : '+score);
             end(score);
@@ -260,14 +270,15 @@
             return;
         }
 
-        // 몸통을 만난건지 체크
-        if($('#block'+head[0]+'_'+head[1]).hasClass('snake')){
-            alert('점수 : '+score);
-            end(score);
-            initAll();
-            return;
+        if (neck_x != tmp_x && neck_y != tmp_y) {
+            // 몸통을 만난건지 체크
+            if($('#block'+head[0]+'_'+head[1]).hasClass('snake')){
+                alert('점수 : '+score);
+                end(score);
+                initAll();
+                return;
+            }
         }
-
 
         snake.unshift(head);
 
