@@ -279,13 +279,17 @@ def get_user_info(request):
     profile_image = None
 
     if request.user.is_authenticated is True:
-        social_account = SocialAccount.objects.get(user_id=request.user.id)
-        if social_account:
+        if SocialAccount.objects.filter(user_id=request.user.id).exists():
+            social_account = SocialAccount.objects.get(user_id=request.user.id)
             user_id = social_account.user_id
             account_data = social_account.extra_data
             account_property = account_data.get('properties')
             nickname = account_property.get('nickname')
             profile_image = account_property.get('profile_image').replace('http', 'https')
+
+        else:
+            user_id = request.user.id
+            nickname = request.user.username
 
     user_info = dict(
         user_id=user_id,
