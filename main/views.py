@@ -84,9 +84,9 @@ def profile(request):
     platform = None
     account_property = None
     nickname = None
-    profile_image = None
+    profile_image = '/static/images/none_profile.png'
 
-    if SocialAccount.objects.filter(user_id=request.user.id).exists():
+    if SocialAccount.objects.filter(user_id=user_id).exists():
         social_account = SocialAccount.objects.get(user_id=request.user.id)
         account_data = social_account.extra_data
         platform = social_account.provider
