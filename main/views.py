@@ -85,8 +85,9 @@ def profile(request):
     account_property = None
     nickname = None
     profile_image = None
-    social_account = SocialAccount.objects.get(user_id=user_id)
-    if social_account:
+
+    if SocialAccount.objects.filter(user_id=request.user.id).exists():
+        social_account = SocialAccount.objects.get(user_id=request.user.id)
         account_data = social_account.extra_data
         platform = social_account.provider
         account_property = account_data.get('properties')
@@ -317,7 +318,7 @@ def get_comment_list(comment_list):
 def get_user_info(request):
     user_id = None
     nickname = 'ANONYMOUS'
-    profile_image = None
+    profile_image = '/static/images/none_profile.png'
 
     if request.user.is_authenticated is True:
         if SocialAccount.objects.filter(user_id=request.user.id).exists():
