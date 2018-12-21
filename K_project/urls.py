@@ -28,7 +28,10 @@ urlpatterns = [
 
     path('favicon.ico', RedirectView.as_view(url=staticfiles_storage.url('favicon.ico')), name="favicon"),
 
+    path('jet/', include('jet.urls', 'jet')),
+    path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
     path('admin/', admin.site.urls),
+
     path('guide/', guide, name='guide'),
     path('intro/', intro, name='intro'),
     path('contact/', contact, name='contact'),
