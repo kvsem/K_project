@@ -34,8 +34,23 @@ def main_page(request):
         category = request.GET.get('category')
         all_post_list = list(Post.objects.order_by('-write_date').filter(category=category).values())
 
-    post_list = all_post_list[start_at:end_at]
-    count = len(all_post_list)
+    return_post_list = []
+    for all_post in all_post_list:
+        return_post = dict(
+            id=all_post.get('id'),
+            title=all_post.get('title'),
+            category=all_post.get('category'),
+            user_id=all_post.get('user_id'),
+            write_date=all_post.get('write_date'),
+            context=all_post.get('context'),
+            like=all_post.get('like'),
+            thumbnail=Post().get_thumbnail(category),
+        )
+
+        return_post_list.append(return_post)
+
+    post_list = return_post_list[start_at:end_at]
+    count = len(return_post_list)
 
     if count % num_per_page == 0:
         max_page = count // num_per_page - 1
@@ -58,7 +73,7 @@ def main_page(request):
     # CATEGORY
     category_list = list(Post.objects.distinct().values_list('category', flat=True))
 
-    response = dict(all_post_list=all_post_list,
+    response = dict(all_post_list=return_post_list,
                     contents_list=contents_list,
                     side_popular_contents_list=side_popular_contents_list,
                     side_latest_contents_list=side_latest_contents_list,
@@ -153,17 +168,11 @@ def write(request):
         context = request.POST.get('context')
         user_id = request.user.id
 
-        if 'img src' in context:
-            thumbnail = context.split('static/')[-1].split('"')[0]
-        else:
-            thumbnail = ""
-
         Post.objects.create(
             title=title,
             category=category,
             context=context,
             write_date=now,
-            thumbnail=thumbnail,
             user_id=user_id,
         )
 
@@ -190,17 +199,11 @@ def modify(request):
         context = request.POST.get('context')
         user_id = request.user.id
 
-        if 'img src' in context:
-            thumbnail = context.split('static/')[-1].split('"')[0]
-        else:
-            thumbnail = ""
-
         Post.objects.filter(id=post_id).update(
             title=title,
             category=category,
             context=context,
             updated_at=now,
-            thumbnail=thumbnail,
         )
         modified = True
 
@@ -265,12 +268,42 @@ def deleague(request):
 
 def get_side_popular_contents():
     post_list = Post.objects.order_by('-like').values()[:3]
-    return get_contents_list(post_list)
+    return_post_list = []
+    for post in post_list:
+        return_post = dict(
+            id=post.get('id'),
+            title=post.get('title'),
+            category=post.get('category'),
+            user_id=post.get('user_id'),
+            write_date=post.get('write_date'),
+            context=post.get('context'),
+            like=post.get('like'),
+            thumbnail=Post().get_thumbnail(post.get('category')),
+        )
+
+        return_post_list.append(return_post)
+
+    return get_contents_list(return_post_list)
 
 
 def get_side_latest_contents():
     post_list = Post.objects.order_by('-write_date').values()[:3]
-    return get_contents_list(post_list)
+    return_post_list = []
+    for post in post_list:
+        return_post = dict(
+            id=post.get('id'),
+            title=post.get('title'),
+            category=post.get('category'),
+            user_id=post.get('user_id'),
+            write_date=post.get('write_date'),
+            context=post.get('context'),
+            like=post.get('like'),
+            thumbnail=Post().get_thumbnail(post.get('category')),
+        )
+
+        return_post_list.append(return_post)
+
+    return get_contents_list(return_post_list)
 
 
 def get_contents_list(post_list):
