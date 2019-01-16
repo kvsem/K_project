@@ -47,3 +47,6 @@ node_modules/
 .project
 reports
 .grunt/
+
+# custom environments
+environments.json
