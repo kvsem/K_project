@@ -155,11 +155,37 @@
                     <!-- Pagination -->
                         <ul class="actions pagination">
                             {% if category == '' %}
-                                <li><a href="/post/?page={{pages.prev_page}}" class={% if pages.page == 0 %}"disabled button big previous"{% else %}"button big next"{% endif %}>Previous Page</a></li>
-                                <li><a href="/post/?page={{pages.next_page}}" class={% if pages.max_page == pages.page %}"disabled button big previous"{% else %}"button big next"{% endif %}>Next Page</a></li>
+                                <li>
+                                {% if contents_list.has_previous %}
+                                    <a href="/post/?page={{contents_list.previous_page_number}}" class="button big previous">Previous Page</a>
+                                {% else %}
+                                    <div class="disabled button big previous">Previous Page</div>
+                                {% endif %}
+                                </li>
+
+                                <li>
+                                {% if contents_list.has_next %}
+                                    <a href="/post/?page={{contents_list.next_page_number}}" class="button big next">Next Page</a>
+                                {% else %}
+                                    <div class="disabled button big next">Next Page</div>
+                                {% endif %}
+                                </li>
                             {% else %}
-                                <li><a href="/post/?page={{pages.prev_page}}&category={{ category }}" class={% if pages.page == 0 %}"disabled button big previous"{% else %}"button big next"{% endif %}>Previous Page</a></li>
-                                <li><a href="/post/?page={{pages.next_page}}&category={{ category }}" class={% if pages.max_page == pages.page %}"disabled button big previous"{% else %}"button big next"{% endif %}>Next Page</a></li>
+                                <li>
+                                {% if contents_list.has_previous %}
+                                    <a href="/post/?page={{contents_list.previous_page_number}}&category={{ category }}" class="button big previous">Previous Page</a>
+                                {% else %}
+                                    <div class="disabled button big previous">Previous Page</div>
+                                {% endif %}
+                                </li>
+
+                                <li>
+                                {% if contents_list.has_next %}
+                                    <a href="/post/?page={{contents_list.next_page_number}}&category={{ category }}" class="button big next">Next Page</a>
+                                {% else %}
+                                    <div class="disabled button big next">Next Page</div>
+                                {% endif %}
+                                </li>
                             {% endif %}
                         </ul>
 

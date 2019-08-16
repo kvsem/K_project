@@ -3,12 +3,14 @@ import traceback
 
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.utils import timezone
 from django.views.generic import View
 
+from common import constant
 from main.forms import PostForm
 from main.models import Post, Comment, Game
 from utils.logger import logger
@@ -19,13 +21,7 @@ def get_request_body(body):
 
 
 def main_page(request):
-    # PAGEING
-    page = int(request.GET.get('page', 0))
-    num_per_page = 2
-    next_page = page + 1
-    prev_page = page - 1 if page != 0 else 0
-    start_at = page * num_per_page
-    end_at = (page + 1) * num_per_page
+    page = request.GET.get('page', 1)
 
     category = ''
     all_post_list = list(Post.objects.order_by('-write_date').values())
@@ -49,38 +45,30 @@ def main_page(request):
 
         return_post_list.append(return_post)
 
-    post_list = return_post_list[start_at:end_at]
-    count = len(return_post_list)
-
-    if count % num_per_page == 0:
-        max_page = count // num_per_page - 1
-    else:
-        max_page = count // num_per_page
-
-    pages = dict(
-        max_page=max_page,
-        page=page,
-        next_page=next_page,
-        prev_page=prev_page,
-    )
-
     # CONTENTS
     side_popular_contents_list = get_side_popular_contents()
     side_latest_contents_list = get_side_latest_contents()
-    contents_list = get_contents_list(post_list)
+    contents_list = get_contents_list(return_post_list)
     user_info = get_user_info(request)
 
     # CATEGORY
     category_list = list(Post.objects.distinct().values_list('category', flat=True))
 
+    paginator = Paginator(contents_list, constant.POST_PER_PAGE)
+
+    try:
+        paginated_contents_list = paginator.page(page)
+    except PageNotAnInteger:
+        paginated_contents_list = paginator.page(1)
+    except EmptyPage:
+        paginated_contents_list = paginator.page(paginator.num_pages)
+
     response = dict(all_post_list=return_post_list,
-                    contents_list=contents_list,
+                    contents_list=paginated_contents_list,
                     side_popular_contents_list=side_popular_contents_list,
                     side_latest_contents_list=side_latest_contents_list,
-                    pages=pages,
                     user_info=user_info,
                     category_list=category_list,
-                    count=count,
                     category=category)
 
     return render(request, 'main/main.html', response)

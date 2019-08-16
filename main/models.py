@@ -70,32 +70,9 @@ class Post(UpdatedAtCreatedAt):
         (ELASTICSEARCH, 'ELASTIC SEARCH'),
     )
 
-    @property
-    def thumbnail(self):
-        if self.category.lower() == self.DEFAULT.lower():
-            return os.path.join(constant.IMAGE_PATH, 'default.jpeg')
-        elif self.category.lower() == self.SERVER.lower():
-            return os.path.join(constant.IMAGE_PATH, 'ubuntu.png')
-        elif self.category.lower() == self.PYTHON.lower():
-            return os.path.join(constant.IMAGE_PATH, 'python.png')
-        elif self.category.lower() == self.DJANGO.lower():
-            return os.path.join(constant.IMAGE_PATH, 'django.png')
-        elif self.category.lower() == self.JAVA.lower():
-            return os.path.join(constant.IMAGE_PATH, 'java.png')
-        elif self.category.lower() == self.SPRING.lower():
-            return os.path.join(constant.IMAGE_PATH, 'spring.png')
-        elif self.category.lower() == self.FRONT.lower():
-            return os.path.join(constant.IMAGE_PATH, 'front.png')
-        elif self.category.lower() == self.DATABASE.lower():
-            return os.path.join(constant.IMAGE_PATH, 'mysql.jpeg')
-        elif self.category.lower() == self.WEB.lower():
-            return os.path.join(constant.IMAGE_PATH, 'web.png')
-        elif self.category.lower() == self.ELASTICSEARCH.lower():
-            return os.path.join(constant.IMAGE_PATH, 'elastic.png')
-
     def get_thumbnail(self, category):
         if category.lower() == self.DEFAULT.lower():
-            return os.path.join(constant.IMAGE_PATH, 'default.png')
+            return os.path.join(constant.IMAGE_PATH, 'default.jpeg')
         elif category.lower() == self.SERVER.lower():
             return os.path.join(constant.IMAGE_PATH, 'ubuntu.png')
         elif category.lower() == self.PYTHON.lower():

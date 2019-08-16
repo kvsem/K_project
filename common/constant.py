@@ -1,1 +1,3 @@
 IMAGE_PATH = 'images'
+POST_PER_PAGE = 3
+ALL_POST_PER_PAGE = 5

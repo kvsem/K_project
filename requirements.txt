@@ -11,5 +11,6 @@ pytz==2018.4
 requests==2.19.1
 ruamel.yaml==0.15.40
 urllib3==1.23
+django-allauth==0.37.1
 django-jet
 google-api-python-client==1.4.1
