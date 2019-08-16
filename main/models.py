@@ -1,8 +1,9 @@
+import os
 from django.db import models
 from django_summernote import models as summer_model
 from django_summernote import fields as summer_fields
 from django.contrib.auth.models import User
-
+from common import constant
 # Create your models here.
 
 
@@ -69,7 +70,28 @@ class Post(UpdatedAtCreatedAt):
         (ELASTICSEARCH, 'ELASTIC SEARCH'),
     )
 
-    thumbnail = models.CharField(null=True, blank=True, max_length=200, verbose_name='Thumenail')
+    def get_thumbnail(self, category):
+        if category.lower() == self.DEFAULT.lower():
+            return os.path.join(constant.IMAGE_PATH, 'default.jpeg')
+        elif category.lower() == self.SERVER.lower():
+            return os.path.join(constant.IMAGE_PATH, 'ubuntu.png')
+        elif category.lower() == self.PYTHON.lower():
+            return os.path.join(constant.IMAGE_PATH, 'python.png')
+        elif category.lower() == self.DJANGO.lower():
+            return os.path.join(constant.IMAGE_PATH, 'django.png')
+        elif category.lower() == self.JAVA.lower():
+            return os.path.join(constant.IMAGE_PATH, 'java.png')
+        elif category.lower() == self.SPRING.lower():
+            return os.path.join(constant.IMAGE_PATH, 'spring.png')
+        elif category.lower() == self.FRONT.lower():
+            return os.path.join(constant.IMAGE_PATH, 'front.png')
+        elif category.lower() == self.DATABASE.lower():
+            return os.path.join(constant.IMAGE_PATH, 'mysql.jpeg')
+        elif category.lower() == self.WEB.lower():
+            return os.path.join(constant.IMAGE_PATH, 'web.png')
+        elif category.lower() == self.ELASTICSEARCH.lower():
+            return os.path.join(constant.IMAGE_PATH, 'elastic.png')
+
     title = models.CharField(max_length=200, null=True, blank=True, verbose_name='제목')
     category = models.CharField(max_length=200, null=True, blank=True, choices=CHOICES_CATEGORY, verbose_name='카테고리')
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.DO_NOTHING, db_constraint=False)
@@ -102,4 +124,3 @@ class Game(UpdatedAtCreatedAt):
         db_table = 'game'
         verbose_name = '게임'
         verbose_name_plural = verbose_name
-

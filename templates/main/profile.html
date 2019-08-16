@@ -9,29 +9,42 @@
 
     .profile_image {
         width:25%;
-        height:25%;
         border-radius: 100%;
         border:2px solid #f4f4f4;
         background-image: url("{{ profile_info.profile_image }}");
         background-repeat: no-repeat;
         background-position: center center;
         background-size: cover;
-        margin:0px auto;
+        margin:0 auto;
     }
 
     .profile_info {
-        width:50%;
-        margin:0px auto;
+        margin:0 auto;
         margin-top:10%;
         margin-bottom:10%;
     }
-    @media screen and (max-width:980px) {
+    @media (max-width:768px) {
         .profile_image {
-            width:40%;
             height:25%;
         }
         .profile_info {
             width:100%;
+        }
+    }
+    @media (min-width:768px) {
+        .profile_image {
+            height:45%;
+        }
+        .profile_info {
+            width:100%;
+        }
+    }
+    @media (min-width:768px) {
+        .profile_image {
+            height:250px;
+        }
+        .profile_info {
+            width:50%;
         }
     }
 </style>
