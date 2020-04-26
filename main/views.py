@@ -148,7 +148,7 @@ def get_excel_data(start_date, end_date):
         _date = start_date + timedelta(days=day)
 
         driver = webdriver.Chrome(ChromeDriverManager().install())
-        driver.get(f'http://ntry.com/stats/powerball/date.php?date={str(_date)}')
+        driver.get('http://ntry.com/stats/powerball/date.php?date=' + _date.strftime('%Y-%m-%d'))
 
         try:
             element = WebDriverWait(driver, 10).until(
