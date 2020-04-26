@@ -136,7 +136,7 @@ def powerball_download(request):
     _content_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     _data = get_excel_data(start_date, end_date)
     response = HttpResponse(save_virtual_workbook(_data), content_type=_content_type)
-    response['Content-Disposition'] = f'attachment; filename="{start_date}~{end_date}.xlsx"'
+    response['Content-Disposition'] = 'attachment; filename=' + request.POST.get('start-date') + '~' + request.POST.get('end-date') + '.xlsx'
     return response
 
 
