@@ -18,7 +18,7 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 from django.conf.urls import include
 from django.urls import path
 from django.views.generic.base import RedirectView
-from main.views import gate, main_page, post_view, guide, write, intro, contact, deleague, modify, write_comment, increase_like, profile, game, GameView
+from main.views import gate, main_page, post_view, guide, write, intro, contact, deleague, modify, write_comment, increase_like, profile, game, GameView, powerball, powerball_download
 
 urlpatterns = [
     path('', gate, name='main'),
@@ -46,6 +46,10 @@ urlpatterns = [
 
     # accounts
     path('accounts/profile/', profile, name='profile'),
+
+    # test excel download
+    path('powerball/', powerball, name='powerball'),
+    path('powerball/download/', powerball_download, name='powerball_download'),
 
 
     path('deleague/', deleague, name='deleague'),

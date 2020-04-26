@@ -1,0 +1,15 @@
+{% load static %}
+{% include 'base/base.html' %}
+<body>
+    <!-- Wrapper -->
+    <div id="wrapper">
+        <form action="{% url 'powerball_download' %}" method="post">
+            {% csrf_token %}
+            <input type="date" id="start-date" name="start-date">
+            <label for="start-date">시작일</label>
+            <input type="date" id="end-date" name="end-date">
+            <label for="end-date">종료일</label>
+            <input type="submit">
+        </form>
+    </div>
+</body>

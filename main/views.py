@@ -1,14 +1,24 @@
 import json
 import traceback
+from datetime import timedelta, datetime
 
+import requests
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.wait import WebDriverWait
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.utils import timezone
 from django.views.generic import View
+from openpyxl import Workbook
+from openpyxl.writer.excel import save_virtual_workbook
+from bs4 import BeautifulSoup
 
 from common import constant
 from main.forms import PostForm
@@ -114,6 +124,83 @@ def profile(request):
     )
     return render(request, 'main/profile.html',
                   dict(side_popular_contents_list=side_popular_contents_list, side_latest_contents_list=side_latest_contents_list, user_info=user_info, profile_info=profile_info))
+
+
+def powerball(request):
+    return render(request, 'test/powerball.html')
+
+
+def powerball_download(request):
+    start_date = datetime.strptime(request.POST.get('start-date'), '%Y-%m-%d')
+    end_date = datetime.strptime(request.POST.get('end-date'), '%Y-%m-%d')
+    _content_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    _data = get_excel_data(start_date, end_date)
+    response = HttpResponse(save_virtual_workbook(_data), content_type=_content_type)
+    response['Content-Disposition'] = f'attachment; filename="{start_date}~{end_date}.xlsx"'
+    return response
+
+
+def get_excel_data(start_date, end_date):
+    delta = end_date - start_date
+
+    result_list = list()
+    for day in range(delta.days + 1):
+        _date = start_date + timedelta(days=day)
+
+        driver = webdriver.Chrome(ChromeDriverManager().install())
+        driver.get(f'http://ntry.com/stats/powerball/date.php?date={str(_date)}')
+
+        try:
+            element = WebDriverWait(driver, 10).until(
+                expected_conditions.presence_of_element_located((By.ID, "pattern-six-box"))
+            )
+
+        finally:
+            soup = BeautifulSoup(driver.page_source, 'html.parser')
+            driver.quit()
+
+        try:
+            pattern_box = soup.find('div', {'id': 'pattern-six-box'})
+            pattern_list = pattern_box.find_all('dl')
+
+            for _index, pattern in enumerate(pattern_list, start=1):
+                each_list = pattern.find_all('dd')
+                result_string = ''
+                for each in each_list:
+                    if not each:
+                        continue
+
+                    _span = each.find('span')
+                    if not _span:
+                        continue
+
+                    result = _span.attrs.get('title')
+
+                    if not result:
+                        continue
+
+                    if result == 'ODD':
+                        result_string += '홀'
+                    else:
+                        result_string += '짝'
+
+                result_list.append([_date.strftime('%Y-%m-%d'), _index, result_string])
+
+        except Exception as e:
+            logger.error(e.args)
+            logger.error(traceback.format_exc())
+            continue
+
+    headers = ['날짜', '회차', '파워볼 홀짝']
+
+    wb = Workbook()
+    ws = wb.active
+    ws.append(headers)
+
+    for result in result_list:
+        ws.append(result)
+
+    return wb
 
 
 def post_view(request):
