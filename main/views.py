@@ -150,8 +150,11 @@ def get_excel_data(start_date, end_date):
     type_list = ['powerball_even_odd', 'powerball_under_over', 'even_odd', 'under_over']
     for day in range(delta.days + 1):
         _date = start_date + timedelta(days=day)
-    # driver = webdriver.Chrome(ChromeDriverManager().install())
-        driver = webdriver.Chrome(executable_path=os.getenv('CHROME_DRIVER_PATH'))
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument('--headless')
+        chrome_options.add_argument('--no-sandbox')
+        chrome_options.add_argument('--disable-dev-shm-usage')
+        driver = webdriver.Chrome(executable_path=os.getenv('CHROME_DRIVER_PATH'), chrome_options=chrome_options)
         driver.get('http://ntry.com/stats/powerball/date.php?date=' + _date.strftime('%Y-%m-%d'))
 
         for _type in type_list:
