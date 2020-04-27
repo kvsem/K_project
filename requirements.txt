@@ -2,7 +2,7 @@ certifi
 chardet==3.0.4
 conda==4.3.16
 conda-autoenv==0.1
-Django==2.0.6
+Django==2.2.10
 django-summernote==0.8.8.8
 idna==2.7
 mysqlclient
