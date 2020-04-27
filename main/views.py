@@ -1,4 +1,5 @@
 import json
+import os
 import traceback
 from datetime import timedelta, datetime
 
@@ -133,74 +134,117 @@ def powerball(request):
 def powerball_download(request):
     start_date = datetime.strptime(request.POST.get('start-date'), '%Y-%m-%d')
     end_date = datetime.strptime(request.POST.get('end-date'), '%Y-%m-%d')
+    # _date = datetime.strptime(request.POST.get('target-date'), '%Y-%m-%d')
     _content_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     _data = get_excel_data(start_date, end_date)
     response = HttpResponse(save_virtual_workbook(_data), content_type=_content_type)
     response['Content-Disposition'] = 'attachment; filename=' + request.POST.get('start-date') + '~' + request.POST.get('end-date') + '.xlsx'
+    # response['Content-Disposition'] = 'attachment; filename=' + request.POST.get('target-date') + '.xlsx'
     return response
 
 
 def get_excel_data(start_date, end_date):
     delta = end_date - start_date
 
-    result_list = list()
+    result_info = dict()
+    type_list = ['powerball_even_odd', 'powerball_under_over', 'even_odd', 'under_over']
     for day in range(delta.days + 1):
         _date = start_date + timedelta(days=day)
-
-        driver = webdriver.Chrome(ChromeDriverManager().install())
+    # driver = webdriver.Chrome(ChromeDriverManager().install())
+        driver = webdriver.Chrome(executable_path=os.getenv('CHROME_DRIVER_PATH'))
         driver.get('http://ntry.com/stats/powerball/date.php?date=' + _date.strftime('%Y-%m-%d'))
 
-        try:
-            element = WebDriverWait(driver, 10).until(
-                expected_conditions.presence_of_element_located((By.ID, "pattern-six-box"))
-            )
+        for _type in type_list:
+            result_info = crawl_data(driver, result_info, _date, _type)
 
-        finally:
-            soup = BeautifulSoup(driver.page_source, 'html.parser')
-            driver.quit()
+        driver.quit()
 
-        try:
-            pattern_box = soup.find('div', {'id': 'pattern-six-box'})
-            pattern_list = pattern_box.find_all('dl')
-
-            for _index, pattern in enumerate(pattern_list, start=1):
-                each_list = pattern.find_all('dd')
-                result_string = ''
-                for each in each_list:
-                    if not each:
-                        continue
-
-                    _span = each.find('span')
-                    if not _span:
-                        continue
-
-                    result = _span.attrs.get('title')
-
-                    if not result:
-                        continue
-
-                    if result == 'ODD':
-                        result_string += '홀'
-                    else:
-                        result_string += '짝'
-
-                result_list.append([_date.strftime('%Y-%m-%d'), _index, result_string])
-
-        except Exception as e:
-            logger.error(e.args)
-            logger.error(traceback.format_exc())
-            continue
-
-    headers = ['날짜', '회차', '파워볼 홀짝']
+    headers = ['날짜', '회차', '파워볼 홀짝', '파워볼 언더오버', '일반볼합 홀짝', '일반볼 언더오버']
 
     wb = Workbook()
     ws = wb.active
     ws.append(headers)
 
-    for result in result_list:
-        ws.append(result)
+    for key in result_info:
+        if not result_info.get(key):
+            continue
+        ws.append(result_info.get(key))
 
     return wb
+
+
+def crawl_data(driver, result_info, _date, _type):
+    RED = 'EVEN'
+    BLUE = 'ODD'
+
+    RED_REPLACE = '홀'
+    BLUE_REPLACE = '짝'
+
+    WAIT_XPATH = '//*[@id="pattern-six-box"]/dl[48]/dd[6]/span'
+
+    if _type == 'powerball_under_over':
+        RED = 'OVER'
+        BLUE = 'UNDER'
+        RED_REPLACE = '오'
+        BLUE_REPLACE = '언'
+        element = driver.find_element_by_xpath('//*[@id="pattern_six_tab"]/li[2]/a')
+        driver.execute_script("arguments[0].click();", element)
+    elif _type == 'even_odd':
+        element = driver.find_element_by_xpath('//*[@id="pattern_six_tab"]/li[3]/a')
+        driver.execute_script("arguments[0].click();", element)
+    elif _type == 'under_over':
+        RED = 'OVER'
+        BLUE = 'UNDER'
+        RED_REPLACE = '오'
+        BLUE_REPLACE = '언'
+        element = driver.find_element_by_xpath('//*[@id="pattern_six_tab"]/li[4]/a')
+        driver.execute_script("arguments[0].click();", element)
+
+    try:
+        element = WebDriverWait(driver, 10).until(
+            expected_conditions.presence_of_element_located((By.XPATH, WAIT_XPATH))
+        )
+
+    finally:
+        soup = BeautifulSoup(driver.page_source, 'html.parser')
+
+    try:
+        pattern_box = soup.find('div', {'id': 'pattern-six-box'})
+        pattern_list = pattern_box.find_all('dl')
+
+        for _index, pattern in enumerate(pattern_list, start=1):
+            each_list = pattern.find_all('dd')
+            result_string = ''
+            for each in each_list:
+                if not each:
+                    continue
+
+                _span = each.find('span')
+                if not _span:
+                    continue
+
+                result = _span.attrs.get('title')
+
+                if not result:
+                    continue
+
+                if result == BLUE:
+                    result_string += BLUE_REPLACE
+                else:
+                    result_string += RED_REPLACE
+
+            if result_info.get(f"{_date.strftime('%Y-%m-%d')}_{_index}"):
+                result_info[f"{_date.strftime('%Y-%m-%d')}_{_index}"].append(result_string)
+
+            else:
+                result_info[f"{_date.strftime('%Y-%m-%d')}_{_index}"] = [_date.strftime('%Y-%m-%d'), _index, result_string]
+
+    except Exception as e:
+        logger.error(e.args)
+        logger.error(traceback.format_exc())
+        return
+
+    return result_info
 
 
 def post_view(request):

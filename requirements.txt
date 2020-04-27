@@ -16,4 +16,5 @@ beautifulsoup4==4.8.0
 django-jet
 openpyxl
 selenium
+webdriver-manager
 google-api-python-client==1.4.1
