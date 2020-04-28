@@ -213,6 +213,9 @@ def crawl_data(driver, result_info, _date, _type, direction='vertical'):
         BLUE_REPLACE = '언'
         element = driver.find_element_by_xpath('//*[@id="pattern_six_tab"]/li[4]/a')
         driver.execute_script("arguments[0].click();", element)
+    else:
+        element = driver.find_element_by_xpath('//*[@id="pattern_six_tab"]/li[1]/a')
+        driver.execute_script("arguments[0].click();", element)
 
     try:
         element = WebDriverWait(driver, 10).until(
