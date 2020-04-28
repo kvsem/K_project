@@ -146,7 +146,8 @@ def powerball_download(request):
 def get_excel_data(start_date, end_date):
     delta = end_date - start_date
 
-    result_info = dict()
+    result_info_vertical = dict()
+    result_info_horizontal = dict()
     type_list = ['powerball_even_odd', 'powerball_under_over', 'even_odd', 'under_over']
     for day in range(delta.days + 1):
         _date = start_date + timedelta(days=day)
@@ -158,7 +159,10 @@ def get_excel_data(start_date, end_date):
         driver.get('http://ntry.com/stats/powerball/date.php?date=' + _date.strftime('%Y-%m-%d'))
 
         for _type in type_list:
-            result_info = crawl_data(driver, result_info, _date, _type)
+            result_info_vertical = crawl_data(driver, result_info_vertical, _date, _type, 'vertical')
+
+        for _type in type_list:
+            result_info_horizontal = crawl_data(driver, result_info_horizontal, _date, _type, 'horizontal')
 
         driver.quit()
 
@@ -168,15 +172,22 @@ def get_excel_data(start_date, end_date):
     ws = wb.active
     ws.append(headers)
 
-    for key in result_info:
-        if not result_info.get(key):
+    for key in result_info_vertical:
+        if not result_info_vertical.get(key):
             continue
-        ws.append(result_info.get(key))
+        ws.append(result_info_vertical.get(key))
+
+    ws1 = wb.create_sheet()
+    ws1.append(headers)
+    for key in result_info_horizontal:
+        if not result_info_horizontal.get(key):
+            continue
+        ws1.append(result_info_horizontal.get(key))
 
     return wb
 
 
-def crawl_data(driver, result_info, _date, _type):
+def crawl_data(driver, result_info, _date, _type, direction='vertical'):
     RED = 'EVEN'
     BLUE = 'ODD'
 
@@ -214,11 +225,15 @@ def crawl_data(driver, result_info, _date, _type):
     try:
         pattern_box = soup.find('div', {'id': 'pattern-six-box'})
         pattern_list = pattern_box.find_all('dl')
-
-        for _index, pattern in enumerate(pattern_list, start=1):
+        result_string_horizontal = dict()
+        for vertical_index, pattern in enumerate(pattern_list, start=1):
             each_list = pattern.find_all('dd')
-            result_string = ''
-            for each in each_list:
+            _index = vertical_index
+            result_string_vertical = ''
+            for horizontal_index, each in enumerate(each_list, start=1):
+                if direction == 'horizontal':
+                    _index = horizontal_index
+
                 if not each:
                     continue
 
@@ -232,15 +247,31 @@ def crawl_data(driver, result_info, _date, _type):
                     continue
 
                 if result == BLUE:
-                    result_string += BLUE_REPLACE
+                    replace_string = BLUE_REPLACE
                 else:
-                    result_string += RED_REPLACE
+                    replace_string = RED_REPLACE
 
-            if result_info.get(f"{_date.strftime('%Y-%m-%d')}_{_index}"):
-                result_info[f"{_date.strftime('%Y-%m-%d')}_{_index}"].append(result_string)
+                if direction == 'vertical':
+                    result_string_vertical += replace_string
 
-            else:
-                result_info[f"{_date.strftime('%Y-%m-%d')}_{_index}"] = [_date.strftime('%Y-%m-%d'), _index, result_string]
+                if direction == 'horizontal':
+                    result_string_horizontal[_index] = result_string_horizontal.get(_index, '') + replace_string
+
+            if direction == 'vertical':
+                if result_info.get(f"{_date.strftime('%Y-%m-%d')}_{_index}"):
+                    result_info[f"{_date.strftime('%Y-%m-%d')}_{_index}"].append(result_string_vertical)
+
+                else:
+                    result_info[f"{_date.strftime('%Y-%m-%d')}_{_index}"] = [_date.strftime('%Y-%m-%d'), _index, result_string_vertical]
+
+        if direction == 'horizontal':
+            for _index, key in enumerate(result_string_horizontal, start=1):
+                result_string = result_string_horizontal.get(key)
+                if result_info.get(f"{_date.strftime('%Y-%m-%d')}_{_index}"):
+                    result_info[f"{_date.strftime('%Y-%m-%d')}_{_index}"].append(result_string)
+
+                else:
+                    result_info[f"{_date.strftime('%Y-%m-%d')}_{_index}"] = [_date.strftime('%Y-%m-%d'), _index, result_string]
 
     except Exception as e:
         logger.error(e.args)
