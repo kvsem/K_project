@@ -131,63 +131,90 @@ def powerball(request):
     return render(request, 'test/powerball.html')
 
 
-def powerball_download(request):
-    start_date = datetime.strptime(request.POST.get('start-date'), '%Y-%m-%d')
-    end_date = datetime.strptime(request.POST.get('end-date'), '%Y-%m-%d')
-    # _date = datetime.strptime(request.POST.get('target-date'), '%Y-%m-%d')
-    _content_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    _data = get_excel_data(start_date, end_date)
-    response = HttpResponse(save_virtual_workbook(_data), content_type=_content_type)
-    response['Content-Disposition'] = 'attachment; filename=' + request.POST.get('start-date') + '~' + request.POST.get('end-date') + '.xlsx'
-    # response['Content-Disposition'] = 'attachment; filename=' + request.POST.get('target-date') + '.xlsx'
-    return response
+def powerball_pattern(request):
+    pattern_info = dict()
+    _date = datetime.strptime(request.POST.get('date'), '%Y-%m-%d')
+    _type = request.POST.get('type')
+    _pattern = int(request.POST.get('pattern'))
 
+    if _pattern < 4:
+        error_message = '3보다 큰 숫자를 입력해주세요.'
+        return render(request, 'test/powerball.html', dict(result=list(), error_message=error_message))
 
-def get_excel_data(start_date, end_date):
-    delta = end_date - start_date
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--disable-dev-shm-usage')
+    driver = webdriver.Chrome(executable_path=os.getenv('CHROME_DRIVER_PATH'), chrome_options=chrome_options)
+    driver.get('http://ntry.com/stats/powerball/date.php?date=' + _date.strftime('%Y-%m-%d'))
+    result_string = crawl_data(driver, _date, _type)
+    driver.quit()
 
-    result_info_vertical = dict()
-    result_info_horizontal = dict()
-    type_list = ['powerball_even_odd', 'powerball_under_over', 'even_odd', 'under_over']
-    for day in range(delta.days + 1):
-        _date = start_date + timedelta(days=day)
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument('--headless')
-        chrome_options.add_argument('--no-sandbox')
-        chrome_options.add_argument('--disable-dev-shm-usage')
-        driver = webdriver.Chrome(executable_path=os.getenv('CHROME_DRIVER_PATH'), chrome_options=chrome_options)
-        driver.get('http://ntry.com/stats/powerball/date.php?date=' + _date.strftime('%Y-%m-%d'))
+    for _index, _str in enumerate(result_string):
+        try:
+            target_string = result_string[_index: _index + _pattern]
+        except:
+            break
 
-        for _type in type_list:
-            result_info_vertical = crawl_data(driver, result_info_vertical, _date, _type, 'vertical')
-
-        for _type in type_list:
-            result_info_horizontal = crawl_data(driver, result_info_horizontal, _date, _type, 'horizontal')
-
-        driver.quit()
-
-    headers = ['날짜', '회차', '파워볼 홀짝', '파워볼 언더오버', '일반볼합 홀짝', '일반볼 언더오버']
-
-    wb = Workbook()
-    ws = wb.active
-    ws.append(headers)
-
-    for key in result_info_vertical:
-        if not result_info_vertical.get(key):
+        if len(target_string) < _pattern:
             continue
-        ws.append(result_info_vertical.get(key))
 
-    ws1 = wb.create_sheet()
-    ws1.append(headers)
-    for key in result_info_horizontal:
-        if not result_info_horizontal.get(key):
-            continue
-        ws1.append(result_info_horizontal.get(key))
+        if pattern_info.get(target_string):
+            pattern_info[target_string] = pattern_info.get(target_string) + 1
+        else:
+            pattern_info[target_string] = 1
 
-    return wb
+    sorted_pattern_info_list = sorted(pattern_info.items(), key=lambda x: x[1], reverse=True)
+
+    return render(request, 'test/powerball_pattern.html', dict(result=sorted_pattern_info_list))
 
 
-def crawl_data(driver, result_info, _date, _type, direction='vertical'):
+# def get_excel_data(start_date, end_date):
+#     delta = end_date - start_date
+#
+#     result_info_vertical = dict()
+#     result_info_horizontal = dict()
+#     type_list = ['powerball_even_odd', 'powerball_under_over', 'even_odd', 'under_over']
+#     for day in range(delta.days + 1):
+#         _date = start_date + timedelta(days=day)
+#         chrome_options = webdriver.ChromeOptions()
+#         chrome_options.add_argument('--headless')
+#         chrome_options.add_argument('--no-sandbox')
+#         chrome_options.add_argument('--disable-dev-shm-usage')
+#         driver = webdriver.Chrome(executable_path=os.getenv('CHROME_DRIVER_PATH'), chrome_options=chrome_options)
+#         driver.get('http://ntry.com/stats/powerball/date.php?date=' + _date.strftime('%Y-%m-%d'))
+#
+#         for _type in type_list:
+#             result_info_vertical = crawl_data(driver, result_info_vertical, _date, _type, 'vertical')
+#
+#         for _type in type_list:
+#             result_info_horizontal = crawl_data(driver, result_info_horizontal, _date, _type, 'horizontal')
+#
+#         driver.quit()
+#
+#     headers = ['날짜', '회차', '파워볼 홀짝', '파워볼 언더오버', '일반볼합 홀짝', '일반볼 언더오버']
+#
+#     wb = Workbook()
+#     ws = wb.active
+#     ws.append(headers)
+#
+#     for key in result_info_vertical:
+#         if not result_info_vertical.get(key):
+#             continue
+#         ws.append(result_info_vertical.get(key))
+#
+#     ws1 = wb.create_sheet()
+#     ws1.append(headers)
+#     for key in result_info_horizontal:
+#         if not result_info_horizontal.get(key):
+#             continue
+#         ws1.append(result_info_horizontal.get(key))
+#
+#     return wb
+
+
+def crawl_data(driver, _date, _type):
+    result_string = ''
     RED = 'EVEN'
     BLUE = 'ODD'
 
@@ -228,15 +255,9 @@ def crawl_data(driver, result_info, _date, _type, direction='vertical'):
     try:
         pattern_box = soup.find('div', {'id': 'pattern-six-box'})
         pattern_list = pattern_box.find_all('dl')
-        result_string_horizontal = dict()
-        for vertical_index, pattern in enumerate(pattern_list, start=1):
+        for pattern in pattern_list:
             each_list = pattern.find_all('dd')
-            _index = vertical_index
-            result_string_vertical = ''
-            for horizontal_index, each in enumerate(each_list, start=1):
-                if direction == 'horizontal':
-                    _index = horizontal_index
-
+            for each in each_list:
                 if not each:
                     continue
 
@@ -254,34 +275,14 @@ def crawl_data(driver, result_info, _date, _type, direction='vertical'):
                 else:
                     replace_string = RED_REPLACE
 
-                if direction == 'vertical':
-                    result_string_vertical += replace_string
-
-                if direction == 'horizontal':
-                    result_string_horizontal[_index] = result_string_horizontal.get(_index, '') + replace_string
-
-            if direction == 'vertical':
-                if result_info.get(f"{_date.strftime('%Y-%m-%d')}_{_index}"):
-                    result_info[f"{_date.strftime('%Y-%m-%d')}_{_index}"].append(result_string_vertical)
-
-                else:
-                    result_info[f"{_date.strftime('%Y-%m-%d')}_{_index}"] = [_date.strftime('%Y-%m-%d'), _index, result_string_vertical]
-
-        if direction == 'horizontal':
-            for _index, key in enumerate(result_string_horizontal, start=1):
-                result_string = result_string_horizontal.get(key)
-                if result_info.get(f"{_date.strftime('%Y-%m-%d')}_{_index}"):
-                    result_info[f"{_date.strftime('%Y-%m-%d')}_{_index}"].append(result_string)
-
-                else:
-                    result_info[f"{_date.strftime('%Y-%m-%d')}_{_index}"] = [_date.strftime('%Y-%m-%d'), _index, result_string]
+                result_string += replace_string
 
     except Exception as e:
         logger.error(e.args)
         logger.error(traceback.format_exc())
         return
 
-    return result_info
+    return result_string
 
 
 def post_view(request):

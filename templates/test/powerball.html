@@ -8,15 +8,20 @@
 <body>
     <!-- Wrapper -->
     <div id="wrapper">
-        <form class="m-auto" action="{% url 'powerball_download' %}" method="post">
+        <form class="m-auto" action="{% url 'powerball_pattern' %}" method="post">
             {% csrf_token %}
-            <input type="date" id="start-date" name="start-date">
-            <label for="start-date">시작일</label>
-            <input type="date" id="end-date" name="end-date">
-            <label for="end-date">종료일</label>
-            <!--<input type="date" id="target-date" name="target-date">
-            <label for="target-date">다운로드 대상일</label>-->
-            <input type="submit" value="다운로드">
+            <label for="type">타입</label>
+            <select name="type" id="type">
+                <option value="powerball_even_odd" selected="selected">파워볼 홀짝</option>
+                <option value="powerball_under_over">파워볼 언더오버</option>
+                <option value="even_odd">일반볼합 홀짝</option>
+                <option value="under_over">일반볼 언더오버</option>
+            </select>
+            <label for="date">날짜</label>
+            <input type="date" id="date" name="date">
+            <label for="pattern">패턴수</label>
+            <input type="number" id="pattern" name="pattern">
+            <input type="submit" value="패턴조회">
         </form>
     </div>
 </body>

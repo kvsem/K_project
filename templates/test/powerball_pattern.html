@@ -1,0 +1,22 @@
+{% load static %}
+{% include 'base/base.html' %}
+<style>
+    .m-auto {
+        margin: auto;
+    }
+</style>
+<body>
+    <!-- Wrapper -->
+    <div id="wrapper">
+        <div class="m-auto">
+            <h2>패턴 분석 결과</h2>
+            {% if error_message %}
+                {{ error_message }}
+            {% else %}
+                {% for each in result %}
+                    <span>{{ each.0 }} : {{ each.1 }}</span><br>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</body>
