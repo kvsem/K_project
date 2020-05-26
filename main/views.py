@@ -133,7 +133,8 @@ def powerball(request):
 
 def powerball_pattern(request):
     pattern_info = dict()
-    _date = datetime.strptime(request.POST.get('date'), '%Y-%m-%d')
+    end_date = datetime.strptime(request.POST.get('end_date'), '%Y-%m-%d')
+    start_date = datetime.strptime(request.POST.get('start_date'), '%Y-%m-%d')
     _type = request.POST.get('type')
     _pattern = int(request.POST.get('pattern'))
 
@@ -146,8 +147,15 @@ def powerball_pattern(request):
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
     driver = webdriver.Chrome(executable_path=os.getenv('CHROME_DRIVER_PATH'), chrome_options=chrome_options)
-    driver.get('http://ntry.com/stats/powerball/date.php?date=' + _date.strftime('%Y-%m-%d'))
-    result_string = crawl_data(driver, _date, _type)
+
+    result_string = ''
+    delta = end_date - start_date
+
+    for day in range(delta.days + 1):
+        _date = start_date + timedelta(days=day)
+        driver.get('http://ntry.com/stats/powerball/date.php?date=' + _date.strftime('%Y-%m-%d'))
+        result_string += crawl_data(driver, _date, _type)
+
     driver.quit()
 
     for _index, _str in enumerate(result_string):
@@ -218,8 +226,8 @@ def crawl_data(driver, _date, _type):
     RED = 'EVEN'
     BLUE = 'ODD'
 
-    RED_REPLACE = '홀'
-    BLUE_REPLACE = '짝'
+    RED_REPLACE = '짝'
+    BLUE_REPLACE = '홀'
 
     WAIT_XPATH = '//*[@id="pattern-six-box"]/dl[48]/dd[6]/span'
 
