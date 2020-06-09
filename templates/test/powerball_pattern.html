@@ -13,8 +13,11 @@
             {% if error_message %}
                 {{ error_message }}
             {% else %}
-                {% for each in result %}
-                    <span>{{ each.0 }} : {{ each.1 }}</span><br>
+                {% for key, val in result.items %}
+                    <span>{{ key }} : {{ val }}</span><br>
+                    {% if forloop.counter|divisibleby:2 %}
+                        <br>
+                    {% endif %}
                 {% endfor %}
             {% endif %}
         </div>

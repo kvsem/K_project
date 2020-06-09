@@ -1,6 +1,7 @@
 import json
 import os
 import traceback
+from collections import OrderedDict
 from datetime import timedelta, datetime
 
 import requests
@@ -138,6 +139,18 @@ def powerball_pattern(request):
     _type = request.POST.get('type')
     _pattern = int(request.POST.get('pattern'))
 
+    RED = 'EVEN'
+    BLUE = 'ODD'
+
+    RED_REPLACE = '짝'
+    BLUE_REPLACE = '홀'
+
+    if _type == 'powerball_under_over' or _type == 'under_over':
+        RED = 'OVER'
+        BLUE = 'UNDER'
+        RED_REPLACE = '오'
+        BLUE_REPLACE = '언'
+
     if _pattern < 4:
         error_message = '3보다 큰 숫자를 입력해주세요.'
         return render(request, 'test/powerball.html', dict(result=list(), error_message=error_message))
@@ -146,7 +159,10 @@ def powerball_pattern(request):
     chrome_options.add_argument('--headless')
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
-    driver = webdriver.Chrome(executable_path=os.getenv('CHROME_DRIVER_PATH'), chrome_options=chrome_options)
+    try:
+        driver = webdriver.Chrome(executable_path=os.getenv('CHROME_DRIVER_PATH'), chrome_options=chrome_options)
+    except:
+        driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), chrome_options=chrome_options)
 
     result_string = ''
     delta = end_date - start_date
@@ -173,8 +189,24 @@ def powerball_pattern(request):
             pattern_info[target_string] = 1
 
     sorted_pattern_info_list = sorted(pattern_info.items(), key=lambda x: x[1], reverse=True)
+    result_list = OrderedDict()
 
-    return render(request, 'test/powerball_pattern.html', dict(result=sorted_pattern_info_list))
+    for sorted_pattern_info in sorted_pattern_info_list:
+        _string = sorted_pattern_info[0]
+        _count = sorted_pattern_info[1]
+        if _string in result_list.keys():
+            continue
+
+        result_list[_string] = _count
+        origin_string = _string.replace(RED_REPLACE, RED).replace(BLUE_REPLACE, BLUE)
+        _string = origin_string.replace(RED, BLUE_REPLACE).replace(BLUE, RED_REPLACE)
+        result_list[_string] = pattern_info.get(_string) or 0
+        try:
+            del pattern_info[_string]
+        except:
+            pass
+
+    return render(request, 'test/powerball_pattern.html', dict(result=result_list))
 
 
 # def get_excel_data(start_date, end_date):
