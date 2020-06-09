@@ -3,6 +3,7 @@ import os
 import traceback
 from collections import OrderedDict
 from datetime import timedelta, datetime
+from subprocess import call
 
 import requests
 from webdriver_manager.chrome import ChromeDriverManager
@@ -133,6 +134,9 @@ def powerball(request):
 
 
 def powerball_pattern(request):
+    if os.getenv('IS_EXIST_CHROME'):
+        call('killall -9 chrome')
+
     pattern_info = dict()
     end_date = datetime.strptime(request.POST.get('end_date'), '%Y-%m-%d')
     start_date = datetime.strptime(request.POST.get('start_date'), '%Y-%m-%d')
