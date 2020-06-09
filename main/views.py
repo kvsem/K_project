@@ -135,7 +135,7 @@ def powerball(request):
 
 def powerball_pattern(request):
     if os.getenv('IS_EXIST_CHROME'):
-        call('killall -9 chrome')
+        call(['killall', '-9', 'chrome'])
 
     pattern_info = dict()
     end_date = datetime.strptime(request.POST.get('end_date'), '%Y-%m-%d')
