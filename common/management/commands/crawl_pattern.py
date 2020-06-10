@@ -112,8 +112,6 @@ class Command(BaseCommand):
         if os.getenv('IS_EXIST_CHROME'):
             call(['killall', '-9', 'chrome'])
 
-        pattern_info = dict()
-
         if _type == 'powerball_under_over' or _type == 'under_over':
             self.RED = 'OVER'
             self.BLUE = 'UNDER'
@@ -124,8 +122,9 @@ class Command(BaseCommand):
 
         obj_list = list()
         for day in range(delta.days + 1):
+            pattern_info = dict()
             _date = self.start_date + timedelta(days=day)
-            print(_date.strftime('%Y-%m-%d'))
+            print(f"[{_type.upper()}] {_date.strftime('%Y-%m-%d')}")
 
             if AnalyticsPattern.objects.filter(ref_date=_date, pattern_type=_type).exists():
                 AnalyticsPattern.objects.filter(ref_date=_date, pattern_type=_type).delete()
@@ -181,9 +180,9 @@ class Command(BaseCommand):
                     AnalyticsPattern.objects.bulk_create(obj_list)
                     obj_list.clear()
 
-        if len(obj_list) > 0:
-            AnalyticsPattern.objects.bulk_create(obj_list)
-            obj_list.clear()
+            if len(obj_list) > 0:
+                AnalyticsPattern.objects.bulk_create(obj_list)
+                obj_list.clear()
 
         return
 
@@ -209,3 +208,5 @@ class Command(BaseCommand):
             self.powerball_pattern(driver, _type)
 
         driver.quit()
+        if os.getenv('IS_EXIST_CHROME'):
+            call(['killall', '-9', 'chrome'])
