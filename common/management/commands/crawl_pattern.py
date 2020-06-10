@@ -173,7 +173,7 @@ class Command(BaseCommand):
                 result_list[_string] = pattern_info.get(_string) or 0
 
                 obj.opposite_string = origin_string.replace(self.RED, self.BLUE_REPLACE).replace(self.BLUE, self.RED_REPLACE)
-                obj.opposite_count = pattern_info.get(_string)
+                obj.opposite_count = pattern_info.get(_string) or 0
 
                 obj_list.append(obj)
 
