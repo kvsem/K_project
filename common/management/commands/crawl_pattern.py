@@ -129,7 +129,11 @@ class Command(BaseCommand):
             if AnalyticsPattern.objects.filter(ref_date=_date, pattern_type=_type).exists():
                 AnalyticsPattern.objects.filter(ref_date=_date, pattern_type=_type).delete()
 
-            driver.get('http://ntry.com/stats/powerball/date.php?date=' + _date.strftime('%Y-%m-%d'))
+            try:
+                driver.get('http://ntry.com/stats/powerball/date.php?date=' + _date.strftime('%Y-%m-%d'))
+            except:
+                continue
+
             result_string = self.crawl_data(driver, _date, _type)
             if not result_string:
                 continue
