@@ -14,10 +14,8 @@
                 {{ error_message }}
             {% else %}
                 {% for key, val in result.items %}
-                    <span>{{ key }} : {{ val }}</span><br>
-                    {% if forloop.counter|divisibleby:2 %}
-                        <br>
-                    {% endif %}
+                    <span>{{ key }} : {{ val.count }}</span><br>
+                    <span>{{ val.opposite_string }} : {{ val.opposite_count }}</span><br><br>
                 {% endfor %}
             {% endif %}
         </div>

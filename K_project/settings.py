@@ -74,6 +74,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.kakao',
     'main.apps.MainConfig',
+    'common.apps.CommonConfig',
     'utils.apps.UtilsConfig',
     'django_summernote',
 ]
