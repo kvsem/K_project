@@ -28,7 +28,7 @@ class Command(BaseCommand):
     RED_REPLACE = '짝'
     BLUE_REPLACE = '홀'
 
-    WAIT_XPATH = '//*[@id="pattern-six-box"]/dl[48]/dd[6]/span'
+    WAIT_XPATH = '//*[@id="pattern-six-box"]/dl[1]/dd[1]/span'
 
     def add_arguments(self, parser):
         parser.add_argument('--start_date', type=str, help="2020-06-01")
