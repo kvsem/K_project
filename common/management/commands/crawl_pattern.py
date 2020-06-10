@@ -125,6 +125,7 @@ class Command(BaseCommand):
         obj_list = list()
         for day in range(delta.days + 1):
             _date = self.start_date + timedelta(days=day)
+            print(_date.strftime('%Y-%m-%d'))
 
             if AnalyticsPattern.objects.filter(ref_date=_date, pattern_type=_type).exists():
                 AnalyticsPattern.objects.filter(ref_date=_date, pattern_type=_type).delete()
