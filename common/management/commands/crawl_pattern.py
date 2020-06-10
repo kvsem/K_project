@@ -72,6 +72,8 @@ class Command(BaseCommand):
             element = WebDriverWait(driver, 10).until(
                 expected_conditions.presence_of_element_located((By.XPATH, self.WAIT_XPATH))
             )
+        except:
+            return result_string
 
         finally:
             soup = BeautifulSoup(driver.page_source, 'html.parser')
@@ -129,6 +131,9 @@ class Command(BaseCommand):
 
             driver.get('http://ntry.com/stats/powerball/date.php?date=' + _date.strftime('%Y-%m-%d'))
             result_string = self.crawl_data(driver, _date, _type)
+            if not result_string:
+                continue
+
             for _index, _str in enumerate(result_string):
                 for _pattern in range(5, 16):
                     try:
