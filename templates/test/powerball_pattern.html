@@ -14,8 +14,7 @@
                 {{ error_message }}
             {% else %}
                 {% for key, val in result.items %}
-                    <span>{{ key }} : {{ val.count }}</span><br>
-                    <span>{{ val.opposite_string }} : {{ val.opposite_count }}</span><br><br>
+                    <span>{{ key }} : {{ val }}</span><br>
                 {% endfor %}
             {% endif %}
         </div>

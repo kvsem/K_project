@@ -210,27 +210,31 @@ def powerball_pattern(request):
     #         del pattern_info[_string]
     #     except:
     #         pass
-    query_set = AnalyticsPattern.objects.filter(ref_date__gte=start_date, ref_date__lte=end_date, pattern_type=_type, pattern_num=_pattern).values('pattern_string').annotate(opposite_string=F('opposite_string'), origin_count=Sum('pattern_count'), opposite_count=Sum('opposite_count')).order_by('-origin_count')
+    query_set = AnalyticsPattern.objects.filter(ref_date__gte=start_date, ref_date__lte=end_date, pattern_type=_type, pattern_num=_pattern).values('pattern_string').annotate(count=Sum('pattern_count')).order_by('-count')
 
-    result_dict = dict()
+    origin_dict = dict()
     for each in query_set:
-        result_dict[each.get('pattern_string')] = dict(count=each.get('origin_count'), opposite_string=each.get('opposite_string'), opposite_count=each.get('opposite_count'))
+        origin_dict[each.get('pattern_string')] = each.get('count')
 
-    # result_list = dict()
-    # for _string, _count in result_dict.items():
-    #     if _string in result_list.keys():
-    #         continue
-    #
-    #     result_list[_string] = _count
-    #     origin_string = _string.replace(RED_REPLACE, RED).replace(BLUE_REPLACE, BLUE)
-    #     _string = origin_string.replace(RED, BLUE_REPLACE).replace(BLUE, RED_REPLACE)
-    #     result_list[_string] = result_dict.get(_string) or 0
-    #     try:
-    #         del result_dict[_string]
-    #     except:
-    #         pass
+    sorted_pattern_info_list = sorted(origin_dict.items(), key=lambda x: x[1], reverse=True)
+    result_list = OrderedDict()
 
-    return render(request, 'test/powerball_pattern.html', dict(result=result_dict))
+    for sorted_pattern_info in sorted_pattern_info_list:
+        _string = sorted_pattern_info[0]
+        _count = sorted_pattern_info[1]
+        if _string in result_list.keys():
+            continue
+
+        result_list[_string] = _count
+        origin_string = _string.replace(RED_REPLACE, RED).replace(BLUE_REPLACE, BLUE)
+        _string = origin_string.replace(RED, BLUE_REPLACE).replace(BLUE, RED_REPLACE)
+        result_list[_string] = origin_dict.get(_string) or 0
+        try:
+            del origin_dict[_string]
+        except:
+            pass
+
+    return render(request, 'test/powerball_pattern.html', dict(result=result_list))
 
 
 # def get_excel_data(start_date, end_date):
