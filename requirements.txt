@@ -10,7 +10,7 @@ pycosat==0.6.3
 pytz==2018.4
 requests==2.19.1
 ruamel.yaml==0.15.40
-urllib3==1.23
+urllib3==1.24.2
 django-allauth~=0.43.0
 beautifulsoup4==4.8.0
 django-jet
