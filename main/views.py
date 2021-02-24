@@ -1,18 +1,32 @@
 import json
+import os
 import traceback
+from collections import OrderedDict
+from datetime import timedelta, datetime
+from subprocess import call
 
+import requests
+from django.db.models import Sum, F
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.wait import WebDriverWait
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.utils import timezone
 from django.views.generic import View
+from openpyxl import Workbook
+from openpyxl.writer.excel import save_virtual_workbook
+from bs4 import BeautifulSoup
 
 from common import constant
 from main.forms import PostForm
-from main.models import Post, Comment, Game
+from main.models import Post, Comment, Game, AnalyticsPattern
 from utils.logger import logger
 
 
@@ -69,7 +83,8 @@ def main_page(request):
                     side_latest_contents_list=side_latest_contents_list,
                     user_info=user_info,
                     category_list=category_list,
-                    category=category)
+                    category=category,
+                    count=len(contents_list))
 
     return render(request, 'main/main.html', response)
 
@@ -246,12 +261,6 @@ def game(request):
     sorted_rank_info_list = sorted(refined_rank_info_list, key=lambda k: k['score'], reverse=True)
 
     return render(request, 'main/snake_game.html', dict(side_popular_contents_list=side_popular_contents_list, side_latest_contents_list=side_latest_contents_list, user_info=user_info, rank_info_list=sorted_rank_info_list, last_game_score=last_game_score))
-
-
-def deleague(request):
-    side_popular_contents_list = get_side_popular_contents()
-    side_latest_contents_list = get_side_latest_contents()
-    return render(request, 'main/deleague.html', dict(side_popular_contents_list=side_popular_contents_list, side_latest_contents_list=side_latest_contents_list, ))
 
 
 def get_side_popular_contents():

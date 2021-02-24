@@ -124,3 +124,36 @@ class Game(UpdatedAtCreatedAt):
         db_table = 'game'
         verbose_name = '게임'
         verbose_name_plural = verbose_name
+
+
+class AnalyticsPattern(UpdatedAtCreatedAt):
+    PATTERN_TYPE_POWERBALL_EVEN_ODD = 'powerball_even_odd'
+    PATTERN_TYPE_POWERBALL_UNDER_OVER = 'powerball_under_over'
+    PATTERN_TYPE_EVEN_ODD = 'even_odd'
+    PATTERN_TYPE_UNDER_OVER = 'under_over'
+
+    CHOICES_PATTERN_TYPE = (
+        (PATTERN_TYPE_POWERBALL_EVEN_ODD, '파워볼 홀짝'),
+        (PATTERN_TYPE_POWERBALL_UNDER_OVER, '파워볼 언더오버'),
+        (PATTERN_TYPE_EVEN_ODD, '일반 홀짝'),
+        (PATTERN_TYPE_UNDER_OVER, '일반 언더오버'),
+    )
+
+    ref_date = models.DateField(db_index=True, null=True, blank=True, verbose_name='일자')
+    pattern_type = models.CharField(db_index=True, max_length=200, null=True, blank=True, choices=CHOICES_PATTERN_TYPE, verbose_name='패턴 타입')
+    pattern_num = models.SmallIntegerField(db_index=True, null=False, blank=False, default=10, verbose_name='패턴 글자수')
+    pattern_string = models.CharField(max_length=200, null=True, blank=True, verbose_name='패턴 문자열')
+    pattern_count = models.SmallIntegerField(null=False, blank=False, default=10, verbose_name='패턴 수')
+    opposite_string = models.CharField(max_length=200, null=True, blank=True, verbose_name='반대 패턴 문자열')
+    opposite_count = models.SmallIntegerField(null=False, blank=False, default=10, verbose_name='반대 패턴 수')
+
+    class Meta:
+        db_table = 'analytics_pattern'
+        verbose_name = '패턴분석'
+        verbose_name_plural = verbose_name
+        index_together = [
+            ['ref_date', 'pattern_type', 'pattern_num']
+        ]
+        unique_together = [
+            ['ref_date', 'pattern_type', 'pattern_num', 'pattern_string']
+        ]
