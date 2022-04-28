@@ -140,7 +140,12 @@ def post_view(request):
         logger.warning(error_msg)
         return redirect('/post')
 
-    social_profile = SocialAccount.objects.get(user_id=post.get('user_id'))
+    try:
+        social_profile = SocialAccount.objects.get(user_id=post.get('user_id'))
+    except SocialAccount.DoesNotExist:
+        logger.error(f"User ID : {post.get('user_id')} Does Not Found")
+        social_profile = None
+
     if social_profile:
         user_id = social_profile.user_id
         account_data = social_profile.extra_data
@@ -306,7 +311,12 @@ def get_side_latest_contents():
 def get_contents_list(post_list):
     contents_list = list()
     for post in post_list:
-        social_profile = SocialAccount.objects.get(user_id=post.get('user_id'))
+        try:
+            social_profile = SocialAccount.objects.get(user_id=post.get('user_id'))
+        except SocialAccount.DoesNotExist:
+            logger.error(f"User ID : {post.get('user_id')} Does Not Found")
+            social_profile = None
+
         if social_profile:
             user_id = social_profile.user_id
             account_data = social_profile.extra_data

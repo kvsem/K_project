@@ -41,3 +41,4 @@ class PostAdmin(admin.ModelAdmin):
             'context',
         ])),
     )
+
